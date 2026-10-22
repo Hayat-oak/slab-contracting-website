@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" role="img" aria-label="Design review and sign-off">
+  <rect width="800" height="560" fill="#efebe4"/>
+  <g stroke="#2b373e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+    <rect x="150" y="70" width="400" height="300" fill="#e3ddd3"/>
+    <rect x="120" y="100" width="400" height="300" fill="#ece7df"/>
+    <rect x="90" y="130" width="400" height="300" fill="#f6f5f2"/>
+    <rect x="260" y="170" width="90" height="70" fill="#adbfca" fill-opacity=".6" stroke="none"/>
+    <rect x="130" y="280" width="110" height="110" fill="#c7d6ca" fill-opacity=".6" stroke="none"/>
+    <path d="M120 160 h340 v240 h-340 z M120 270 h130 M250 160 v240 M250 320 h210 M360 160 v160 M120 220 h60" stroke-width="2"/>
+    <path d="M380 400 h80 v20 h-80 z" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(570 300)">
+    <circle r="92" fill="#f6f5f2" stroke="#2b373e" stroke-width="2.5"/>
+    <circle r="74" fill="none" stroke="#8e7660" stroke-width="2" stroke-dasharray="4 6"/>
+    <path d="M-34 2 l22 22 l46 -50" fill="none" stroke="#2b373e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(660 110) rotate(35)" stroke="#2b373e" stroke-width="2.5" stroke-linejoin="round">
+    <rect x="-10" y="-90" width="20" height="150" rx="4" fill="#8e7660"/>
+    <path d="M-10 60 l10 26 l10 -26 z" fill="#f6f5f2"/>
+  </g>
+</svg>

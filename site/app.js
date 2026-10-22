@@ -44,7 +44,17 @@ const projects = [
 
 // Full-width and large placements use photos that have high-resolution originals (assets/hd, from SLAB's Drive folders).
 const heroSlides = [['almughrizat', 1], ['soulhittin', 1], ['almajidiya111', 1], ['almajidiya116', 1]];
-const processPhotos = [['nirvana12', 1], ['masharef', 3], ['almughrizat', 2], ['mkin30', 2], ['almajidiya130', 3], ['jawhara8', 1], ['ajlan11', 1]];
+// One visual per delivery stage. 'drawing' = SLAB's own floor plan; 'illustration' = brand line art used until real
+// site photography for that stage is supplied; 'photo' = finished project. Replace files in assets/process/ to update.
+const processVisuals = [
+  {src: 'assets/process/1-understand.svg', kind: 'illustration'},
+  {src: 'assets/process/2-design.webp', kind: 'drawing'},
+  {src: 'assets/process/3-approve.svg', kind: 'illustration'},
+  {src: 'assets/process/4-plan.svg', kind: 'illustration'},
+  {src: 'assets/process/5-execute.svg', kind: 'illustration'},
+  {src: 'assets/process/6-control.svg', kind: 'illustration'},
+  {src: HD('soulhittin', 1), kind: 'photo'}
+];
 const servicePhotos = [['nirvana12', 2], ['almajidiya111', 2], ['almughrizat', 3], ['almajidiya130', 1]];
 const PHONE = '920066197'; // UNVERIFIED: not in the profile — confirm before launch.
 const PHONE_DISPLAY = '9200 66197';
@@ -478,8 +488,8 @@ ${cta()}</main>`;
 
 function processPanel() {
   const st = state.step + 1;
-  const [slug, n] = processPhotos[state.step];
-  return `<div class="photo">${img(slug, n, '', 'decoding="async"')}</div>
+  const v = processVisuals[state.step];
+  return `<div class="photo is-${v.kind}"><img src="${v.src}" alt="${esc(t('p' + st))}" decoding="async"></div>
   <div class="process-description"><span class="eyebrow">${t('stage')} ${pad(st)} / 07</span><h2>${t('p' + st)}</h2><p>${t('p' + st + 'd')}</p>
   <div class="process-navigation"><button type="button" data-action="step-move" data-move="-1" aria-label="${t('prevStage')}">${ICON.prev}</button><span>${pad(st)} / 07</span><button type="button" data-action="step-move" data-move="1" aria-label="${t('nextStage')}">${ICON.next}</button></div></div>`;
 }
