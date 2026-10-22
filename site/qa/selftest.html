@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="noindex" />
+  <title>SLAB self-test (running)</title>
+  <!-- Resolve assets/ and app.js relative to the site root, exactly like index.html. -->
+  <base href="../" />
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="" />
+</head>
+<body>
+  <div id="app"></div>
+  <pre id="results" style="position:relative;z-index:999;background:#fff;padding:20px;font:12px/1.6 monospace;white-space:pre-wrap"></pre>
+  <script src="app.js"></script>
+  <script>
+  /* Browser QA for the SLAB site. Open site/qa/selftest.html in Chrome/Edge, or run headless:
+     chrome --headless=new --virtual-time-budget=20000 --dump-dom file:///.../site/qa/selftest.html */
+  (async () => {
+    const out = [], errors = [];
+    const ok = (cond, msg) => { if (!cond) errors.push(msg); };
+    // Full path because <base href="../"> would otherwise resolve '#/x' against the site root.
+    const go = route => {
+      Object.assign(state, {step: 0, gallery: 0, projectTab: 'gallery'}); // same reset as navigate()
+      history.replaceState(null, '', location.pathname + '#/' + route);
+      render();
+    };
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+    const urls = new Set();
+    window.addEventListener('error', e => errors.push('JS error: ' + e.message));
+
+    const routes = ['home', 'projects', 'services', 'services/3', 'about', 'process', 'process/4', 'contact', 'privacy', 'nope', ...projects.map(p => 'projects/' + p.id)];
+    for (const lang of ['en', 'ar']) {
+      state.language = lang;
+      for (const route of routes) {
+        go(route);
+        const html = $app.innerHTML;
+        ok($('main#main-content'), `${lang} ${route}: missing <main>`);
+        ok($$('h1').length === 1, `${lang} ${route}: expected exactly one h1, got ${$$('h1').length}`);
+        ok(!/(>\s*undefined\s*<|>\s*null\s*<|\[object Object\]|NaN)/.test(html), `${lang} ${route}: undefined/null/NaN in output`);
+        ok(document.documentElement.dir === (lang === 'ar' ? 'rtl' : 'ltr'), `${lang} ${route}: wrong dir`);
+        $$('img').forEach(i => { urls.add(i.getAttribute('src')); });
+        // Quotes may be ' or " (serialized as &quot;) once JS has rewritten the style attribute (parallax).
+        for (const m of html.matchAll(/url\((?:'|"|&quot;)?(assets\/[^'")&]+)/g)) urls.add(m[1]);
+        $$('img').forEach(i => ok(i.hasAttribute('alt'), `${lang} ${route}: img without alt ${i.getAttribute('src')}`));
+        $$('button').forEach(b => ok((b.textContent.trim() || b.getAttribute('aria-label')), `${lang} ${route}: unlabeled button`));
+        $$('input:not([type=hidden]), select, textarea').forEach(f => {
+          if (f.name === 'bot-field') return;
+          ok(f.id && document.querySelector(`label[for="${f.id}"]`) || f.closest('label'), `${lang} ${route}: field without label ${f.name}`);
+        });
+        out.push(`${lang} ${route.padEnd(26)} ${String(html.length).padStart(6)} chars  imgs ${$$('img').length}`);
+      }
+    }
+    state.language = 'en';
+
+    // Every gallery photo, plus check there is no undeclared extra photo on disk.
+    projects.forEach(p => { for (let i = 1; i <= p.images; i++) { urls.add(IMAGE(p.id, i)); urls.add(HD(p.id, i)); } });
+    const load = src => new Promise(res => { const im = new Image(); im.onload = () => res(im.naturalWidth > 0); im.onerror = () => res(false); im.src = src; });
+    for (const src of urls) ok(await load(src), 'Image failed to load: ' + src);
+    for (const p of projects) ok(!(await load(IMAGE(p.id, p.images + 1))), `${p.id}: photo ${p.images + 1} exists on disk but images=${p.images}`);
+    out.push(`Loaded ${urls.size} distinct image URLs`);
+    ok(projects.length === 13, 'Expected 13 projects');
+
+    // Interactions
+    go('projects');
+    $('[data-filter="soul"]').click();
+    ok($$('#project-results .project-card').length === 1, 'Filter SOUL should show 1 project');
+    ok($('[data-filter="soul"]').getAttribute('aria-pressed') === 'true', 'Filter aria-pressed not updated');
+    $('[data-filter="all"]').click();
+    ok($$('#project-results .project-card').length === 13, 'Filter All should show 13 projects');
+
+    go('projects/jawhara8');
+    const next = $('.gallery-control.next');
+    next.focus(); next.click();
+    await new Promise(r => setTimeout(r, 250));
+    ok(state.gallery === 1 && $('#gallery-main').src.endsWith('jawhara8_2.webp'), 'Gallery next did not advance');
+    ok(document.activeElement === next, 'Gallery lost focus after click (full re-render?)');
+    ok($('#gallery-count').textContent.includes('02 / 04'), 'Gallery counter wrong');
+    $('[data-tab="overview"]').click();
+    ok(!$('#panel-overview').hidden && $('#panel-gallery').hidden, 'Overview tab did not switch');
+    ok($('[data-tab="overview"]').getAttribute('aria-selected') === 'true', 'Tab aria-selected not updated');
+
+    go('process');
+    $('[data-action="step-move"][data-move="1"]').click();
+    ok(state.step === 1 && $('#process-panel h2').textContent === 'Design', 'Process next step failed');
+    $('#step-6').click();
+    ok($('#process-panel h2').textContent === 'Deliver', 'Process step click failed');
+    go('process/3');
+    ok($('#process-panel h2').textContent === 'Approve', 'Deep link #/process/3 failed');
+
+    go('home');
+    showHero(2);
+    ok($$('.hero-image.is-active').length === 1 && $('.hero-image.is-active').dataset.slide === '2', 'Hero slide switch failed');
+
+    go('contact');
+    $('#lead-form button[type=submit]').click();
+    await new Promise(r => setTimeout(r, 50));
+    ok(!$('#form-summary').hidden, 'Empty form submit should show error summary');
+    ok($$('[aria-invalid="true"]').length >= 7, 'Expected all required fields flagged invalid');
+    $('#email').value = 'not-an-email'; validateField($('#email'));
+    ok($('#email-error').textContent === t('errEmail'), 'Email validation message missing');
+    ok($('#lead-form [name="consent"]'), 'consent field missing from the live form');
+    state.formStarted = 0; // the earlier focus() would otherwise trip the anti-spam timer
+    // Valid submission from file:// must show the offline notice — never a fake success message.
+    $('#full-name').value = 'Test Person'; $('#email').value = 'test@example.com'; $('#phone').value = '+966 5 0000 0000';
+    $('#project-type').value = 'residential'; $('#project-location').value = 'Riyadh'; $('#message').value = 'Fit-out for a 3-unit residential building.';
+    $('#consent').checked = true;
+    $('#lead-form button[type=submit]').click();
+    await new Promise(r => setTimeout(r, 50));
+    ok($('#form-summary').hidden && $$('[aria-invalid="true"]').length === 0, 'Valid form still flagged invalid');
+    ok(!$('#form-feedback').hidden && $('#form-feedback').textContent === t('localNote'), 'Offline preview notice not shown');
+    ok(!$('.form-success'), 'Success shown without a server response');
+    const live = $$('#lead-form [name]').map(f => f.name).filter(n => n !== 'form-name').sort().join(',');
+    const stat = Array.from(document.querySelectorAll('form[hidden] [name]')).map(f => f.name).filter(n => n !== 'form-name').sort().join(',');
+
+    go('home');
+    $('[data-action="language"]').click();
+    ok(document.documentElement.dir === 'rtl' && document.documentElement.lang === 'ar', 'Language toggle failed');
+    $('[data-action="language"]').click();
+
+    const pass = !errors.length;
+    out.unshift(pass ? 'PASS — all checks succeeded' : `FAIL — ${errors.length} problem(s):\n  ` + errors.join('\n  '), '');
+    out.push('', 'Note: static form fields: ' + (stat || '(index.html form not present on this page — checked by verify_site.cjs)'), 'Live form fields: ' + live);
+    document.getElementById('results').textContent = out.join('\n');
+    document.title = pass ? 'SLAB self-test PASS' : 'SLAB self-test FAIL';
+    document.body.dataset.result = pass ? 'pass' : 'fail';
+  })();
+  </script>
+</body>
+</html>

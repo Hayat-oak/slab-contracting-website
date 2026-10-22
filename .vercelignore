@@ -1,0 +1,8 @@
+references/
+site/qa/
+site/verify_site.cjs
+site/build_release.py
+site/extract_assets.py
+site/netlify.toml
+site/README_AR.txt
+*.md

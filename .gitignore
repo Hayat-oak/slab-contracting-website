@@ -1,0 +1,11 @@
+# Local backups and outdated preview (kept on the original machine only)
+_backup_original_site/
+SLAB_preview_singlefile.html
+# Office lock files / OS files
+~$*
+.DS_Store
+Thumbs.db
+# Local environment / Vercel
+.env
+.env.*
+.vercel/
