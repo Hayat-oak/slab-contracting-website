@@ -65,7 +65,7 @@ if (projects.length !== 13) errors.push(`Expected 13 projects, found ${projects.
 
 // The enquiry form posts these fields to Supabase table project_enquiries (see submitForm in app.js).
 const liveForm = contactHtml.slice(contactHtml.indexOf('<form'), contactHtml.indexOf('</form>'));
-for (const n of ['full-name', 'email', 'phone', 'project-type', 'project-location', 'message', 'consent', 'bot-field']) {
+for (const n of ['full-name', 'email', 'phone', 'project-type', 'services', 'project-location', 'message', 'consent', 'bot-field']) {
   if (!liveForm.includes(`name="${n}"`)) errors.push(`Form field "${n}" missing from the contact form`);
 }
 

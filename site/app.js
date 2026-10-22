@@ -56,6 +56,9 @@ const processVisuals = [
   {src: HD('soulhittin', 1), kind: 'photo'}
 ];
 const servicePhotos = [['nirvana12', 2], ['almajidiya111', 2], ['almughrizat', 3], ['almajidiya130', 1]];
+// Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
+const SERVICE_KEYS = ['fit-out-execution', 'design', 'interior-fit-out', 'project-contract-management'];
+const ICON_CHECK = '<svg class="icon chip-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const PHONE = '920066197'; // UNVERIFIED: not in the profile — confirm before launch.
 const PHONE_DISPLAY = '9200 66197';
 
@@ -111,7 +114,7 @@ const phrases = {
  p7:'Deliver',p7d:'Inspect, close out, hand over and prepare the asset for its intended use.',
  tech:'Technology Supporting Delivery',tech1:'Cost & Resource Visibility',tech1d:'Clear insight into costs and resource allocation to support faster, better-informed decisions.',tech2:'Progress Reporting',tech2d:'Regular reporting on project status and completion progress.',tech3:'Digital Project Management',tech3d:'Centralized coordination of tasks, schedules and resources across active projects.',tech4:'AI Workforce Monitoring',tech4d:'Real-time attendance and site activity tracking powered by AI.',
  contactHero:'Contact',contactHeroSub:'LET’S DISCUSS YOUR NEXT PROJECT',getInTouch:'Get in Touch',contactCopy:'Whether you are defining a new project or preparing for fit-out, tell us what you have in mind. Our team will review your enquiry.',
- phone:'Phone', locationOffice:'Saudi Arabia', activeIn:'Active in Riyadh, Madinah & Jeddah', fullName:'Full name',email:'Email address',phoneField:'Phone number',sector:'Project sector',projectLocation:'Project location (city)',message:'Project description',messageHint:'Scope, size, timing — whatever you know so far.',send:'Send Enquiry',sending:'Sending…',choose:'Select a sector',required:'Required',
+ phone:'Phone', locationOffice:'Saudi Arabia', activeIn:'Active in Riyadh, Madinah & Jeddah', fullName:'Full name',email:'Email address',phoneField:'Phone number',sector:'Project sector', servicesNeeded:'Services required', servicesHint:'Select one or more.', errServices:'Please select at least one service.',projectLocation:'Project location (city)',message:'Project description',messageHint:'Scope, size, timing — whatever you know so far.',send:'Send Enquiry',sending:'Sending…',choose:'Select a sector',required:'Required',
  consent:'I agree that SLAB may use these details to respond to my enquiry, as described in the', consentLink:'privacy notice',
  errRequired:'Please fill in this field.', errEmail:'Please enter a valid email address.', errPhone:'Please enter a valid phone number (8–15 digits).', errShort:'Please add a little more detail (at least 12 characters).', errConsent:'Please confirm you agree to the privacy notice.', errSummary:'Please correct the highlighted fields.', errTooFast:'That was very fast — please review your details and send again.',
  formNote:'Fields marked * are required. Your details are used only to respond to this enquiry.',
@@ -163,7 +166,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  processTeaser:'سبع مراحل. فريق واحد مسؤول.',processTeaserSub:'من أول اجتماع حتى التسليم، يمر كل مشروع لدى سلاب بالمسار المنظم نفسه.',
  p1:'الفهم',p1d:'تحديد الأهداف والمتطلبات الفنية والأولويات المالية وظروف الموقع والاحتياجات التشغيلية.',p2:'التصميم',p2d:'تحويل متطلبات المشروع إلى تصاميم ومواصفات معمارية وداخلية وفنية منسقة.',p3:'الاعتماد',p3d:'إكمال المراجعات والموافقات قبل بدء المشتريات والإنشاءات.',p4:'التخطيط',p4d:'تحديد النطاق والجدول والموارد والمشتريات واستراتيجية الموردين وضوابط المشروع.',p5:'التنفيذ',p5d:'تنسيق الأعمال الميدانية تحت إشراف منظم وإدارة للجودة.',p6:'الرقابة',p6d:'متابعة التقدم والعمالة والموارد والتكلفة والجداول والتقارير.',p7:'التسليم',p7d:'الفحص وإغلاق الملاحظات والتسليم وتجهيز المشروع للاستخدام.',
  tech:'التقنيات الداعمة للتنفيذ',tech1:'وضوح التكاليف والموارد',tech1d:'متابعة التكاليف وتوزيع الموارد لدعم قرارات أسرع وأدق.',tech2:'تقارير التقدم',tech2d:'تحديثات منتظمة لحالة المشاريع ونسب الإنجاز.',tech3:'إدارة رقمية للمشاريع',tech3d:'تنسيق المهام والجداول والموارد في نظام موحد عبر المشاريع القائمة.',tech4:'مراقبة العمالة بالذكاء الاصطناعي',tech4d:'متابعة لحظية للحضور والنشاط في الموقع بتقنيات الذكاء الاصطناعي.',
- contactHero:'تواصل معنا',contactHeroSub:'لنتحدث عن مشروعك القادم',getInTouch:'يسعدنا تواصلك',contactCopy:'سواء كنت تخطط لمشروع جديد أو تستعد لأعمال التشطيب، شاركنا فكرتك ومتطلباتك ليتواصل معك فريقنا.',phone:'الهاتف',locationOffice:'المملكة العربية السعودية',activeIn:'مشاريع في الرياض والمدينة المنورة وجدة',fullName:'الاسم الكامل',email:'البريد الإلكتروني',phoneField:'رقم الجوال',sector:'قطاع المشروع',projectLocation:'موقع المشروع (المدينة)',message:'وصف المشروع',messageHint:'النطاق والمساحة والتوقيت — ما يتوفر لديك حاليًا.',send:'إرسال الطلب',sending:'جارٍ الإرسال…',choose:'اختر القطاع',required:'إلزامي',
+ contactHero:'تواصل معنا',contactHeroSub:'لنتحدث عن مشروعك القادم',getInTouch:'يسعدنا تواصلك',contactCopy:'سواء كنت تخطط لمشروع جديد أو تستعد لأعمال التشطيب، شاركنا فكرتك ومتطلباتك ليتواصل معك فريقنا.',phone:'الهاتف',locationOffice:'المملكة العربية السعودية',activeIn:'مشاريع في الرياض والمدينة المنورة وجدة',fullName:'الاسم الكامل',email:'البريد الإلكتروني',phoneField:'رقم الجوال',sector:'قطاع المشروع',servicesNeeded:'الخدمات المطلوبة',servicesHint:'يمكنك اختيار أكثر من خدمة.',errServices:'يرجى اختيار خدمة واحدة على الأقل.',projectLocation:'موقع المشروع (المدينة)',message:'وصف المشروع',messageHint:'النطاق والمساحة والتوقيت — ما يتوفر لديك حاليًا.',send:'إرسال الطلب',sending:'جارٍ الإرسال…',choose:'اختر القطاع',required:'إلزامي',
  consent:'أوافق على استخدام سلاب لهذه البيانات للرد على طلبي، وفق',consentLink:'إشعار الخصوصية',
  errRequired:'يرجى تعبئة هذا الحقل.',errEmail:'يرجى إدخال بريد إلكتروني صحيح.',errPhone:'يرجى إدخال رقم جوال صحيح (من 8 إلى 15 رقمًا).',errShort:'يرجى إضافة تفاصيل أكثر (12 حرفًا على الأقل).',errConsent:'يرجى الموافقة على إشعار الخصوصية.',errSummary:'يرجى تصحيح الحقول المحددة.',errTooFast:'تم الإرسال بسرعة كبيرة — يرجى مراجعة البيانات والإرسال مجددًا.',
  formNote:'الحقول المعلّمة بـ * إلزامية. تُستخدم بياناتك فقط للرد على هذا الطلب.',
@@ -530,6 +533,12 @@ function contact() {
   ${field('email', t('email'), `<input id="email" name="email" type="email" required autocomplete="email" maxlength="160" dir="ltr" aria-describedby="email-error">`)}
   ${field('phone', t('phoneField'), `<input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="20" dir="ltr" aria-describedby="phone-error">`)}
   ${field('project-type', t('sector'), `<select id="project-type" name="project-type" required aria-describedby="project-type-error"><option value="">${t('choose')}</option>${sectors.map(x => `<option value="${x}">${t(x)}</option>`).join('')}</select>`)}
+  <fieldset class="field full service-picker" id="services-field" aria-describedby="services-hint services-error">
+    <legend>${t('servicesNeeded')} <span aria-hidden="true">*</span></legend>
+    <small class="hint" id="services-hint">${t('servicesHint')}</small>
+    <div class="chips">${SERVICE_KEYS.map((key, i) => `<label class="chip"><input type="checkbox" name="services" value="${key}"><span>${ICON_CHECK}${t('service' + (i + 1))}</span></label>`).join('')}</div>
+    <small class="error" id="services-error" hidden></small>
+  </fieldset>
   ${field('project-location', t('projectLocation'), `<input id="project-location" name="project-location" required maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`)}
   ${field('message', t('message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
@@ -934,11 +943,27 @@ function validateField(el) {
   return !msg;
 }
 
+// Services multi-select: at least one must be ticked.
+const selectedServices = form => Array.from(form.querySelectorAll('input[name="services"]:checked')).map(c => c.value);
+function validateServices(form) {
+  const set = document.getElementById('services-field');
+  const ok = selectedServices(form).length > 0;
+  const err = document.getElementById('services-error');
+  set.setAttribute('aria-invalid', String(!ok));
+  set.classList.toggle('invalid', !ok);
+  err.textContent = ok ? '' : t('errServices');
+  err.hidden = ok;
+  return ok;
+}
+
 async function submitForm(form) {
   const feedback = document.getElementById('form-feedback');
   const summary = document.getElementById('form-summary');
   const fields = Array.from(form.querySelectorAll('input[required], select[required], textarea[required]'));
   const invalid = fields.filter(f => !validateField(f));
+  if (!validateServices(form)) invalid.push(form.querySelector('input[name="services"]'));
+  // Focus the first problem in page order.
+  invalid.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
   feedback.hidden = true;
   if (invalid.length) {
     summary.textContent = t('errSummary');
@@ -969,7 +994,7 @@ async function submitForm(form) {
   try {
     const v = name => form.elements[name].value.trim();
     const row = {
-      full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'),
+      full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'), services: selectedServices(form),
       project_location: v('project-location'), message: v('message'), consent: form.elements.consent.checked, language: state.language
     };
     const resp = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
@@ -1104,6 +1129,10 @@ $app.addEventListener('input', e => {
   if (el.getAttribute && el.getAttribute('aria-invalid') === 'true') validateField(el);
 });
 $app.addEventListener('change', e => {
+  if (e.target.name === 'services') {
+    if (document.getElementById('services-field').classList.contains('invalid')) validateServices(e.target.form);
+    return;
+  }
   if (e.target.id === 'consent' || e.target.tagName === 'SELECT') {
     if (e.target.getAttribute('aria-invalid') === 'true') validateField(e.target);
   }
