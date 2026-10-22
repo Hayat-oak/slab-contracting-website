@@ -51,7 +51,7 @@ const processVisuals = [
   {src: 'assets/process/2-design.webp', kind: 'drawing'},
   {src: 'assets/process/3-approve.webp', kind: 'photo'},
   {src: 'assets/process/4-plan.webp', kind: 'photo'},
-  {src: 'assets/process/5-execute.webp', kind: 'photo'},
+  {src: 'assets/process/5-execute-slab-team.webp', kind: 'photo'},
   {src: 'assets/process/6-control-inspection.webp', kind: 'photo'},
   {src: HD('soulhittin', 1), kind: 'photo'}
 ];
