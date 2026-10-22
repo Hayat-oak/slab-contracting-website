@@ -44,16 +44,17 @@ const projects = [
 
 // Full-width and large placements use photos that have high-resolution originals (assets/hd, from SLAB's Drive folders).
 const heroSlides = [['almughrizat', 1], ['soulhittin', 1], ['almajidiya111', 1], ['almajidiya116', 1]];
-// One visual per delivery stage. Design = SLAB floor plan; Execute/Control/Deliver = SLAB team photos; stages 1, 3, 4 use free Unsplash License photos
+// One visual per delivery stage. Design = SLAB floor plan; Execute/Control/Deliver = SLAB team photos shown whole ('full');
+// stages 1, 3, 4 use free Unsplash License photos
 // (see references/image_sources.tsv) until SLAB site photography is supplied. Replace files in assets/process/ to update.
 const processVisuals = [
   {src: 'assets/process/1-understand.webp', kind: 'photo'},
   {src: 'assets/process/2-design.webp', kind: 'drawing'},
   {src: 'assets/process/3-approve.webp', kind: 'photo'},
   {src: 'assets/process/4-plan.webp', kind: 'photo'},
-  {src: 'assets/process/5-execute-team.webp', kind: 'photo', pos: 'center top'},
-  {src: 'assets/process/6-control-team.webp', kind: 'photo', pos: 'center top'},
-  {src: 'assets/process/7-deliver-team.webp', kind: 'photo', pos: 'center top'}
+  {src: 'assets/process/5-execute-team-full.webp', kind: 'full'},
+  {src: 'assets/process/6-control-team-full.webp', kind: 'full'},
+  {src: 'assets/process/7-deliver-team-full.webp', kind: 'full'}
 ];
 const servicePhotos = [['nirvana12', 2], ['almajidiya111', 2], ['almughrizat', 3], ['almajidiya130', 1]];
 // Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
@@ -492,7 +493,7 @@ ${cta()}</main>`;
 function processPanel() {
   const st = state.step + 1;
   const v = processVisuals[state.step];
-  return `<div class="photo is-${v.kind}"><img src="${v.src}" alt="${esc(t('p' + st))}" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}></div>
+  return `<div class="photo is-${v.kind}"${v.kind === 'full' ? ` style="--bg:url('${v.src}')"` : ''}><img src="${v.src}" alt="${esc(t('p' + st))}" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}></div>
   <div class="process-description"><span class="eyebrow">${t('stage')} ${pad(st)} / 07</span><h2>${t('p' + st)}</h2><p>${t('p' + st + 'd')}</p>
   <div class="process-navigation"><button type="button" data-action="step-move" data-move="-1" aria-label="${t('prevStage')}">${ICON.prev}</button><span>${pad(st)} / 07</span><button type="button" data-action="step-move" data-move="1" aria-label="${t('nextStage')}">${ICON.next}</button></div></div>`;
 }

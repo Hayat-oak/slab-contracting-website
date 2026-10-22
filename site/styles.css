@@ -553,3 +553,13 @@ html[dir="rtl"] .technology-grid article { padding: 26px 0 10px 15px; }
 .chip input:focus-visible + span { outline: 2px solid var(--warm); outline-offset: 3px; }
 .service-picker.invalid .chip span { border-color: #a3412a; }
 html[dir="rtl"] .chip span { font-size: 16px; }
+
+/* Process: portrait team photos shown whole (no crop) on a blurred copy of themselves */
+.process-feature:has(.is-full) { min-height: 680px; }
+.process-feature .photo.is-full { position: relative; background: #1f1e1c; isolation: isolate; }
+.process-feature .photo.is-full::before { content: ''; position: absolute; inset: -40px; z-index: -1; background: var(--bg) center / cover no-repeat; filter: blur(34px) brightness(.5) saturate(.85); }
+.process-feature .photo.is-full img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+@media (max-width: 740px) {
+  .process-feature:has(.is-full) { min-height: 0; }
+  .process-feature .photo.is-full { min-height: 0; aspect-ratio: 4 / 5; }
+}
