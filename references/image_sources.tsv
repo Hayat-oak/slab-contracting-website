@@ -44,6 +44,6 @@ process_1-understand	Unsplash License (free) - Pedro Miranda		People reviewing a
 process_2-design	SLAB floor plan drawing (supplied by SLAB)			
 process_3-approve	Unsplash License (free)		Material samples are on display	https://unsplash.com/photos/2ZjSja_2EX4
 process_4-plan	Unsplash License (free) - Jonathan Borba		Architectural blueprints and a laptop on a marble desk	https://unsplash.com/photos/rn00OVh0gEI
-process_5-execute-slab-team	SLAB own photo (supplied by SLAB); helmets recoloured blue -> yellow, corner logo/frame cropped, upscaled			
+process_5-execute-slab-team-v2	SLAB own photo (supplied by SLAB, 252x331 source); helmets recoloured blue -> yellow, corner logo/frame cropped, Lanczos upscale + sharpening			
 process_6-control	Unsplash License (free)		Construction workers measuring concrete wall	https://unsplash.com/photos/ZYUcxbMeaIY
 process_7-deliver	Drive original (SOUL Hittin) - same as soulhittin_1			
