@@ -53,7 +53,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design.', heroB:'Build.', heroC:'Deliver.', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -113,13 +113,13 @@ const phrases = {
   ['Who can see it','Enquiries are received by SLAB Contracting staff responsible for responding to project requests, through the website’s form-hosting provider.'],
   ['How long we keep it','We keep enquiry details only for as long as needed to respond and to manage any resulting business relationship, unless a longer period is required by law.'],
   ['Your rights','You may ask us to access, correct or delete your details by contacting SLAB using the phone number on the Contact page.']],
- quick:'Quick Links',contactLabel:'Contact',rights:'All rights reserved.',part:'Part of Oaktree Group',brandTag:'Design. Build. Deliver.',learn:'Learn More',
+ quick:'Quick Links',contactLabel:'Contact',rights:'All rights reserved.',part:'Part of Oaktree Group',brandTag:'Design · Build · Deliver',learn:'Learn More',
  navMenu:'Open navigation menu',noData:'No projects match the selected filter.', notFound:'This page could not be found.', interiorBusiness:'Integrated Construction & Project Delivery', sourcePhoto:'Project photography: SLAB Company Profile 2026.',
  },
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم.',heroB:'ننفذ.',heroC:'نسلّم.',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -165,7 +165,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
   ['من يطّلع عليها','يستقبل الطلبات موظفو سلاب للمقاولات المسؤولون عن الرد على طلبات المشاريع، عبر مزود استضافة النماذج الخاص بالموقع.'],
   ['مدة الاحتفاظ','نحتفظ ببيانات الطلب للمدة اللازمة للرد وإدارة أي علاقة عمل تنتج عنه فقط، ما لم يتطلب النظام مدة أطول.'],
   ['حقوقك','يمكنك طلب الاطلاع على بياناتك أو تصحيحها أو حذفها بالتواصل مع سلاب عبر رقم الهاتف في صفحة التواصل.']],
- quick:'روابط سريعة',contactLabel:'التواصل',rights:'جميع الحقوق محفوظة.',part:'جزء من مجموعة أوكتري',brandTag:'نصمم. ننفذ. نسلّم.',learn:'اعرف المزيد',navMenu:'فتح قائمة التنقل',noData:'لا توجد مشاريع ضمن التصنيف المختار.',notFound:'تعذّر العثور على هذه الصفحة.',interiorBusiness:'إنشاءات وتنفيذ مشاريع متكاملة',sourcePhoto:'صور المشاريع: الملف التعريفي لسلاب 2026.'
+ quick:'روابط سريعة',contactLabel:'التواصل',rights:'جميع الحقوق محفوظة.',part:'جزء من مجموعة أوكتري',brandTag:'نصمم · ننفذ · نسلّم',learn:'اعرف المزيد',navMenu:'فتح قائمة التنقل',noData:'لا توجد مشاريع ضمن التصنيف المختار.',notFound:'تعذّر العثور على هذه الصفحة.',interiorBusiness:'إنشاءات وتنفيذ مشاريع متكاملة',sourcePhoto:'صور المشاريع: الملف التعريفي لسلاب 2026.'
  }
 };
 
@@ -569,7 +569,7 @@ function updateMeta(r) {
   const p = r.page === 'projects' && r.id ? projects.find(x => x.id === r.id) : null;
   const titleKey = {home: null, projects: 'projects', services: 'services', about: 'about', process: 'process', contact: 'contact', privacy: 'privacyTitle'}[r.page];
   const brand = isAR() ? 'سلاب للمقاولات' : 'SLAB Contracting';
-  document.title = r.page === 'home' ? `${brand} | ${isAR() ? 'نصمم. ننفذ. نسلّم.' : 'Design. Build. Deliver.'}`
+  document.title = r.page === 'home' ? `${brand} | ${isAR() ? 'نصمم · ننفذ · نسلّم' : 'Design · Build · Deliver'}`
     : `${p ? pname(p) : (titleKey ? t(titleKey) : '404')} | ${brand}`;
   const desc = p ? t('projectLead')(p) : (metaDescriptions[state.language][r.page] || metaDescriptions[state.language].home);
   const tag = document.querySelector && document.querySelector('meta[name="description"]');
