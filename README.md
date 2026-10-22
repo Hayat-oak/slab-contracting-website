@@ -25,3 +25,10 @@ Open `site/index.html` in Chrome or Edge — no build step.
 | `references/` | الملف التعريفي 2026، المرجع البصري، `image_sources.tsv` (مصدر كل صورة) |
 | `QA_REPORT_AR.md` | تقرير التطوير والجودة وما يحتاج اعتمادًا قبل الإطلاق |
 | `SLAB_FULL_PROJECT_BRIEF_AR.md` | وثيقة متطلبات المشروع |
+
+## Supabase
+- **طلبات العملاء / Enquiries:** جدول `public.project_enquiries`. الزائر يقدر **يضيف** طلب فقط (RLS)، ولا يقدر يقرأ أو يعدّل.
+  عرض الطلبات: لوحة Supabase ← Table Editor ← `project_enquiries`.
+- **الصور / Photos:** bucket عام `site-assets` (`projects/` 1200px و `projects/hd/` 2400px).
+  نسخة مطابقة في `site/assets/` تُستخدم تلقائيًا إذا تعذّر الوصول إلى Supabase.
+- المفتاح في `app.js` هو **publishable key** (عام بطبيعته). لا يُوضع أي مفتاح سري في الكود.

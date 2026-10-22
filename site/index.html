@@ -8,18 +8,19 @@
   <meta name="description" content="SLAB Contracting — Saudi construction, design and fit-out company, part of Oaktree Group. Integrated project delivery from first brief to handover." />
   <!-- PRE-LAUNCH: content and images are pending client approval. Remove this line when the site is approved for public launch. -->
   <meta name="robots" content="noindex, nofollow" />
-  <!-- Open Graph: replace og:image/og:url with absolute URLs on the official domain at launch. -->
+  <!-- Open Graph: add og:url with the official domain at launch. -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="SLAB Contracting" />
   <meta property="og:title" content="SLAB Contracting | Design. Build. Deliver." />
   <meta property="og:description" content="Saudi construction, design and fit-out company, part of Oaktree Group." />
-  <meta property="og:image" content="assets/hd/almughrizat_1.webp" />
+  <meta property="og:image" content="https://oydrudnqcazzytauodup.supabase.co/storage/v1/object/public/site-assets/projects/hd/almughrizat_1.webp" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="ar_SA" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preload" href="assets/fonts/jost-latin-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/hd/almughrizat_1.webp" as="image" />
+  <link rel="preconnect" href="https://oydrudnqcazzytauodup.supabase.co" crossorigin />
+  <link rel="preload" href="https://oydrudnqcazzytauodup.supabase.co/storage/v1/object/public/site-assets/projects/hd/almughrizat_1.webp" as="image" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -33,19 +34,6 @@
       </div>
     </noscript>
   </div>
-  <!-- Netlify scans static HTML for this form at deploy time. Field names must match the form in app.js. -->
-  <form name="slab-project-enquiry" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="slab-project-enquiry" />
-    <input name="bot-field" />
-    <input name="language" />
-    <input name="full-name" />
-    <input name="email" />
-    <input name="phone" />
-    <input name="project-type" />
-    <input name="project-location" />
-    <textarea name="message"></textarea>
-    <input name="consent" />
-  </form>
   <script src="app.js" defer></script>
 </body>
 </html>

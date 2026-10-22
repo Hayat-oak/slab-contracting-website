@@ -40,8 +40,12 @@ for (const lang of ['en', 'ar']) {
     if (!out.includes('<main')) errors.push(`Missing <main> ${lang} ${route}`);
     if ((out.match(/<h1[\s>]/g) || []).length !== 1) errors.push(`Expected one <h1> ${lang} ${route}`);
     if (/(>\s*undefined\s*<|>\s*null\s*<|\[object Object\]|NaN)/.test(out)) errors.push(`Unexpected undefined/null/NaN ${lang} ${route}`);
-    for (const m of out.matchAll(/(?:src="|url\(')(assets\/[\w./-]+)(?:"|')/g)) {
-      if (!fs.existsSync(path.join(__dirname, m[1]))) errors.push(`Missing asset ${m[1]} (${lang} ${route})`);
+    // Photos are served from Supabase Storage; each must also exist as the local fallback copy in site/assets.
+    const assetBase = vm.runInContext('ASSET_BASE', context);
+    for (const m of out.matchAll(/(?:src="|url\(')([^"')]+\.(?:webp|svg|woff2))(?:"|')/g)) {
+      const local = m[1].replace(assetBase, 'assets/');
+      if (!local.startsWith('assets/')) { errors.push(`Unexpected asset host ${m[1]} (${lang} ${route})`); continue; }
+      if (!fs.existsSync(path.join(__dirname, local))) errors.push(`Missing asset ${local} (${lang} ${route})`);
     }
     console.log(lang, route.padEnd(26), out.length, 'chars', 'imgs', (out.match(/<img/g) || []).length);
   }
@@ -59,13 +63,11 @@ for (const p of projects) {
 }
 if (projects.length !== 13) errors.push(`Expected 13 projects, found ${projects.length}`);
 
-// Netlify detects fields from the static form in index.html; it must list every field the live form sends.
-const names = html => new Set([...html.matchAll(/name="([\w-]+)"/g)].map(m => m[1]));
-const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
-const staticForm = indexHtml.slice(indexHtml.indexOf('<form'), indexHtml.indexOf('</form>'));
+// The enquiry form posts these fields to Supabase table project_enquiries (see submitForm in app.js).
 const liveForm = contactHtml.slice(contactHtml.indexOf('<form'), contactHtml.indexOf('</form>'));
-const staticNames = names(staticForm);
-for (const n of names(liveForm)) if (!staticNames.has(n)) errors.push(`Form field "${n}" missing from index.html static form`);
+for (const n of ['full-name', 'email', 'phone', 'project-type', 'project-location', 'message', 'consent', 'bot-field']) {
+  if (!liveForm.includes(`name="${n}"`)) errors.push(`Form field "${n}" missing from the contact form`);
+}
 
 if (errors.length) { console.error(errors); process.exit(1); }
 console.log('All pages, assets, gallery counts and form fields passed static runtime verification');

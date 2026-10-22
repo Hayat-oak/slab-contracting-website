@@ -9,10 +9,18 @@
 /* Data                                                                 */
 /* ------------------------------------------------------------------ */
 
-const IMAGE = (slug, i = 1) => `assets/${slug}_${i}.webp`;
+// Supabase: enquiries are stored in table `project_enquiries` (visitors may INSERT only, enforced by RLS);
+// project photos are served from the public Storage bucket `site-assets`. The publishable key is public by design.
+const SUPABASE_URL = 'https://oydrudnqcazzytauodup.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_4Ep7dLPR3odGYd_uf3GDtw_0U4ieWvw';
+const ASSET_BASE = `${SUPABASE_URL}/storage/v1/object/public/site-assets/projects/`;
+
+// Photos load from Supabase Storage; site/assets keeps identical local copies used as a fallback (see 'error' listener).
+const IMAGE = (slug, i = 1) => `${ASSET_BASE}${slug}_${i}.webp`;
 // Large versions (up to 2400px) for backgrounds, gallery and lightbox. Most come from SLAB's original photography;
 // 4 (Ajlan Riviera 19 #1-2, Almajidiya 116 #2, Almajidiya 130 #4) are enhanced upscales until originals are supplied.
-const HD = (slug, i = 1) => `assets/hd/${slug}_${i}.webp`;
+const HD = (slug, i = 1) => `${ASSET_BASE}hd/${slug}_${i}.webp`;
+const localAsset = url => url.replace(ASSET_BASE, 'assets/');
 
 // `images` must equal the number of assets/{id}_{n}.webp files (checked by verify_site.cjs and qa/selftest.html).
 // Interior room photos only, one photo per space — outdoor areas, exteriors and repeat shots of the same room are excluded.
@@ -97,7 +105,7 @@ const phrases = {
  consent:'I agree that SLAB may use these details to respond to my enquiry, as described in the', consentLink:'privacy notice',
  errRequired:'Please fill in this field.', errEmail:'Please enter a valid email address.', errPhone:'Please enter a valid phone number (8–15 digits).', errShort:'Please add a little more detail (at least 12 characters).', errConsent:'Please confirm you agree to the privacy notice.', errSummary:'Please correct the highlighted fields.', errTooFast:'That was very fast — please review your details and send again.',
  formNote:'Fields marked * are required. Your details are used only to respond to this enquiry.',
- localNote:'This is an offline preview, so nothing was sent. Enquiries work once the site is deployed and the form is activated. You can call SLAB on the number shown.', sendSuccessTitle:'Thank you — your enquiry has been received.', sendSuccess:'Our team will review your project details and get back to you.', sendAnother:'Send another enquiry', sendError:'The form could not be submitted. Please try again or call the phone number shown.',
+ localNote:'This is a local preview file, so nothing was sent. Please use the published website to send an enquiry, or call SLAB on the number shown.', sendSuccessTitle:'Thank you — your enquiry has been received.', sendSuccess:'Our team will review your project details and get back to you.', sendAnother:'Send another enquiry', sendError:'The form could not be submitted. Please try again or call the phone number shown.',
  privacyTitle:'Privacy Notice', privacyDraft:'Draft for review — this notice must be approved by SLAB management and legal before launch.',
  privacyBody:[
   ['What we collect','When you submit a project enquiry we collect your name, email address, phone number, project sector, project location and the description you provide.'],
@@ -149,7 +157,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  consent:'أوافق على استخدام سلاب لهذه البيانات للرد على طلبي، وفق',consentLink:'إشعار الخصوصية',
  errRequired:'يرجى تعبئة هذا الحقل.',errEmail:'يرجى إدخال بريد إلكتروني صحيح.',errPhone:'يرجى إدخال رقم جوال صحيح (من 8 إلى 15 رقمًا).',errShort:'يرجى إضافة تفاصيل أكثر (12 حرفًا على الأقل).',errConsent:'يرجى الموافقة على إشعار الخصوصية.',errSummary:'يرجى تصحيح الحقول المحددة.',errTooFast:'تم الإرسال بسرعة كبيرة — يرجى مراجعة البيانات والإرسال مجددًا.',
  formNote:'الحقول المعلّمة بـ * إلزامية. تُستخدم بياناتك فقط للرد على هذا الطلب.',
- localNote:'هذه نسخة معاينة محلية، لذلك لم يُرسل أي طلب. يعمل النموذج بعد نشر الموقع وتفعيل خدمة النماذج. يمكنك الاتصال بسلاب على الرقم الموضح.',sendSuccessTitle:'شكرًا لك، تم استلام طلبك.',sendSuccess:'سيراجع فريقنا تفاصيل مشروعك ويتواصل معك.',sendAnother:'إرسال طلب آخر',sendError:'تعذّر إرسال الطلب. يرجى المحاولة مجددًا أو الاتصال بالرقم الموضح.',
+ localNote:'هذا ملف معاينة محلي، لذلك لم يُرسل أي طلب. يرجى استخدام الموقع المنشور لإرسال طلبك، أو الاتصال بسلاب على الرقم الموضح.',sendSuccessTitle:'شكرًا لك، تم استلام طلبك.',sendSuccess:'سيراجع فريقنا تفاصيل مشروعك ويتواصل معك.',sendAnother:'إرسال طلب آخر',sendError:'تعذّر إرسال الطلب. يرجى المحاولة مجددًا أو الاتصال بالرقم الموضح.',
  privacyTitle:'إشعار الخصوصية',privacyDraft:'مسودة للمراجعة — يجب اعتماد هذا الإشعار من إدارة سلاب والإدارة القانونية قبل الإطلاق.',
  privacyBody:[
   ['البيانات التي نجمعها','عند إرسال طلب مشروع نجمع اسمك وبريدك الإلكتروني ورقم جوالك وقطاع المشروع وموقعه والوصف الذي تقدمه.'],
@@ -504,8 +512,7 @@ function contact() {
     <li class="contact-point">${ICON.group}<div><small>SLAB Contracting</small><strong>${t('part')}</strong></div></li>
   </ul></div>
 <div class="form-wrap" data-reveal>
-<form class="contact-form" id="lead-form" name="slab-project-enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-  <input type="hidden" name="form-name" value="slab-project-enquiry">
+<form class="contact-form" id="lead-form" name="slab-project-enquiry" novalidate>
   <input type="hidden" name="language" value="${state.language}">
   <p class="visually-hidden" aria-hidden="true"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
   <div class="form-alert" id="form-summary" role="alert" hidden></div>
@@ -930,14 +937,15 @@ async function submitForm(form) {
     return;
   }
   summary.hidden = true;
-  // Simple anti-spam: real people take a few seconds to fill the form (Netlify's honeypot covers the rest).
-  if (state.formStarted && Date.now() - state.formStarted < 1500) {
+  // Simple anti-spam: a hidden honeypot field bots tend to fill, and real people take a few seconds to fill the form.
+  if (form.elements['bot-field'].value || (state.formStarted && Date.now() - state.formStarted < 1500)) {
     feedback.textContent = t('errTooFast');
     feedback.className = 'form-message error';
     feedback.hidden = false;
     return;
   }
-  if (location.protocol === 'file:' || ['localhost', '127.0.0.1', ''].includes(location.hostname)) {
+  // Opened as a local file (review copy): don't send real enquiries.
+  if (location.protocol === 'file:') {
     feedback.textContent = t('localNote');
     feedback.className = 'form-message';
     feedback.hidden = false;
@@ -949,8 +957,16 @@ async function submitForm(form) {
   btn.setAttribute('aria-busy', 'true');
   label.textContent = t('sending');
   try {
-    const body = new URLSearchParams(new FormData(form)).toString();
-    const resp = await fetch('/', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body});
+    const v = name => form.elements[name].value.trim();
+    const row = {
+      full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'),
+      project_location: v('project-location'), message: v('message'), consent: form.elements.consent.checked, language: state.language
+    };
+    const resp = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Prefer: 'return=minimal'},
+      body: JSON.stringify(row)
+    });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     // Success is shown only after the server accepted the submission.
     const wrap = form.parentElement;
@@ -1000,6 +1016,12 @@ $app.addEventListener('click', e => {
     if (el) { el.scrollIntoView({behavior: reducedMotion() ? 'auto' : 'smooth'}); el.setAttribute('tabindex', '-1'); el.focus({preventScroll: true}); }
   } else if (act === 'form-reset') render();
 });
+
+// If Supabase Storage is unreachable, fall back to the identical local copy in site/assets.
+document.addEventListener('error', e => {
+  const el = e.target;
+  if (el && el.tagName === 'IMG' && el.src.startsWith(ASSET_BASE)) el.src = localAsset(el.src);
+}, true);
 
 // Same-page in-content anchors such as #main-content must not be treated as routes.
 window.addEventListener('hashchange', e => {
