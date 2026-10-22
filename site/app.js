@@ -457,7 +457,7 @@ function services() {
   const [slug, n] = servicePhotos[i - 1];
   return `<article class="service-row" id="service-${i}" data-reveal>
     <div class="photo reveal-img"><div class="parallax-inner" data-parallax>${img(slug, n, '')}</div></div>
-    <div class="service-copy"><span class="service-num">${pad(i)}</span><h2>${t('service' + i)}</h2><p>${t('serviceLong' + i)}</p><a class="text-link" href="#/contact">${t('start')} ${ICON.diag}</a></div>
+    <div class="service-copy"><span class="service-num">${pad(i)}</span><h2>${t('service' + i)}</h2><p>${t('serviceLong' + i)}</p></div>
   </article>`;
 }).join('')}</div></div></section>
 <section class="section-sm tinted"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('sectors')}</h2><p class="copy">${t('sectorsSub')}</p></div></div>
