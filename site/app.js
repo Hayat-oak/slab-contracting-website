@@ -52,7 +52,7 @@ const processVisuals = [
   {src: 'assets/process/3-approve.webp', kind: 'photo'},
   {src: 'assets/process/4-plan.webp', kind: 'photo'},
   {src: 'assets/process/5-execute.webp', kind: 'photo'},
-  {src: 'assets/process/6-control.webp', kind: 'photo'},
+  {src: 'assets/process/6-control-inspection.webp', kind: 'photo'},
   {src: HD('soulhittin', 1), kind: 'photo'}
 ];
 const servicePhotos = [['nirvana12', 2], ['almajidiya111', 2], ['almughrizat', 3], ['almajidiya130', 1]];
