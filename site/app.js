@@ -44,15 +44,15 @@ const projects = [
 
 // Full-width and large placements use photos that have high-resolution originals (assets/hd, from SLAB's Drive folders).
 const heroSlides = [['almughrizat', 1], ['soulhittin', 1], ['almajidiya111', 1], ['almajidiya116', 1]];
-// One visual per delivery stage. 'drawing' = SLAB's own floor plan; 'illustration' = brand line art used until real
-// site photography for that stage is supplied; 'photo' = finished project. Replace files in assets/process/ to update.
+// One visual per delivery stage. 'drawing' = SLAB's own floor plan; stages 1, 3-6 use free Unsplash License photos
+// (see references/image_sources.tsv) until SLAB site photography is supplied. Replace files in assets/process/ to update.
 const processVisuals = [
-  {src: 'assets/process/1-understand.svg', kind: 'illustration'},
+  {src: 'assets/process/1-understand.webp', kind: 'photo'},
   {src: 'assets/process/2-design.webp', kind: 'drawing'},
-  {src: 'assets/process/3-approve.svg', kind: 'illustration'},
-  {src: 'assets/process/4-plan.svg', kind: 'illustration'},
-  {src: 'assets/process/5-execute.svg', kind: 'illustration'},
-  {src: 'assets/process/6-control.svg', kind: 'illustration'},
+  {src: 'assets/process/3-approve.webp', kind: 'photo'},
+  {src: 'assets/process/4-plan.webp', kind: 'photo'},
+  {src: 'assets/process/5-execute.webp', kind: 'photo'},
+  {src: 'assets/process/6-control.webp', kind: 'photo'},
   {src: HD('soulhittin', 1), kind: 'photo'}
 ];
 const servicePhotos = [['nirvana12', 2], ['almajidiya111', 2], ['almughrizat', 3], ['almajidiya130', 1]];
