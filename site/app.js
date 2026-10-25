@@ -69,7 +69,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -135,7 +135,7 @@ const phrases = {
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -251,6 +251,7 @@ const ICON = {
   phone: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>',
   pin: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
   group: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6"/></svg>',
+  search: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>',
   pause: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
   play: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>'
 };
@@ -278,25 +279,30 @@ function current() {
 /* Shared components                                                    */
 /* ------------------------------------------------------------------ */
 
+// Header order (client design): Home, About, Services, Projects, Our Process, Contact.
+const headerNav = [['home', 'home'], ['about', 'about'], ['services', 'services'], ['navProjects', 'projects'], ['process', 'process'], ['contact', 'contact']];
+
 function header(route) {
   const onHero = route.page === 'home';
-  const links = navItems.map(([key, path]) => {
+  const links = headerNav.map(([key, path]) => {
     const active = route.page === path;
     return `<a class="nav-link ${active ? 'active' : ''}" href="${href(path)}" ${active ? 'aria-current="page"' : ''}>${t(key)}</a>`;
   }).join('');
   return `<a class="skip-link" href="#main-content" data-action="skip">${t('skip')}</a>
 <header class="site-header ${onHero ? 'on-hero' : ''}" id="site-header">
-  <a class="brand" href="#/home" aria-label="${t('brandLabel')}">${LOGO}</a>
+  <div class="header-brand"><a class="brand" href="#/home" aria-label="${t('brandLabel')}">${LOGO}</a><span class="header-divider" aria-hidden="true"></span></div>
   <nav class="desktop-nav" aria-label="${isAR() ? 'التنقل الرئيسي' : 'Primary'}">${links}</nav>
   <div class="header-actions">
-    <a class="outline-cta header-cta" href="#/contact">${t('start')}</a>
+    <a class="header-cta" href="#/contact"><span>${t('start')}</span>${ICON.arrow}</a>
+    <span class="header-divider" aria-hidden="true"></span>
     <button class="lang-toggle" type="button" data-action="language" lang="${isAR() ? 'en' : 'ar'}" aria-label="${t('languageLabel')}">${t('language')}</button>
+    <button class="search-toggle" type="button" data-action="search" aria-haspopup="dialog" aria-label="${t('searchLabel')}">${ICON.search}</button>
     <button class="menu-button" type="button" data-action="menu" aria-controls="mobile-menu" aria-expanded="false" aria-label="${t('navMenu')}"><span class="menu-lines" aria-hidden="true"></span></button>
   </div>
 </header>
 <div class="mobile-menu" id="mobile-menu" hidden>
   <nav aria-label="${isAR() ? 'قائمة الجوال' : 'Mobile'}">
-    ${[['home', 'home'], ...navItems].map(([key, path], i) => `<a class="mobile-link" style="--i:${i}" href="${href(path)}" ${route.page === path ? 'aria-current="page"' : ''}><span>${pad(i + 1)}</span>${t(key)}</a>`).join('')}
+    ${headerNav.map(([key, path], i) => `<a class="mobile-link" style="--i:${i}" href="${href(path)}" ${route.page === path ? 'aria-current="page"' : ''}><span>${pad(i + 1)}</span>${t(key)}</a>`).join('')}
   </nav>
   <div class="mobile-menu-foot">
     <a class="dark-cta" href="#/contact">${t('start')} ${ICON.arrow}</a>
@@ -775,6 +781,63 @@ function moveCursor() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Site search (header)                                                 */
+/* ------------------------------------------------------------------ */
+
+// Arabic-aware normalisation: strip diacritics/tatweel, unify alef, yaa and taa marbuta forms.
+const norm = s => String(s).toLowerCase().normalize('NFKD').replace(/[\u064B-\u065F\u0670\u0640\u0300-\u036f]/g, '')
+  .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+function searchIndex() {
+  const both = (key) => [phrases.en[key], phrases.ar[key]].join(' ');
+  const items = [];
+  projects.forEach(p => items.push({group: 'searchGroupProjects', label: pname(p), meta: `${pclient(p)} · ${t('riyadhShort')}`, href: href('projects/' + p.id), text: [p.name, p.ar, p.client, p.clientAr, 'project مشروع'].join(' ')}));
+  [1, 2, 3, 4].forEach(i => items.push({group: 'searchGroupServices', label: t('service' + i), meta: t('service' + i + 'desc'), href: `#/services/${i}`, text: [both('service' + i), both('serviceLong' + i)].join(' ')}));
+  [1, 2, 3, 4, 5, 6, 7].forEach(i => items.push({group: 'searchGroupProcess', label: `${pad(i)} ${t('p' + i)}`, meta: t('p' + i + 'd'), href: `#/process/${i}`, text: [both('p' + i), both('p' + i + 'd')].join(' ')}));
+  headerNav.forEach(([key, path]) => items.push({group: 'searchGroupPages', label: t(key), meta: '', href: href(path), text: both(key)}));
+  items.push({group: 'searchGroupPages', label: t('privacyTitle'), meta: '', href: '#/privacy', text: both('privacyTitle')});
+  return items.map(x => ({...x, n: norm(x.text + ' ' + x.label)}));
+}
+
+let searchDialog = null;
+function openSearch() {
+  if (!searchDialog) {
+    searchDialog = document.createElement('dialog');
+    searchDialog.className = 'search-dialog';
+    document.body.appendChild(searchDialog);
+    searchDialog.addEventListener('input', e => { if (e.target.id === 'search-input') renderSearch(e.target.value); });
+    searchDialog.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target.id === 'search-input') { const first = searchDialog.querySelector('.search-results a'); if (first) { e.preventDefault(); first.click(); } }
+    });
+    searchDialog.addEventListener('click', e => {
+      if (e.target.closest('a') || e.target.closest('[data-search-close]') || e.target === searchDialog) searchDialog.close();
+    });
+    searchDialog.addEventListener('close', () => { document.body.style.overflow = ''; const b = document.querySelector('[data-action="search"]'); if (b) b.focus(); });
+  }
+  searchDialog.dir = isAR() ? 'rtl' : 'ltr';
+  searchDialog.setAttribute('aria-label', t('searchLabel'));
+  searchDialog.innerHTML = `<div class="search-panel">
+    <div class="search-bar">${ICON.search}<input id="search-input" type="search" autocomplete="off" placeholder="${esc(t('searchPlaceholder'))}" aria-label="${esc(t('searchLabel'))}" aria-controls="search-results">
+      <button type="button" data-search-close aria-label="${t('closeSearch')}">${ICON.close}</button></div>
+    <div class="search-results" id="search-results" role="region" aria-live="polite"></div></div>`;
+  searchDialog._index = searchIndex();
+  renderSearch('');
+  document.body.style.overflow = 'hidden';
+  searchDialog.showModal ? searchDialog.showModal() : searchDialog.setAttribute('open', '');
+  searchDialog.querySelector('#search-input').focus();
+}
+
+function renderSearch(q) {
+  const box = searchDialog.querySelector('#search-results');
+  const terms = norm(q).split(' ').filter(Boolean);
+  const hits = terms.length ? searchDialog._index.filter(x => terms.every(w => x.n.includes(w))) : searchDialog._index.filter(x => x.group === 'searchGroupPages');
+  if (!hits.length) { box.innerHTML = `<p class="search-empty">${t('searchEmpty')}</p>`; return; }
+  const groups = ['searchGroupProjects', 'searchGroupServices', 'searchGroupProcess', 'searchGroupPages'];
+  box.innerHTML = groups.map(g => { const list = hits.filter(x => x.group === g).slice(0, 6); if (!list.length) return '';
+    return `<div class="search-group"><h3>${t(g)}</h3><ul>${list.map(x => `<li><a href="${x.href}"><span>${esc(x.label)}</span>${x.meta ? `<small>${esc(x.meta)}</small>` : ''}</a></li>`).join('')}</ul></div>`; }).join('');
+}
+
+/* ------------------------------------------------------------------ */
 /* Gallery & lightbox                                                   */
 /* ------------------------------------------------------------------ */
 
@@ -1057,6 +1120,7 @@ $app.addEventListener('click', e => {
   else if (act === 'gallery-index') setGallery(Number(btn.dataset.index));
   else if (act === 'lightbox') openLightbox();
   else if (act === 'project-tab') setProjectTab(btn.dataset.tab);
+  else if (act === 'search') openSearch();
   else if (act === 'hero-video') {
     const v = document.getElementById('hero-video');
     if (!v) return;
