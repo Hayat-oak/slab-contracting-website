@@ -76,7 +76,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', techEyebrow:'Smarter projects, stronger outcomes', techIntro:'Integrated tools and data-driven processes to deliver greater visibility, efficiency and control across every stage of our projects.', ourSectors:'Our Sectors', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in the city.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in the city.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', footerAbout:'Delivering exceptional spaces through integrated contracting and innovative solutions.', footerCity:'Riyadh, Saudi Arabia', techEyebrow:'Smarter projects, stronger outcomes', techIntro:'Integrated tools and data-driven processes to deliver greater visibility, efficiency and control across every stage of our projects.', ourSectors:'Our Sectors', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in the city.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in the city.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -142,7 +142,7 @@ const phrases = {
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',techEyebrow:'مشاريع أذكى، نتائج أقوى',techIntro:'أدوات متكاملة وعمليات قائمة على البيانات لتحقيق وضوح وكفاءة وتحكم أكبر في كل مرحلة من مراحل مشاريعنا.',ourSectors:'قطاعاتنا',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة بالمدينة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة بالمدينة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',footerAbout:'نقدّم مساحات استثنائية من خلال مقاولات متكاملة وحلول مبتكرة.',footerCity:'الرياض، المملكة العربية السعودية',techEyebrow:'مشاريع أذكى، نتائج أقوى',techIntro:'أدوات متكاملة وعمليات قائمة على البيانات لتحقيق وضوح وكفاءة وتحكم أكبر في كل مرحلة من مراحل مشاريعنا.',ourSectors:'قطاعاتنا',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة بالمدينة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة بالمدينة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -319,18 +319,21 @@ function header(route) {
 </div>`;
 }
 
+// Email from the client's footer design (not in the company profile) — confirm the mailbox before launch.
+const EMAIL = 'info@slab.sa';
 function footer() {
+  const row = (h, label) => `<a href="${h}"><span>${label}</span>${ICON.arrow}</a>`;
   return `<footer class="site-footer"><div class="footer-top">
-  <div class="footer-brand-wrap"><a class="footer-brand" href="#/home" aria-label="${t('brandLabel')}">${LOGO}</a><p class="footer-tag">${t('brandTag')}</p><p class="footer-part">${t('part')}</p></div>
-  <div class="footer-col"><h2>${t('quick')}</h2>${navItems.slice(0, 4).map(([key, path]) => `<a href="${href(path)}">${t(key)}</a>`).join('')}</div>
-  <div class="footer-col"><h2>${t('services')}</h2>${[1, 2, 3, 4].map(i => `<a href="#/services/${i}">${t('service' + i)}</a>`).join('')}</div>
+  <div class="footer-brand-wrap"><a class="footer-brand" href="#/home" aria-label="${t('brandLabel')}">${LOGO}</a><span class="footer-rule" aria-hidden="true"></span><p class="footer-tag">${t('brandTag')}</p><p class="footer-about">${t('footerAbout')}</p></div>
+  <div class="footer-col footer-links"><h2>${t('quick')}</h2>${navItems.slice(0, 4).map(([key, path]) => row(href(path), t(key))).join('')}</div>
+  <div class="footer-col footer-links"><h2>${t('services')}</h2>${[1, 2, 3, 4].map(i => row(`#/services/${i}`, t('service' + i))).join('')}</div>
   <div class="footer-col footer-contact"><h2>${t('contactLabel')}</h2>
     <a href="tel:${PHONE}">${ICON.phone}<span dir="ltr">${PHONE_DISPLAY}</span></a>
-    <span>${ICON.pin}<span>${t('locationOffice')}</span></span>
-    <a href="#/contact">${ICON.mail}<span>${t('start')}</span>${ICON.arrow}</a></div>
-  <figure class="footer-visual"><img src="assets/about/footer-image.webp" alt="" loading="lazy" decoding="async"><figcaption>${t('footerTagline')}</figcaption></figure>
+    <span>${ICON.pin}<span>${t('footerCity')}</span></span>
+    <a href="mailto:${EMAIL}">${ICON.mail}<span dir="ltr">${EMAIL}</span></a>
+    <a class="footer-cta" href="#/contact"><span>${t('start')}</span>${ICON.arrow}</a></div>
 </div>
-<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal"><a href="#/privacy">${t('privacy')}</a><span>${t('sourcePhoto')}</span></span></div></footer>`;
+<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal"><a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a></span></div></footer>`;
 }
 
 function projectCard(p, extra = '') {
