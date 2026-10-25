@@ -759,3 +759,42 @@ html[dir="rtl"] .impact-intro h2 { letter-spacing: 0; line-height: 1.3; }
   .impact-stat ul { flex-direction: column; align-items: center; white-space: normal; margin: 0; }
   .impact-stat li + li::before { content: none; }
 }
+
+/* Small uppercase link with a long rule before it (client design) */
+.rule-link { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: #5f5d58; padding-bottom: 8px; border-bottom: 1px solid currentColor; white-space: nowrap; position: relative; }
+.rule-link::before { content: ''; position: absolute; inset-inline-end: calc(100% + 40px); top: 50%; width: clamp(80px, 22vw, 390px); height: 1px; background: #cfcbc3; }
+html[dir="rtl"] .rule-link { letter-spacing: 0; font-size: 15px; }
+.rule-link:hover { color: var(--ink); }
+
+/* Sectors: four full-bleed photo cards with a dark caption band */
+.sectors-band { padding-top: clamp(56px, 6vw, 96px); }
+.sector-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+.sector-card { position: relative; aspect-ratio: 1.46; overflow: hidden; color: #fff; background: #2a2927; }
+.sector-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+.sector-card:hover > img { transform: scale(1.05); }
+.sector-band { position: absolute; inset: auto 0 0 0; display: flex; align-items: center; gap: clamp(16px, 1.8vw, 28px); padding: 22px clamp(20px, 2.4vw, 40px) 26px; background: linear-gradient(180deg, rgba(30, 30, 30, .62), rgba(26, 26, 26, .86)); backdrop-filter: blur(2px); }
+.sector-icon { flex: none; font-size: clamp(38px, 3vw, 50px); padding-inline-end: clamp(16px, 1.8vw, 28px); border-inline-end: 1px solid rgba(255, 255, 255, .45); align-self: stretch; display: flex; align-items: center; }
+.sector-icon .icon { stroke-width: 1.2; }
+.sector-num { font-size: 15px; opacity: .9; }
+.sector-band h3 { font-size: clamp(22px, 1.8vw, 30px); font-weight: 400; margin: 4px 0 6px; }
+.sector-band p { font-size: 15px; line-height: 1.55; margin: 0; color: #ece9e3; }
+@media (max-width: 1180px) { .sector-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .sector-cards { grid-template-columns: 1fr; } .sector-card { aspect-ratio: 1.15; } }
+
+/* Seven-stage strip: numbered circles with icons on a connecting line */
+.process-strip-section { padding-block: clamp(56px, 6vw, 96px); }
+.process-strip { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); position: relative; }
+.process-strip li { position: relative; }
+.process-strip li + li::before { content: ''; position: absolute; top: 65px; inset-inline-end: calc(50% + 40px); width: calc(100% - 80px); height: 1px; background: #c9b9a6; }
+.process-strip a { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.ps-num { font-size: 14px; color: var(--muted); letter-spacing: .08em; }
+.ps-icon { width: 66px; height: 66px; border-radius: 50%; background: #e9e1d6; color: #4a4945; display: grid; place-items: center; font-size: 28px; transition: background .3s, color .3s, transform .35s var(--ease); }
+.ps-icon .icon { stroke-width: 1.4; }
+.ps-label { font-size: 17px; color: var(--ink); }
+.process-strip a:hover .ps-icon { background: var(--navy); color: #fff; transform: translateY(-3px); }
+@media (max-width: 900px) {
+  .process-strip { grid-template-columns: repeat(4, 1fr); row-gap: 34px; }
+  .process-strip li + li::before { display: none; }
+  .rule-link::before { display: none; }
+}
+@media (max-width: 520px) { .process-strip { grid-template-columns: repeat(2, 1fr); } }

@@ -76,7 +76,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in the city.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in the city.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', ourSectors:'Our Sectors', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in the city.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in the city.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -142,7 +142,7 @@ const phrases = {
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة بالمدينة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة بالمدينة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',ourSectors:'قطاعاتنا',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة بالمدينة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة بالمدينة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -351,6 +351,36 @@ function serviceCards() {
   }).join('')}</div>`;
 }
 
+
+// Sectors and seven-stage strip (client design). Photos are SLAB's own; the profile has no dedicated
+// commercial/government photography, so those two use SLAB team / planning images.
+const SECTOR_VISUALS = {
+  hospitality: {src: HD('soulhittin', 1), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-9M21 19v-5a3 3 0 0 0-3-3H10v6M3 17h18M6.5 13.5a1.5 1.5 0 1 0 0-.01"/></svg>'},
+  residential: {src: HD('almajidiya116', 1), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>'},
+  commercial: {src: 'assets/process/svc-4-project-management.webp', pos: 'center 25%', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3h12v18M4 21h16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M11 21v-3h2v3"/></svg>'},
+  institutional: {src: 'assets/process/4-plan.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 4l9 5M4 9h16M6 9v8M10 9v8M14 9v8M18 9v8M3 20h18M4 17h16"/></svg>'}
+};
+function sectorsSection(link) {
+  return `<section class="sectors-band" aria-labelledby="sectors-title"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title" id="sectors-title">${t('sectors')}</h2><p class="copy">${t('sectorsSub')}</p></div>${link ? `<a class="rule-link" href="#/services">${t('ourSectors')} ${ICON.diag}</a>` : ''}</div></div>
+  <div class="sector-cards">${['hospitality', 'residential', 'commercial', 'institutional'].map((k, i) => { const v = SECTOR_VISUALS[k]; return `<article class="sector-card" data-reveal style="--d:${i * 80}ms">
+    <img src="${v.src}" alt="" loading="lazy" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}>
+    <div class="sector-band"><span class="sector-icon">${v.icon}</span><div><span class="sector-num">${pad(i + 1)}</span><h3>${t(k)}</h3><p>${t(k + 'Desc')}</p></div></div></article>`; }).join('')}</div></section>`;
+}
+const STAGE_ICONS = [
+  '<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>',
+  '<path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/>',
+  '<path d="M8 4h8v3H8zM6 5H5v16h14V5h-1M9 13l2 2 4-4"/>',
+  '<path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M8 14h1M12 14h1M16 14h1M8 17h1M12 17h1"/>',
+  '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
+  '<path d="M5 20V12M10 20V6M15 20v-9M20 20V4M3 20h18"/>',
+  '<path d="M3 11l4-4 4 2 3-2 7 5-4 4M7 7l-4 4 6 6 2-1 2 2 4-3M11 9l-2 3 2 1 3-3"/>'
+];
+function processStrip() {
+  return `<section class="process-strip-section"><div class="container">
+  <div class="section-head" data-reveal><div><h2 class="section-title">${t('processTeaser')}</h2><p class="copy">${t('processTeaserSub')}</p></div><a class="rule-link" href="#/process">${t('process')} ${ICON.diag}</a></div>
+  <ol class="process-strip" data-reveal>${STAGE_ICONS.map((d, i) => `<li><a href="#/process/${i + 1}"><span class="ps-num">${pad(i + 1)}</span><span class="ps-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${d}</svg></span><span class="ps-label">${t('p' + (i + 1))}</span></a></li>`).join('')}</ol>
+</div></section>`;
+}
 function cta() {
   return `<section class="cta-banner" aria-labelledby="cta-title"><div class="bg-image" data-parallax style="background-image:url('assets/about/cta-bedroom.webp')"></div>
   <div class="content" data-reveal><span class="cta-rule" aria-hidden="true"></span><h2 id="cta-title">${t('bannerTitle').replace('\n', '<br>')}</h2><p>${t('bannerDesc')}</p>
@@ -442,10 +472,7 @@ function home() {
 </div></section>
 <section class="section-sm"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('featured')}</h2><p class="micro">${t('featuredSub')}</p></div><a class="text-link" href="#/projects">${t('viewAll')} ${ICON.diag}</a></div>
   <div class="project-grid">${projects.slice(0, 4).map(p => projectCard(p)).join('')}</div></div></section>
-<section class="section-sm process-teaser"><div class="container">
-  <div class="section-head" data-reveal><div><h2 class="section-title">${t('processTeaser')}</h2><p class="micro">${t('processTeaserSub')}</p></div><a class="text-link" href="#/process">${t('process')} ${ICON.diag}</a></div>
-  <ol class="teaser-steps" data-reveal>${Array.from({length: 7}, (_, i) => `<li><a href="#/process/${i + 1}"><span>${pad(i + 1)}</span>${t('p' + (i + 1))}</a></li>`).join('')}</ol>
-</div></section>
+${sectorsSection(true)}${processStrip()}
 ${impact()}
 ${cta()}
 </main>`;
@@ -527,10 +554,7 @@ function services() {
     <div class="service-copy"><span class="service-num">${pad(i)}</span><h2>${t('service' + i)}</h2><p>${t('serviceLong' + i)}</p></div>
   </article>`;
 }).join('')}</div></div></section>
-<section class="section-sm tinted"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('sectors')}</h2><p class="copy">${t('sectorsSub')}</p></div></div>
-<div class="sector-grid">${['hospitality', 'residential', 'commercial', 'institutional'].map((k, i) => `<article class="sector-item" data-reveal style="--d:${i * 80}ms"><span>${pad(i + 1)}</span><h3>${t(k)}</h3><p>${t(k + 'Desc')}</p></article>`).join('')}</div></div></section>
-<section class="section-sm"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('processTeaser')}</h2><p class="micro">${t('processTeaserSub')}</p></div><a class="text-link" href="#/process">${t('process')} ${ICON.diag}</a></div>
-<ol class="teaser-steps" data-reveal>${Array.from({length: 7}, (_, i) => `<li><a href="#/process/${i + 1}"><span>${pad(i + 1)}</span>${t('p' + (i + 1))}</a></li>`).join('')}</ol></div></section>
+${sectorsSection(false)}${processStrip()}
 ${cta()}</main>`;
 }
 
