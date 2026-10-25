@@ -76,7 +76,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -142,7 +142,7 @@ const phrases = {
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -258,6 +258,7 @@ const ICON = {
   phone: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>',
   pin: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
   group: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6"/></svg>',
+  mail: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="1.5"/><path d="m4 7 8 6 8-6"/></svg>',
   search: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>',
   pause: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
   play: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>'
@@ -320,35 +321,21 @@ function header(route) {
 
 function footer() {
   return `<footer class="site-footer"><div class="footer-top">
-  <div class="footer-brand-wrap"><a class="footer-brand" href="#/home" aria-label="${t('brandLabel')}">${LOGO}</a><p class="footer-tag">${t('brandTag')}</p><p class="micro">${t('part')}</p></div>
+  <div class="footer-brand-wrap"><a class="footer-brand" href="#/home" aria-label="${t('brandLabel')}">${LOGO}</a><p class="footer-tag">${t('brandTag')}</p><p class="footer-part">${t('part')}</p></div>
   <div class="footer-col"><h2>${t('quick')}</h2>${navItems.slice(0, 4).map(([key, path]) => `<a href="${href(path)}">${t(key)}</a>`).join('')}</div>
   <div class="footer-col"><h2>${t('services')}</h2>${[1, 2, 3, 4].map(i => `<a href="#/services/${i}">${t('service' + i)}</a>`).join('')}</div>
-  <div class="footer-col"><h2>${t('contactLabel')}</h2><a href="tel:${PHONE}"><span dir="ltr">${PHONE_DISPLAY}</span></a><span>${t('locationOffice')}</span><a href="#/contact">${t('start')}</a></div>
+  <div class="footer-col footer-contact"><h2>${t('contactLabel')}</h2>
+    <a href="tel:${PHONE}">${ICON.phone}<span dir="ltr">${PHONE_DISPLAY}</span></a>
+    <span>${ICON.pin}<span>${t('locationOffice')}</span></span>
+    <a href="#/contact">${ICON.mail}<span>${t('start')}</span>${ICON.arrow}</a></div>
+  <figure class="footer-visual"><img src="assets/about/footer-image.webp" alt="" loading="lazy" decoding="async"><figcaption>${t('footerTagline')}</figcaption></figure>
 </div>
 <div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal"><a href="#/privacy">${t('privacy')}</a><span>${t('sourcePhoto')}</span></span></div></footer>`;
 }
 
-function projectCard(p, extra = '') {
-  return `<article class="project-card ${extra}" data-reveal>
-  <a href="${href('projects/' + p.id)}" data-cursor="${t('view')}">
-    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${t('residential')}`)}</div>
-    <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${t('riyadhShort')} · ${pclient(p)} · ${units(p)}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
-  </a></article>`;
-}
-
-function serviceCards() {
-  return `<div class="service-grid">${[1, 2, 3, 4].map(i => {
-
-    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="${t('view')}">
-      <div class="photo reveal-img">${serviceImg(i)}</div>
-      <div class="card-end"><div><span class="card-num">${pad(i)}</span><h3>${t('service' + i)}</h3><p class="micro">${t('service' + i + 'desc')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
-    </a>`;
-  }).join('')}</div>`;
-}
-
 function cta() {
-  return `<section class="cta-banner" aria-labelledby="cta-title"><div class="bg-image" data-parallax style="background-image:url('${HD('almajidiya130', 2)}')"></div>
-  <div class="content" data-reveal><h2 id="cta-title">${t('bannerTitle').replace('\n', '<br>')}</h2><p>${t('bannerDesc')}</p>
+  return `<section class="cta-banner" aria-labelledby="cta-title"><div class="bg-image" data-parallax style="background-image:url('assets/about/cta-bedroom.webp')"></div>
+  <div class="content" data-reveal><span class="cta-rule" aria-hidden="true"></span><h2 id="cta-title">${t('bannerTitle').replace('\n', '<br>')}</h2><p>${t('bannerDesc')}</p>
   <a class="outline-cta light" href="#/contact">${t('start')} ${ICON.arrow}</a></div></section>`;
 }
 
@@ -409,7 +396,7 @@ function home() {
   <ol class="teaser-steps" data-reveal>${Array.from({length: 7}, (_, i) => `<li><a href="#/process/${i + 1}"><span>${pad(i + 1)}</span>${t('p' + (i + 1))}</a></li>`).join('')}</ol>
 </div></section>
 <div class="container">${stats()}</div>
-<div class="container cta-wrap">${cta()}</div>
+${cta()}
 </main>`;
 }
 
