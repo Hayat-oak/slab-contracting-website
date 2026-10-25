@@ -128,7 +128,12 @@
     document.getElementById('results').textContent = out.join('\n');
     document.title = pass ? 'SLAB self-test PASS' : 'SLAB self-test FAIL';
     document.body.dataset.result = pass ? 'pass' : 'fail';
-  })();
+  })().catch(e => {
+    // Any exception (e.g. a render error) must surface as an explicit failure.
+    document.getElementById('results').textContent = 'FAIL — exception: ' + (e && e.stack || e);
+    document.title = 'SLAB self-test FAIL';
+    document.body.dataset.result = 'fail';
+  });
   </script>
 </body>
 </html>

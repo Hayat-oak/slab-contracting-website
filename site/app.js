@@ -76,7 +76,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in the city.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in the city.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -142,7 +142,7 @@ const phrases = {
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة بالمدينة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة بالمدينة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -333,6 +333,24 @@ function footer() {
 <div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal"><a href="#/privacy">${t('privacy')}</a><span>${t('sourcePhoto')}</span></span></div></footer>`;
 }
 
+function projectCard(p, extra = '') {
+  return `<article class="project-card ${extra}" data-reveal>
+  <a href="${href('projects/' + p.id)}" data-cursor="${t('view')}">
+    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${t('residential')}`)}</div>
+    <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${t('riyadhShort')} · ${pclient(p)} · ${units(p)}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
+  </a></article>`;
+}
+
+function serviceCards() {
+  return `<div class="service-grid">${[1, 2, 3, 4].map(i => {
+
+    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="${t('view')}">
+      <div class="photo reveal-img">${serviceImg(i)}</div>
+      <div class="card-end"><div><span class="card-num">${pad(i)}</span><h3>${t('service' + i)}</h3><p class="micro">${t('service' + i + 'desc')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
+    </a>`;
+  }).join('')}</div>`;
+}
+
 function cta() {
   return `<section class="cta-banner" aria-labelledby="cta-title"><div class="bg-image" data-parallax style="background-image:url('assets/about/cta-bedroom.webp')"></div>
   <div class="content" data-reveal><span class="cta-rule" aria-hidden="true"></span><h2 id="cta-title">${t('bannerTitle').replace('\n', '<br>')}</h2><p>${t('bannerDesc')}</p>
@@ -344,6 +362,39 @@ function interiorHero(title, sub, photo = 'soulhittin', index = 1) {
   <div class="content"><h1 class="hero-title-anim">${title}</h1><p>${sub}</p></div></section>`;
 }
 
+
+// "Our Impact" (client design): intro panel, four stats with icons and detail lists, three city cards.
+// Detail lists use the profile's own sectors and seven delivery stages; city lines stay within what the profile states.
+const IMPACT_ICON = {
+  units: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5l7-2v18M11 21V8l9 3v10M3 21h18M7 8h1M7 12h1M7 16h1M14 13h2M14 17h2"/></svg>',
+  cities: ICON.pin,
+  sectors: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/></svg>',
+  stages: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>'
+};
+function impact() {
+  const items = [
+    ['units', 125, '+', 'stats1', []],
+    ['cities', 3, '', 'stats2', []],
+    ['sectors', 4, '', 'stats3', [['residential', 'hospitality'], ['commercial'], ['institutional']].map(row => row.map(k => t(k)))],
+    ['stages', 7, '', 'stats4', [[1, 2, 3], [4, 5, 6, 7]].map(row => row.map(i => t('p' + i)))]
+  ];
+  const cities = [['riyadh', 'cityRiyadh', 'cityRiyadhD'], ['madinah', 'cityMadinah', 'cityMadinahD'], ['jeddah', 'cityJeddah', 'cityJeddahD']];
+  return `<section class="impact" aria-labelledby="impact-title">
+  <div class="impact-intro" style="background-image:url('assets/about/why-main.webp')">
+    <div class="impact-intro-copy" data-reveal><span class="eyebrow-rule">${t('impactEyebrow')}</span>
+      <h2 id="impact-title">${t('impactTitle').replace('\n', '<br>')}</h2><p>${t('impactDesc')}</p>
+      <a class="outline-cta light" href="#/projects">${t('explore')} ${ICON.arrow}</a></div>
+  </div>
+  <div class="impact-main">
+    <div class="impact-stats">${items.map(([icon, n, suffix, key, list]) => `<div class="impact-stat" data-reveal>
+      <span class="impact-icon">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
+      <span class="impact-label">${t(key)}</span>${list.map(row => `<ul>${row.map(x => `<li>${x}</li>`).join('')}</ul>`).join('')}</div>`).join('')}</div>
+    <div class="impact-cities">${cities.map(([img, name, desc]) => `<article class="city-card" data-reveal>
+      <div class="city-photo"><img src="assets/about/city-${img}.webp" alt="" loading="lazy" decoding="async"></div>
+      <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div></article>`).join('')}</div>
+  </div>
+</section>`;
+}
 function stats(extra = '') {
   const items = [[125, '+', 'stats1'], [3, '', 'stats2'], [4, '', 'stats3'], [7, '', 'stats4']];
   return `<div class="stats-band ${extra}" data-reveal style="--stats-bg:url('${HD('masharef', 3)}')">${items.map(([n, suffix, key]) =>
@@ -395,7 +446,7 @@ function home() {
   <div class="section-head" data-reveal><div><h2 class="section-title">${t('processTeaser')}</h2><p class="micro">${t('processTeaserSub')}</p></div><a class="text-link" href="#/process">${t('process')} ${ICON.diag}</a></div>
   <ol class="teaser-steps" data-reveal>${Array.from({length: 7}, (_, i) => `<li><a href="#/process/${i + 1}"><span>${pad(i + 1)}</span>${t('p' + (i + 1))}</a></li>`).join('')}</ol>
 </div></section>
-<div class="container">${stats()}</div>
+${impact()}
 ${cta()}
 </main>`;
 }
@@ -492,7 +543,7 @@ function about() {
   <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 1, '')}</div></div>
 </div>
 <div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><div class="pillar-photo reveal-img"><img src="assets/about/pillar-${k}.webp" alt="" loading="lazy" decoding="async"></div><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
-${stats('stats-full')}
+${impact()}
 <section class="section" id="about-principles"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('principles')}</h2><p class="copy narrow">${t('principlesLead')}</p></div></div>
 <div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<article class="principle" data-reveal style="--d:${i * 90}ms"><span class="eyebrow">${pad(i + 1)}</span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp" alt="" loading="lazy" decoding="async"></div></article>`).join('')}</div></div></section>
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
