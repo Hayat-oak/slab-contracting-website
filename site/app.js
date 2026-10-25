@@ -374,20 +374,22 @@ function sectorsSection(link) {
     <img src="${v.src}" alt="" loading="lazy" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}>
     <div class="sector-band"><span class="sector-icon">${v.icon}</span><div><span class="sector-num">${pad(i + 1)}</span><h3>${t(k)}</h3><p>${t(k + 'Desc')}</p></div></div></article>`; }).join('')}</div></section>`;
 }
+// Icon system (client design): earthy palette circles with an arc accent. Index i -> STAGE_TONES[i].
+const STAGE_TONES = ['#ece4dc', '#d5d9cc', '#7f8a75', '#e6d6c5', '#b8826a', '#596247', '#434a35'];
+const toneInk = c => ['#ece4dc', '#d5d9cc', '#e6d6c5'].includes(c) ? '#4a4038' : '#ffffff';
 const STAGE_ICONS = [
-  '<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>',
-  '<path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/>',
-  '<path d="M8 4h8v3H8zM6 5H5v16h14V5h-1M9 13l2 2 4-4"/>',
-  '<path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M8 14h1M12 14h1M16 14h1M8 17h1M12 17h1"/>',
-  '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
-  '<path d="M5 20V12M10 20V6M15 20v-9M20 20V4M3 20h18"/>',
-  '<path d="M3 11l4-4 4 2 3-2 7 5-4 4M7 7l-4 4 6 6 2-1 2 2 4-3M11 9l-2 3 2 1 3-3"/>'
-];
-const TECH_ICONS = ['<path d="M5 20v-6M10 20V9M15 20v-8M20 20V5M3 20h18"/>', '<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>', '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>', '<circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 5.5a3 3 0 0 1 0 5.6M18 13.8c1.8.7 3 2.6 3 5.2"/>'];
+  '<path d="M6 3h8l4 4v6M14 3v4h4M6 3v18h7M9 10h5M9 13h3"/><circle cx="16.5" cy="17.5" r="2.6"/><path d="m18.5 19.5 2 2"/>',
+  '<path d="M4 20l1.2-4.4L16.5 4.3a2 2 0 0 1 2.8 0l.4.4a2 2 0 0 1 0 2.8L8.4 18.8zM14.5 6.3l3.2 3.2M5.2 15.6l3.2 3.2"/>',
+  '<path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1z"/><path d="M8 5H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2M9 13.5l2 2 4-4.5"/>',
+  '<rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M7.5 13h1.5M11.25 13h1.5M15 13h1.5M7.5 16.5h1.5M11.25 16.5h1.5M15 16.5h1.5"/>',
+  '<circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-2.6-1.5L14 2.5h-4l-.4 2.5a7.4 7.4 0 0 0-2.6 1.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 3l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 2.6-1.5l2.4 1 2-3.4z"/>',
+  '<path d="M3 21h18M5.5 21v-7h2.5v7M10.75 21V9h2.5v12M16 21V5h2.5v16"/>',
+  '<path d="m2.5 11.5 3.5-3.5 3 1 3-2 3 .5 4.5 4.5M2.5 11.5 8 17l1.5-.5 1.5 1.5 1.5-.5 1.5 1 4.5-4.5M12 7l-3 3.5c.6.8 1.8.9 2.6.2L13.5 9l4 4M10.5 14.5 12 16M12.5 13l1.5 1.5"/>'
+];const TECH_ICONS = ['<path d="M5 20v-6M10 20V9M15 20v-8M20 20V5M3 20h18"/>', '<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>', '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>', '<circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 5.5a3 3 0 0 1 0 5.6M18 13.8c1.8.7 3 2.6 3 5.2"/>'];
 function processStrip() {
   return `<section class="process-strip-section"><div class="container">
   <div class="section-head" data-reveal><div><h2 class="section-title">${t('processTeaser')}</h2><p class="copy">${t('processTeaserSub')}</p></div><a class="rule-link" href="#/process">${t('process')} ${ICON.diag}</a></div>
-  <ol class="process-strip" data-reveal>${STAGE_ICONS.map((d, i) => `<li><a href="#/process/${i + 1}"><span class="ps-num">${pad(i + 1)}</span><span class="ps-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${d}</svg></span><span class="ps-label">${t('p' + (i + 1))}</span></a></li>`).join('')}</ol>
+  <ol class="process-strip" data-reveal>${STAGE_ICONS.map((d, i) => `<li style="--tone:${STAGE_TONES[i]};--tone-ink:${toneInk(STAGE_TONES[i])}"><a href="#/process/${i + 1}"><span class="ps-num">${pad(i + 1)}</span><span class="ps-icon icon-ring"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${d}</svg></span><span class="ps-label">${t('p' + (i + 1))}</span><i class="ps-dash" aria-hidden="true"></i></a></li>`).join('')}</ol>
 </div></section>`;
 }
 function cta() {
@@ -405,12 +407,11 @@ function interiorHero(title, sub, photo = 'soulhittin', index = 1) {
 // "Our Impact" (client design): intro panel, four stats with icons and detail lists, three city cards.
 // Detail lists use the profile's own sectors and seven delivery stages; city lines stay within what the profile states.
 const IMPACT_ICON = {
-  units: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5l7-2v18M11 21V8l9 3v10M3 21h18M7 8h1M7 12h1M7 16h1M14 13h2M14 17h2"/></svg>',
-  cities: ICON.pin,
-  sectors: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/></svg>',
-  stages: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>'
-};
-function impact() {
+  units: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 21h19M4 21V10l4-2v13M8 21V5l5-2.5V21M13 21V7l5 2v12M18 21v-8l2.5 1.2V21M10.2 7h.8M10.2 10h.8M10.2 13h.8M10.2 16h.8M15.2 11h.8M15.2 14h.8M15.2 17h.8"/></svg>',
+  cities: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9.5s3-2.8 3-5a3 3 0 0 0-6 0c0 2.2 3 5 3 5z"/><circle cx="12" cy="4.6" r=".9"/><path d="M6 19.5s2.6-2.4 2.6-4.3a2.6 2.6 0 0 0-5.2 0c0 1.9 2.6 4.3 2.6 4.3zM18 19.5s2.6-2.4 2.6-4.3a2.6 2.6 0 0 0-5.2 0c0 1.9 2.6 4.3 2.6 4.3z"/><path d="M8.6 9.8 7.2 11.6M15.4 9.8l1.4 1.8M9 20.5c2 .8 4 .8 6 0" stroke-dasharray="1.4 1.6"/></svg>',
+  sectors: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg>',
+  stages: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="5" r="2"/><path d="m4.6 5 .7.7 1.2-1.4M7.5 5h9a3 3 0 0 1 0 6h-9a3 3 0 0 0 0 6h9"/><circle cx="18.5" cy="17" r="2"/><path d="m17.6 17 .7.7 1.2-1.4"/><circle cx="5.5" cy="11" r="1.4"/></svg>'
+};function impact() {
   const items = [
     ['units', 125, '+', 'stats1', []],
     ['cities', 3, '', 'stats2', []],
@@ -593,13 +594,13 @@ function process() {
 <span class="eyebrow">${t('processHeroSub')}</span><h1 class="page-title hero-title-anim">${t('processTitle')}</h1><p class="copy">${t('processIntro')}</p>
 <div class="process-track"><div class="process-progress" id="process-progress" style="--p:${state.step / 6}"></div>
 <div class="process-steps" role="tablist" aria-label="${t('processStages')}">${Array.from({length: 7}, (_, i) =>
-  `<button type="button" role="tab" class="process-step ${state.step === i ? 'active' : ''} ${i < state.step ? 'done' : ''}" id="step-${i}" aria-controls="process-panel" aria-selected="${state.step === i}" tabindex="${state.step === i ? 0 : -1}" data-action="step" data-index="${i}"><span class="step-circle">${pad(i + 1)}</span><strong>${t('p' + (i + 1))}</strong><small>${t('p' + (i + 1) + 'd')}</small></button>`).join('')}</div></div>
+  `<button type="button" role="tab" class="process-step ${state.step === i ? 'active' : ''} ${i < state.step ? 'done' : ''}" id="step-${i}" aria-controls="process-panel" aria-selected="${state.step === i}" tabindex="${state.step === i ? 0 : -1}" data-action="step" data-index="${i}"><span class="step-num">${pad(i + 1)}</span><span class="step-circle icon-ring" style="--tone:${STAGE_TONES[i]};--tone-ink:${toneInk(STAGE_TONES[i])}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${STAGE_ICONS[i]}</svg></span><strong>${t('p' + (i + 1))}</strong><small>${t('p' + (i + 1) + 'd')}</small></button>`).join('')}</div></div>
 <div class="process-feature" id="process-panel" role="tabpanel" aria-labelledby="step-${state.step}" aria-live="polite">${processPanel()}</div>
 </div></section>
 <section class="tech-section"><div class="container">
   <div class="tech-head" data-reveal><span class="eyebrow-line">${t('techEyebrow')}</span><h2 class="section-title">${t('tech')}</h2><p class="copy">${t('techIntro')}</p></div>
   <div class="tech-cards">${[1, 2, 3, 4].map(i => `<article class="tech-card" data-reveal style="--d:${(i - 1) * 80}ms">
-    <div class="tech-top"><span class="tech-num">${pad(i)}</span><span class="tech-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${TECH_ICONS[i - 1]}</svg></span><i aria-hidden="true"></i></div>
+    <div class="tech-top"><span class="tech-num">${pad(i)}</span><span class="tech-icon icon-ring" style="--tone:${STAGE_TONES[[0, 3, 4, 2][i - 1]]};--tone-ink:${toneInk(STAGE_TONES[[0, 3, 4, 2][i - 1]])}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${TECH_ICONS[i - 1]}</svg></span><i aria-hidden="true"></i></div>
     <h3>${t('tech' + i)}</h3><p>${t('tech' + i + 'd')}</p>
     <div class="tech-photo"><img src="assets/about/tech-${i}.webp" alt="" loading="lazy" decoding="async"></div></article>`).join('')}</div>
 </div></section>
