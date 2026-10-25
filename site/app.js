@@ -321,6 +321,11 @@ function header(route) {
 
 // Email from the client's footer design (not in the company profile) — confirm the mailbox before launch.
 const EMAIL = 'info@slab.sa';
+// Official social accounts (supplied by SLAB).
+const SOCIAL = [
+  {label: 'LinkedIn', href: 'https://www.linkedin.com/company/slab-saudi/', icon: '<svg class="icon social-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.1c0-1.22-.02-2.78-1.7-2.78-1.7 0-1.96 1.33-1.96 2.7V21h-4z"/></svg>'},
+  {label: 'Instagram', href: 'https://www.instagram.com/slab.saudi/', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>'}
+];
 function footer() {
   const row = (h, label) => `<a href="${h}"><span>${label}</span>${ICON.arrow}</a>`;
   return `<footer class="site-footer"><div class="footer-top">
@@ -333,7 +338,7 @@ function footer() {
     <a href="mailto:${EMAIL}">${ICON.mail}<span dir="ltr">${EMAIL}</span></a>
     <a class="footer-cta" href="#/contact"><span>${t('start')}</span>${ICON.arrow}</a></div>
 </div>
-<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal"><a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a></span></div></footer>`;
+<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal">${SOCIAL.map(s => `<a class="footer-social" href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}">${s.icon}</a>`).join('')}<a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a></span></div></footer>`;
 }
 
 function projectCard(p, extra = '') {
