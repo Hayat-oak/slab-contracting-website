@@ -801,9 +801,6 @@ html[dir="rtl"] .rule-link { letter-spacing: 0; font-size: 15px; }
 
 /* Technology Supporting Delivery (client design) */
 .tech-section { position: relative; padding-block: clamp(60px, 6vw, 100px); background: #efece6; overflow: hidden; isolation: isolate; }
-.tech-section::after { content: ''; position: absolute; inset: 0 0 0 auto; width: 26%; z-index: -1; background: var(--tech-side) center / cover no-repeat; -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%); mask-image: linear-gradient(90deg, transparent, #000 35%); }
-html[dir="rtl"] .tech-section::after { inset: 0 auto 0 0; transform: scaleX(-1); }
-.tech-section .container { max-width: none; padding-inline-end: max(var(--gutter), 24%); }
 .eyebrow-line { display: flex; align-items: center; gap: 18px; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: #6a655d; }
 .eyebrow-line::after { content: ''; width: 190px; height: 1px; background: #b9a58f; }
 html[dir="rtl"] .eyebrow-line { letter-spacing: 0; font-size: 15px; }
@@ -824,8 +821,6 @@ html[dir="rtl"] .eyebrow-line { letter-spacing: 0; font-size: 15px; }
 .tech-photo img { display: block; width: 100%; height: clamp(150px, 11vw, 210px); object-fit: cover; transition: transform .9s var(--ease); }
 .tech-card:hover .tech-photo img { transform: scale(1.04); }
 @media (max-width: 1180px) {
-  .tech-section::after { display: none; }
-  .tech-section .container { padding-inline: var(--gutter); }
   .tech-cards { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
   .tech-card:nth-child(3) { border-inline-start: 0; padding-inline-start: 0; }
 }

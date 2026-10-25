@@ -594,7 +594,7 @@ function process() {
   `<button type="button" role="tab" class="process-step ${state.step === i ? 'active' : ''} ${i < state.step ? 'done' : ''}" id="step-${i}" aria-controls="process-panel" aria-selected="${state.step === i}" tabindex="${state.step === i ? 0 : -1}" data-action="step" data-index="${i}"><span class="step-circle">${pad(i + 1)}</span><strong>${t('p' + (i + 1))}</strong><small>${t('p' + (i + 1) + 'd')}</small></button>`).join('')}</div></div>
 <div class="process-feature" id="process-panel" role="tabpanel" aria-labelledby="step-${state.step}" aria-live="polite">${processPanel()}</div>
 </div></section>
-<section class="tech-section" style="--tech-side:url('assets/about/tech-side.webp')"><div class="container">
+<section class="tech-section"><div class="container">
   <div class="tech-head" data-reveal><span class="eyebrow-line">${t('techEyebrow')}</span><h2 class="section-title">${t('tech')}</h2><p class="copy">${t('techIntro')}</p></div>
   <div class="tech-cards">${[1, 2, 3, 4].map(i => `<article class="tech-card" data-reveal style="--d:${(i - 1) * 80}ms">
     <div class="tech-top"><span class="tech-num">${pad(i)}</span><span class="tech-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${TECH_ICONS[i - 1]}</svg></span><i aria-hidden="true"></i></div>
