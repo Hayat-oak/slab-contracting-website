@@ -133,7 +133,7 @@ const phrases = {
  privacyBody:[
   ['What we collect','When you submit a project enquiry we collect your name, email address, phone number, project sector, project location and the description you provide.'],
   ['Why we collect it','We use these details only to review and respond to your enquiry and to discuss your project with you.'],
-  ['Who can see it','Enquiries are received by SLAB Contracting staff responsible for responding to project requests, through the website’s form-hosting provider.'],
+  ['Who can see it','Enquiries are stored securely in the website database and a copy is emailed to SLAB (info@slab.sa) through an email-delivery service. They are seen only by SLAB staff responsible for responding to project requests.'],
   ['How long we keep it','We keep enquiry details only for as long as needed to respond and to manage any resulting business relationship, unless a longer period is required by law.'],
   ['Your rights','You may ask us to access, correct or delete your details by contacting SLAB using the phone number on the Contact page.']],
  quick:'Quick Links',contactLabel:'Contact',rights:'All rights reserved.',part:'Part of Oaktree Group',brandTag:'Design · Build · Deliver',learn:'Learn More',
@@ -185,7 +185,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  privacyBody:[
   ['البيانات التي نجمعها','عند إرسال طلب مشروع نجمع اسمك وبريدك الإلكتروني ورقم جوالك وقطاع المشروع وموقعه والوصف الذي تقدمه.'],
   ['سبب جمعها','نستخدم هذه البيانات فقط لمراجعة طلبك والرد عليه ومناقشة مشروعك معك.'],
-  ['من يطّلع عليها','يستقبل الطلبات موظفو سلاب للمقاولات المسؤولون عن الرد على طلبات المشاريع، عبر مزود استضافة النماذج الخاص بالموقع.'],
+  ['من يطّلع عليها','تُحفظ الطلبات بأمان في قاعدة بيانات الموقع، وتُرسل نسخة منها إلى بريد سلاب (info@slab.sa) عبر خدمة لإرسال البريد. ولا يطّلع عليها إلا موظفو سلاب المسؤولون عن الرد على طلبات المشاريع.'],
   ['مدة الاحتفاظ','نحتفظ ببيانات الطلب للمدة اللازمة للرد وإدارة أي علاقة عمل تنتج عنه فقط، ما لم يتطلب النظام مدة أطول.'],
   ['حقوقك','يمكنك طلب الاطلاع على بياناتك أو تصحيحها أو حذفها بالتواصل مع سلاب عبر رقم الهاتف في صفحة التواصل.']],
  quick:'روابط سريعة',contactLabel:'التواصل',rights:'جميع الحقوق محفوظة.',part:'جزء من مجموعة أوكتري',brandTag:'نصمم · ننفذ · نسلّم',learn:'اعرف المزيد',navMenu:'فتح قائمة التنقل',noData:'لا توجد مشاريع ضمن التصنيف المختار.',notFound:'تعذّر العثور على هذه الصفحة.',interiorBusiness:'إنشاءات وتنفيذ مشاريع متكاملة',sourcePhoto:'صور المشاريع: الملف التعريفي لسلاب 2026.'
@@ -1110,6 +1110,22 @@ function validateServices(form) {
   return ok;
 }
 
+// Email copy of each enquiry to SLAB's inbox via FormSubmit (chosen by SLAB). The enquiry is already saved in
+// Supabase before this runs, so a failed email never loses an enquiry. FormSubmit requires a one-time activation
+// click in the first email it sends to EMAIL.
+function notifyByEmail(row) {
+  const serviceNames = row.services.map(k => phrases.en['service' + (SERVICE_KEYS.indexOf(k) + 1)]).join(', ');
+  fetch(`https://formsubmit.co/ajax/${EMAIL}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+    body: JSON.stringify({
+      _subject: `New project enquiry — ${row.full_name}`, _template: 'table', _captcha: 'false', _replyto: row.email,
+      Name: row.full_name, Email: row.email, Phone: row.phone, Sector: phrases.en[row.project_type] || row.project_type,
+      Services: serviceNames, Location: row.project_location, Message: row.message, Language: row.language
+    })
+  }).catch(() => {});
+}
+
 async function submitForm(form) {
   const feedback = document.getElementById('form-feedback');
   const summary = document.getElementById('form-summary');
@@ -1157,6 +1173,7 @@ async function submitForm(form) {
       body: JSON.stringify(row)
     });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    notifyByEmail(row);
     // Success is shown only after the server accepted the submission.
     const wrap = form.parentElement;
     wrap.innerHTML = `<div class="form-success" tabindex="-1" role="status"><span class="success-mark" aria-hidden="true"></span><h2>${t('sendSuccessTitle')}</h2><p class="copy">${t('sendSuccess')}</p><button type="button" class="text-link" data-action="form-reset">${t('sendAnother')} ${ICON.diag}</button></div>`;
