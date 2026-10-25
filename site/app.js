@@ -444,13 +444,15 @@ function stats(extra = '') {
 /* Pages                                                                */
 /* ------------------------------------------------------------------ */
 
-// Home hero: SOUL Hittin film ("SOUL 4"), shown uncropped (portrait 1080x1920). On wide screens it sits whole in
-// the centre over a blurred still of itself; on portrait screens it fills the frame.
-const HERO_VIDEO = {src: 'assets/video/soul4-full.mp4', poster: 'assets/video/soul4-full-poster.webp'};
+// Home hero: SOUL Hittin film ("SOUL 4"). Landscape cut for wide screens, full portrait cut for portrait screens.
+const HERO_VIDEO = {
+  wide: {src: 'assets/video/soul4-desktop.mp4', poster: 'assets/video/soul4-desktop-poster.webp'},
+  tall: {src: 'assets/video/soul4-mobile.mp4', poster: 'assets/video/soul4-mobile-poster.webp'}
+};
 function heroVideo() {
+  const v = matches('(max-aspect-ratio: 1/1)') ? HERO_VIDEO.tall : HERO_VIDEO.wide;
   const motion = reducedMotion() ? '' : 'autoplay';
-  return `<div class="hero-video-bg" style="background-image:url('${HERO_VIDEO.poster}')" aria-hidden="true"></div>
-    <video class="hero-video" id="hero-video" ${motion} muted loop playsinline preload="auto" poster="${HERO_VIDEO.poster}" aria-hidden="true"><source src="${HERO_VIDEO.src}" type="video/mp4"></video>`;
+  return `<video class="hero-video" id="hero-video" ${motion} muted loop playsinline preload="auto" poster="${v.poster}" aria-hidden="true"><source src="${v.src}" type="video/mp4"></video>`;
 }
 
 function home() {

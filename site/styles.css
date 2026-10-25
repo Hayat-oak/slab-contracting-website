@@ -872,8 +872,3 @@ html[dir="rtl"] .footer-links a:hover .icon { transform: scaleX(-1) translateX(4
 }
 .footer-legal .footer-social + .footer-social { margin-inline-start: -8px; }
 .footer-social .social-fill { fill: currentColor; stroke: none; }
-
-/* Hero video shown whole: contained on wide screens over a blurred still, cover on portrait screens */
-.hero-video-bg { position: absolute; inset: -40px; background-size: cover; background-position: center; filter: blur(28px) brightness(.55) saturate(.9); }
-.hero-video { object-fit: contain; object-position: center; }
-@media (max-aspect-ratio: 1/1) { .hero-video { object-fit: cover; } .hero-video-bg { display: none; } }

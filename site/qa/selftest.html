@@ -91,7 +91,7 @@
 
     go('home');
     const hv = $('#hero-video');
-    ok(hv && /soul4-full.mp4$/.test(hv.querySelector('source').getAttribute('src')) && hv.muted && hv.loop, 'Hero video missing or not muted/looping');
+    ok(hv && /soul4-(desktop|mobile).mp4$/.test(hv.querySelector('source').getAttribute('src')) && hv.muted && hv.loop, 'Hero video missing or not muted/looping');
 
     go('contact');
     $('#lead-form button[type=submit]').click();
