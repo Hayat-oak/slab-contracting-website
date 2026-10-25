@@ -536,7 +536,7 @@ ${cta()}</main>`;
 
 function about() {
   const sub = [['story', t('ourStory')], ['principles', t('principles')], ['why', t('why')]];
-  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('aboutHero'), t('aboutHeroSub'), 'almajidiya111', 3)}
+  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('aboutHero'), t('aboutHeroSub'), 'jawhara8', 4)}
 <nav class="subnav" aria-label="${t('aboutNav')}"><div class="container">${sub.map(([id, label]) => `<a href="#about-${id}" data-action="scroll-to" data-target="about-${id}">${label}</a>`).join('')}</div></nav>
 <section class="section" id="about-story"><div class="container about-feature">
   <div data-reveal><span class="eyebrow">${t('ourStory')}</span><h2 class="section-title">${t('storyTitle')}</h2><p class="copy">${t('storyCopy')}</p><p class="copy">${t('storyCopy2')}</p></div>
