@@ -509,8 +509,8 @@ ${stats('stats-full')}
 <section class="section" id="about-principles"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('principles')}</h2><p class="copy narrow">${t('principlesLead')}</p></div></div>
 <div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<article class="principle" data-reveal style="--d:${i * 90}ms"><span class="eyebrow">${pad(i + 1)}</span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp" alt="" loading="lazy" decoding="async"></div></article>`).join('')}</div></div></section>
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
-  <div class="why-intro" data-reveal><h2 class="section-title">${t('why')}</h2><p class="copy">${t('whyDesc')}</p><div class="feature-image reveal-img">${img('almajidiya70', 2, '')}</div></div>
-  <ol class="why-list">${[1, 2, 3, 4, 5, 6].map(i => `<li data-reveal><span>${pad(i)}</span><div><h3>${t('why' + i)}</h3><p>${t('why' + i + 'd')}</p></div></li>`).join('')}</ol>
+  <div class="why-intro" data-reveal><span class="why-rule" aria-hidden="true"></span><h2 class="section-title">${t('why')}</h2><p class="copy">${t('whyDesc')}</p><div class="feature-image reveal-img"><img src="assets/about/why-main.webp" alt="" loading="lazy" decoding="async"></div></div>
+  <ol class="why-list">${[1, 2, 3, 4, 5, 6].map(i => `<li data-reveal><span>${pad(i)}</span><div><h3>${t('why' + i)}</h3><p>${t('why' + i + 'd')}</p></div><img class="why-thumb" src="assets/about/why-${i}.webp" alt="" loading="lazy" decoding="async"></li>`).join('')}</ol>
 </div></section>
 ${cta()}</main>`;
 }
