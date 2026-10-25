@@ -357,9 +357,9 @@ function interiorHero(title, sub, photo = 'soulhittin', index = 1) {
   <div class="content"><h1 class="hero-title-anim">${title}</h1><p>${sub}</p></div></section>`;
 }
 
-function stats() {
+function stats(extra = '') {
   const items = [[125, '+', 'stats1'], [3, '', 'stats2'], [4, '', 'stats3'], [7, '', 'stats4']];
-  return `<div class="stats-band" data-reveal>${items.map(([n, suffix, key]) =>
+  return `<div class="stats-band ${extra}" data-reveal style="--stats-bg:url('${HD('masharef', 3)}')">${items.map(([n, suffix, key]) =>
     `<div class="stat"><b><span data-count="${n}">${n}</span>${suffix}</b><span>${t(key)}</span></div>`).join('')}</div>`;
 }
 
@@ -504,8 +504,8 @@ function about() {
   <div data-reveal><span class="eyebrow">${t('ourStory')}</span><h2 class="section-title">${t('storyTitle')}</h2><p class="copy">${t('storyCopy')}</p><p class="copy">${t('storyCopy2')}</p></div>
   <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 1, '')}</div></div>
 </div>
-<div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
-<div class="container">${stats()}</div>
+<div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><div class="pillar-photo reveal-img"><img src="assets/about/pillar-${k}.webp" alt="" loading="lazy" decoding="async"></div><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
+${stats('stats-full')}
 <section class="section" id="about-principles"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('principles')}</h2><p class="copy narrow">${t('principlesLead')}</p></div></div>
 <div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<article class="principle" data-reveal style="--d:${i * 90}ms"><span class="eyebrow">${pad(i + 1)}</span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p></article>`).join('')}</div></div></section>
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
