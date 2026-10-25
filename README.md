@@ -31,4 +31,5 @@ Open `site/index.html` in Chrome or Edge — no build step.
   عرض الطلبات: لوحة Supabase ← Table Editor ← `project_enquiries`.
 - **الصور / Photos:** bucket عام `site-assets` (`projects/` 1200px و `projects/hd/` 2400px).
   نسخة مطابقة في `site/assets/` تُستخدم تلقائيًا إذا تعذّر الوصول إلى Supabase.
+  **مهم:** عند تغيير أو إضافة أو حذف صورة مشروع في `site/assets/`، يجب رفع نفس التغيير إلى bucket `site-assets` (نفس الأسماء)، وإلا يعرض الموقع المنشور النسخة القديمة.
 - المفتاح في `app.js` هو **publishable key** (عام بطبيعته). لا يُوضع أي مفتاح سري في الكود.
