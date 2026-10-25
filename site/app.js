@@ -25,17 +25,19 @@ const localAsset = url => url.replace(ASSET_BASE, 'assets/');
 // `images` must equal the number of assets/{id}_{n}.webp files (checked by verify_site.cjs and qa/selftest.html).
 // Interior room photos only, one photo per space — outdoor areas, exteriors and repeat shots of the same room are excluded.
 // `sizes` are apartment sizes in m², copied from the profile table for each project.
+// Client corrections (2026-10-25): Masharef 14 units; Ajlan Riviera 11 -> 12 (1 unit); Ajlan Riviera 19 -> 21;
+// Jawhara Al Narjis 8 -> 1 unit. Project ids are unchanged so image files and links keep working.
 const projects = [
   {id:'soulhittin', name:'SOUL Hittin', ar:'سول حطين', client:'OHG', clientAr:'OHG', units:9, sizes:['132.26'], images:6, category:'soul', source:26},
   {id:'almughrizat', name:'Almughrizat Building', ar:'مبنى المغرزات', client:'Aliyah Homes', clientAr:'عليّة هومز', units:25, sizes:['50','107'], images:3, category:'aliyah', source:13},
-  {id:'masharef', name:'Masharef Building', ar:'مبنى مشارف', client:'Aliyah Homes', clientAr:'عليّة هومز', units:3, sizes:['117','121','160'], images:3, category:'aliyah', source:14},
+  {id:'masharef', name:'Masharef Building', ar:'مبنى مشارف', client:'Aliyah Homes', clientAr:'عليّة هومز', units:14, sizes:['117','121','160'], images:3, category:'aliyah', source:14},
   {id:'mkin30', name:'Mkin 30', ar:'مكين 30', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['245'], images:2, category:'aliyah', source:16},
   {id:'nirvana12', name:'Nirvana 12', ar:'نيرفانا 12', client:'Aliyah Homes', clientAr:'عليّة هومز', units:2, sizes:['50','145'], images:3, category:'aliyah', source:15},
-  {id:'ajlan11', name:'Ajlan Riviera 11', ar:'عجلان ريفيرا 11', client:'Aliyah Homes', clientAr:'عليّة هومز', units:2, sizes:['92','169'], images:3, category:'aliyah', source:17},
+  {id:'ajlan11', name:'Ajlan Riviera 12', ar:'عجلان ريفيرا 12', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['92','169'], images:3, category:'aliyah', source:17},
   {id:'almajidiya116', name:'Almajidiya 116', ar:'المجيدية 116', client:'Aliyah Homes', clientAr:'عليّة هومز', units:4, sizes:['77','101','128','130'], images:2, category:'aliyah', source:19},
   {id:'almajidiya111', name:'Al Majidiya Residence 111', ar:'المجيدية ريزيدنس 111', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['120'], images:4, category:'aliyah', source:20},
-  {id:'jawhara8', name:'Jawhara Al Narjis 8', ar:'جوهرة النرجس 8', client:'Aliyah Homes', clientAr:'عليّة هومز', units:2, sizes:['50','145'], images:4, category:'aliyah', source:21},
-  {id:'ajlan19', name:'Ajlan Riviera 19', ar:'عجلان ريفيرا 19', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['137'], images:2, category:'aliyah', source:22},
+  {id:'jawhara8', name:'Jawhara Al Narjis 8', ar:'جوهرة النرجس 8', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['50','145'], images:4, category:'aliyah', source:21},
+  {id:'ajlan19', name:'Ajlan Riviera 21', ar:'عجلان ريفيرا 21', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['137'], images:2, category:'aliyah', source:22},
   {id:'almajidiya70', name:'Almajidiya 70', ar:'المجيدية 70', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['90'], images:3, category:'aliyah', source:23},
   {id:'almajidiya130', name:'Almajidiya 130', ar:'المجيدية 130', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['128'], images:4, category:'aliyah', source:24},
   // NEEDS CLIENT REVIEW: profile p.18 lists 2 units but four sizes, identical to Almajidiya 116 (p.19). Shown as printed.
