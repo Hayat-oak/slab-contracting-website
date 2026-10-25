@@ -545,7 +545,7 @@ function detail(p) {
 }
 
 function services() {
-  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('servicesHero'), t('servicesHeroSub'), 'nirvana12', 1)}
+  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('servicesHero'), t('servicesHeroSub'), 'almajidiya130', 1)}
 <section class="section"><div class="container"><div class="section-head" data-reveal><h2 class="section-title">${t('servicesIntro')}</h2></div>
 <div class="service-rows">${[1, 2, 3, 4].map(i => {
 
