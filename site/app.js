@@ -319,7 +319,7 @@ function header(route) {
 </div>`;
 }
 
-// Email from the client's footer design (not in the company profile) — confirm the mailbox before launch.
+// Official enquiries email (confirmed by SLAB, 2026-10-25).
 const EMAIL = 'info@slab.sa';
 // Official social accounts (supplied by SLAB).
 const SOCIAL = [
@@ -617,6 +617,7 @@ function contact() {
 <div class="contact-details" data-reveal><h2>${t('getInTouch')}</h2><p class="copy">${t('contactCopy')}</p>
   <ul class="contact-points">
     <li><a class="contact-point" href="tel:${PHONE}">${ICON.phone}<div><small>${t('phone')}</small><strong dir="ltr">${PHONE_DISPLAY}</strong></div></a></li>
+    <li><a class="contact-point" href="mailto:${EMAIL}">${ICON.mail}<div><small>${t('email')}</small><strong dir="ltr">${EMAIL}</strong></div></a></li>
     <li class="contact-point">${ICON.pin}<div><small>${t('locationOffice')}</small><strong>${t('activeIn')}</strong></div></li>
     <li class="contact-point">${ICON.group}<div><small>SLAB Contracting</small><strong>${t('part')}</strong></div></li>
   </ul></div>
