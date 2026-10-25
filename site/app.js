@@ -475,7 +475,6 @@ function home() {
   <div class="project-grid">${projects.slice(0, 4).map(p => projectCard(p)).join('')}</div></div></section>
 ${sectorsSection(true)}${processStrip()}
 ${impact()}
-${cta()}
 </main>`;
 }
 
@@ -488,7 +487,7 @@ function projectList() {
     `<button type="button" class="filter ${state.filter === f ? 'active' : ''}" data-action="filter" data-filter="${f}" aria-pressed="${state.filter === f}">${t(f)} <sup>${count(f)}</sup></button>`).join('')}
     <span class="results-count" id="results-count" aria-live="polite">${list.length} ${t('showing')}</span></div>
   <div class="project-grid listing" id="project-results">${projectResults(list)}</div>
-</div></section>${cta()}</main>`;
+</div></section></main>`;
 }
 
 function projectResults(list) {
@@ -542,7 +541,7 @@ function detail(p) {
 </nav>
 <section class="more-projects"><div class="section-head"><h2 class="section-title">${t('similarProjects')}</h2><a class="text-link" href="#/projects">${t('viewAll')} ${ICON.diag}</a></div>
 <div class="project-grid three">${more.map(x => projectCard(x)).join('')}</div></section>
-</div>${cta()}</main>`;
+</div></main>`;
 }
 
 function services() {
@@ -556,7 +555,7 @@ function services() {
   </article>`;
 }).join('')}</div></div></section>
 ${sectorsSection(false)}${processStrip()}
-${cta()}</main>`;
+</main>`;
 }
 
 function about() {
@@ -601,7 +600,7 @@ function process() {
     <h3>${t('tech' + i)}</h3><p>${t('tech' + i + 'd')}</p>
     <div class="tech-photo"><img src="assets/about/tech-${i}.webp" alt="" loading="lazy" decoding="async"></div></article>`).join('')}</div>
 </div></section>
-${cta()}</main>`;
+</main>`;
 }
 
 function field(id, label, input, hint = '') {
