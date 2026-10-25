@@ -58,7 +58,14 @@ const processVisuals = [
   {src: 'assets/process/6-control-team-full.webp', kind: 'full'},
   {src: 'assets/process/7-deliver-team-full.webp', kind: 'full'}
 ];
-const servicePhotos = [['nirvana12', 2], ['almajidiya111', 2], ['almughrizat', 3], ['almajidiya130', 1]];
+// One image per service, chosen to show that service (SLAB team photos where available). pos = focal point when cropped.
+const servicePhotos = [
+  {src: 'assets/process/svc-1-fitout-execution.webp', pos: 'center 70%'}, // Fit-Out & Execution: SLAB team installing (logo/frame removed)
+  {src: 'assets/process/4-plan.webp', pos: 'center'},                    // Design: drawings + laptop
+  {src: HD('soulhittin', 1), pos: 'center'},                              // Interior Fit-Out: finished SOUL Hittin interior
+  {src: 'assets/process/svc-4-project-management.webp', pos: 'center 25%'} // Project & Contract Management: engineers on site (logo removed)
+];
+const serviceImg = i => { const s = servicePhotos[i - 1]; return `<img src="${s.src}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
 // Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
 const SERVICE_KEYS = ['fit-out-execution', 'design', 'interior-fit-out', 'project-contract-management'];
 const ICON_CHECK = '<svg class="icon chip-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -331,9 +338,9 @@ function projectCard(p, extra = '') {
 
 function serviceCards() {
   return `<div class="service-grid">${[1, 2, 3, 4].map(i => {
-    const [slug, n] = servicePhotos[i - 1];
+
     return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="${t('view')}">
-      <div class="photo reveal-img">${img(slug, n, '')}</div>
+      <div class="photo reveal-img">${serviceImg(i)}</div>
       <div class="card-end"><div><span class="card-num">${pad(i)}</span><h3>${t('service' + i)}</h3><p class="micro">${t('service' + i + 'desc')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
     </a>`;
   }).join('')}</div>`;
@@ -476,9 +483,9 @@ function services() {
   return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('servicesHero'), t('servicesHeroSub'), 'nirvana12', 1)}
 <section class="section"><div class="container"><div class="section-head" data-reveal><h2 class="section-title">${t('servicesIntro')}</h2></div>
 <div class="service-rows">${[1, 2, 3, 4].map(i => {
-  const [slug, n] = servicePhotos[i - 1];
+
   return `<article class="service-row" id="service-${i}" data-reveal>
-    <div class="photo reveal-img"><div class="parallax-inner" data-parallax>${img(slug, n, '')}</div></div>
+    <div class="photo reveal-img"><div class="parallax-inner" data-parallax>${serviceImg(i)}</div></div>
     <div class="service-copy"><span class="service-num">${pad(i)}</span><h2>${t('service' + i)}</h2><p>${t('serviceLong' + i)}</p></div>
   </article>`;
 }).join('')}</div></div></section>
