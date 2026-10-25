@@ -872,3 +872,18 @@ html[dir="rtl"] .footer-links a:hover .icon { transform: scaleX(-1) translateX(4
 }
 .footer-legal .footer-social + .footer-social { margin-inline-start: -8px; }
 .footer-social .social-fill { fill: currentColor; stroke: none; }
+
+/* About sub-navigation: active section, hover underline, numbered items, reading progress */
+.subnav { position: sticky; }
+.subnav .container { gap: clamp(22px, 3vw, 48px); }
+.subnav a { position: relative; display: inline-flex; align-items: baseline; gap: 10px; padding: 20px 0; font-size: 16px; color: var(--muted); transition: color .25s; }
+.subnav a span { font-size: 12px; color: var(--subtle); letter-spacing: .08em; transition: color .25s; }
+.subnav a::after { content: ''; position: absolute; inset-inline: 0; bottom: -1px; height: 2px; background: var(--warm); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+html[dir="rtl"] .subnav a::after { transform-origin: right; }
+.subnav a:hover { color: var(--ink); }
+.subnav a:hover::after { transform: scaleX(.4); }
+.subnav a.active { color: var(--ink); }
+.subnav a.active span { color: var(--warm); }
+.subnav a.active::after { transform: scaleX(1); }
+.subnav-progress { position: absolute; inset-inline: 0; bottom: -1px; height: 1px; background: var(--ink); opacity: .25; transform: scaleX(var(--p, 0)); transform-origin: left; transition: transform .15s linear; }
+html[dir="rtl"] .subnav-progress { transform-origin: right; }

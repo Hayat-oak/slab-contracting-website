@@ -564,7 +564,7 @@ ${sectorsSection(false)}${processStrip()}
 function about() {
   const sub = [['story', t('ourStory')], ['principles', t('principles')], ['why', t('why')]];
   return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('aboutHero'), t('aboutHeroSub'), 'jawhara8', 4)}
-<nav class="subnav" aria-label="${t('aboutNav')}"><div class="container">${sub.map(([id, label]) => `<a href="#about-${id}" data-action="scroll-to" data-target="about-${id}">${label}</a>`).join('')}</div></nav>
+<nav class="subnav" aria-label="${t('aboutNav')}"><div class="container">${sub.map(([id, label]) => `<a href="#about-${id}" data-action="scroll-to" data-target="about-${id}" class="${id === 'story' ? 'active' : ''}"><span>${pad(sub.findIndex(s => s[0] === id) + 1)}</span>${label}</a>`).join('')}</div><i class="subnav-progress" aria-hidden="true"></i></nav>
 <section class="section" id="about-story"><div class="container about-feature">
   <div data-reveal><span class="eyebrow">${t('ourStory')}</span><h2 class="section-title">${t('storyTitle')}</h2><p class="copy">${t('storyCopy')}</p><p class="copy">${t('storyCopy2')}</p></div>
   <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 1, '')}</div></div>
@@ -706,6 +706,22 @@ function render({scrollTop = false, focusMain = false} = {}) {
   }
 }
 
+
+// About sub-navigation: highlight the section in view and show reading progress through the page.
+function updateSubnav() {
+  const nav = document.querySelector('.subnav');
+  if (!nav) return;
+  const links = Array.from(nav.querySelectorAll('a[data-target]'));
+  const offset = nav.getBoundingClientRect().bottom + 80;
+  let current = links[0];
+  links.forEach(a => { const s = document.getElementById(a.dataset.target); if (s && s.getBoundingClientRect().top <= offset) current = a; });
+  links.forEach(a => { const on = a === current; a.classList.toggle('active', on); if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
+  const first = document.getElementById(links[0].dataset.target), last = document.getElementById(links[links.length - 1].dataset.target);
+  if (first && last) {
+    const start = first.getBoundingClientRect().top + scrollY - offset, end = last.getBoundingClientRect().bottom + scrollY - innerHeight;
+    nav.style.setProperty('--p', Math.min(1, Math.max(0, (scrollY - start) / Math.max(1, end - start))).toFixed(3));
+  }
+}
 function afterRender(r) {
   state.formStarted = 0;
   updateHeader();
@@ -717,6 +733,7 @@ function afterRender(r) {
     if (el) requestFrame(() => el.scrollIntoView({behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start'}));
   }
   if (r.page === 'home') clearInterval(heroTimer);
+  if (r.page === 'about') requestFrame(updateSubnav);
   if (r.page === 'projects' && r.id) { const p = currentProject(); if (p) upgradeGallery(p, state.gallery + 1); }
 }
 
@@ -1254,7 +1271,7 @@ let scrollQueued = false;
 window.addEventListener('scroll', () => {
   if (scrollQueued) return;
   scrollQueued = true;
-  requestFrame(() => { scrollQueued = false; updateHeader(); runParallax(); });
+  requestFrame(() => { scrollQueued = false; updateHeader(); runParallax(); updateSubnav(); });
 }, {passive: true});
 window.addEventListener('resize', () => requestFrame(runParallax), {passive: true});
 
