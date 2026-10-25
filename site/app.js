@@ -456,7 +456,6 @@ function heroVideo() {
 }
 
 function home() {
-  const p = projects.find(x => x.id === 'soulhittin');
   return `<main class="page home-page" id="main-content" tabindex="-1">
 <section class="hero" aria-label="${t('featured')}">
   <div class="hero-media" data-parallax-hero>${heroVideo()}</div>
@@ -467,10 +466,6 @@ function home() {
     <p class="hero-sub">${t('heroS')}</p>
     <div class="hero-bottom">
       <a href="#/projects" class="hero-link"><span class="round-arrow">${ICON.arrow}</span>${t('explore')}</a>
-      <div class="hero-side">
-        <a class="hero-caption" id="hero-caption" href="${href('projects/' + p.id)}"><small>${t('heroNow')}</small><span>${pname(p)}</span></a>
-        <button type="button" class="hero-video-toggle" data-action="hero-video" aria-pressed="${reducedMotion()}" aria-label="${reducedMotion() ? t('playVideo') : t('pauseVideo')}">${reducedMotion() ? ICON.play : ICON.pause}</button>
-      </div>
     </div>
   </div>
 </section>

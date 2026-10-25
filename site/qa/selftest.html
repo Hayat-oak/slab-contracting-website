@@ -92,8 +92,6 @@
     go('home');
     const hv = $('#hero-video');
     ok(hv && /soul4-(desktop|mobile).mp4$/.test(hv.querySelector('source').getAttribute('src')) && hv.muted && hv.loop, 'Hero video missing or not muted/looping');
-    $('[data-action="hero-video"]').click();
-    ok($('[data-action="hero-video"]').getAttribute('aria-pressed') === 'true', 'Hero video pause button did not toggle');
 
     go('contact');
     $('#lead-form button[type=submit]').click();
