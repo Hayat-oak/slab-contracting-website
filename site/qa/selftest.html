@@ -90,8 +90,10 @@
     ok($('#process-panel h2').textContent === 'Approve', 'Deep link #/process/3 failed');
 
     go('home');
-    showHero(2);
-    ok($$('.hero-image.is-active').length === 1 && $('.hero-image.is-active').dataset.slide === '2', 'Hero slide switch failed');
+    const hv = $('#hero-video');
+    ok(hv && /soul4-(desktop|mobile).mp4$/.test(hv.querySelector('source').getAttribute('src')) && hv.muted && hv.loop, 'Hero video missing or not muted/looping');
+    $('[data-action="hero-video"]').click();
+    ok($('[data-action="hero-video"]').getAttribute('aria-pressed') === 'true', 'Hero video pause button did not toggle');
 
     go('contact');
     $('#lead-form button[type=submit]').click();

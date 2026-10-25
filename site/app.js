@@ -67,7 +67,7 @@ const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
  skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
@@ -133,7 +133,7 @@ const phrases = {
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
  skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
@@ -248,7 +248,9 @@ const ICON = {
   expand: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
   phone: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>',
   pin: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
-  group: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6"/></svg>'
+  group: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6"/></svg>',
+  pause: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
+  play: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>'
 };
 
 
@@ -350,13 +352,22 @@ function stats() {
 /* Pages                                                                */
 /* ------------------------------------------------------------------ */
 
+// Home hero: SOUL Hittin film ("SOUL 4"). Landscape cut for wide screens, full portrait cut for portrait screens.
+const HERO_VIDEO = {
+  wide: {src: 'assets/video/soul4-desktop.mp4', poster: 'assets/video/soul4-desktop-poster.webp'},
+  tall: {src: 'assets/video/soul4-mobile.mp4', poster: 'assets/video/soul4-mobile-poster.webp'}
+};
+function heroVideo() {
+  const v = matches('(max-aspect-ratio: 1/1)') ? HERO_VIDEO.tall : HERO_VIDEO.wide;
+  const motion = reducedMotion() ? '' : 'autoplay';
+  return `<video class="hero-video" id="hero-video" ${motion} muted loop playsinline preload="auto" poster="${v.poster}" aria-hidden="true"><source src="${v.src}" type="video/mp4"></video>`;
+}
+
 function home() {
-  const [slug] = heroSlides[state.slide];
-  const p = projects.find(x => x.id === slug);
+  const p = projects.find(x => x.id === 'soulhittin');
   return `<main class="page home-page" id="main-content" tabindex="-1">
 <section class="hero" aria-label="${t('featured')}">
-  <div class="hero-media" data-parallax-hero>${heroSlides.map(([s, n], i) =>
-    `<div class="hero-image ${i === state.slide ? 'is-active' : ''}" data-slide="${i}" style="background-image:url('${HD(s, n)}')"></div>`).join('')}</div>
+  <div class="hero-media" data-parallax-hero>${heroVideo()}</div>
   <div class="hero-shade"></div>
   <div class="container hero-content">
     <p class="hero-tagline">${t('heroTop')}</p>
@@ -366,8 +377,7 @@ function home() {
       <a href="#/projects" class="hero-link"><span class="round-arrow">${ICON.arrow}</span>${t('explore')}</a>
       <div class="hero-side">
         <a class="hero-caption" id="hero-caption" href="${href('projects/' + p.id)}"><small>${t('heroNow')}</small><span>${pname(p)}</span></a>
-        <div class="hero-pagination">${heroSlides.map((s, i) =>
-          `<button type="button" data-action="hero" data-index="${i}" class="${state.slide === i ? 'selected' : ''}" aria-label="${t('heroSlide')} ${i + 1}" aria-pressed="${state.slide === i}"><span>${pad(i + 1)}</span><i class="bar"></i></button>`).join('')}</div>
+        <button type="button" class="hero-video-toggle" data-action="hero-video" aria-pressed="${reducedMotion()}" aria-label="${reducedMotion() ? t('playVideo') : t('pauseVideo')}">${reducedMotion() ? ICON.play : ICON.pause}</button>
       </div>
     </div>
   </div>
@@ -620,7 +630,7 @@ function afterRender(r) {
     const el = document.getElementById('service-' + r.id);
     if (el) requestFrame(() => el.scrollIntoView({behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start'}));
   }
-  if (r.page === 'home') restartHeroTimer();
+  if (r.page === 'home') clearInterval(heroTimer);
   if (r.page === 'projects' && r.id) { const p = currentProject(); if (p) upgradeGallery(p, state.gallery + 1); }
 }
 
@@ -1045,7 +1055,15 @@ $app.addEventListener('click', e => {
   else if (act === 'gallery-index') setGallery(Number(btn.dataset.index));
   else if (act === 'lightbox') openLightbox();
   else if (act === 'project-tab') setProjectTab(btn.dataset.tab);
-  else if (act === 'hero') { showHero(Number(btn.dataset.index)); restartHeroTimer(); }
+  else if (act === 'hero-video') {
+    const v = document.getElementById('hero-video');
+    if (!v) return;
+    const pause = btn.getAttribute('aria-pressed') !== 'true'; // button state = intent (video may still be loading)
+    pause ? v.pause() : v.play().catch(() => {});
+    btn.setAttribute('aria-pressed', String(pause));
+    btn.setAttribute('aria-label', pause ? t('playVideo') : t('pauseVideo'));
+    btn.innerHTML = pause ? ICON.play : ICON.pause;
+  }
   else if (act === 'scroll-to') {
     e.preventDefault();
     const el = document.getElementById(btn.dataset.target);

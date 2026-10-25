@@ -563,3 +563,9 @@ html[dir="rtl"] .chip span { font-size: 16px; }
   .process-feature:has(.is-full) { min-height: 0; }
   .process-feature .photo.is-full { min-height: 0; aspect-ratio: 4 / 5; }
 }
+
+/* Home hero background video */
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; filter: saturate(.9) contrast(1.03); }
+.hero-video-toggle { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .6); background: rgba(0, 0, 0, .15); color: #fff; display: grid; place-items: center; font-size: 16px; transition: background .25s, color .25s; }
+.hero-video-toggle:hover { background: #fff; color: var(--ink); }
+.hero-video-toggle .icon { fill: currentColor; stroke-width: 2; }
