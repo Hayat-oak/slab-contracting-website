@@ -422,10 +422,10 @@ const IMPACT_ICON = {
 };
 function impact() {
   const items = [
-    ['units', 125, '+', 'stats1', []],
-    ['cities', 3, '', 'stats2', []],
-    ['sectors', 4, '', 'stats3', [['residential', 'hospitality'], ['commercial'], ['institutional']].map(row => row.map(k => t(k)))],
-    ['stages', 7, '', 'stats4', [[1, 2, 3], [4, 5], [6, 7]].map(row => row.map(i => t('p' + i)))]
+    ['units', 125, '+', 'stats1'],
+    ['cities', 3, '', 'stats2'],
+    ['sectors', 4, '', 'stats3'],
+    ['stages', 7, '', 'stats4']
   ];
   const cities = [['riyadh', 'cityRiyadh', 'cityRiyadhD'], ['madinah', 'cityMadinah', 'cityMadinahD'], ['jeddah', 'cityJeddah', 'cityJeddahD']];
   return `<section class="impact" aria-labelledby="impact-title">
@@ -435,9 +435,9 @@ function impact() {
       <a class="outline-cta light" href="#/projects">${t('explore')} ${ICON.arrow}</a></div>
   </div>
   <div class="impact-main">
-    <div class="impact-stats">${items.map(([icon, n, suffix, key, list]) => `<div class="impact-stat" data-reveal>
+    <div class="impact-stats">${items.map(([icon, n, suffix, key]) => `<div class="impact-stat" data-reveal>
       <span class="impact-icon icon-ring">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
-      <span class="impact-label">${t(key)}</span>${list.map(row => `<ul>${row.map(x => `<li>${x}</li>`).join('')}</ul>`).join('')}</div>`).join('')}</div>
+      <span class="impact-label">${t(key)}</span></div>`).join('')}</div>
     <div class="impact-cities">${cities.map(([img, name, desc]) => `<a class="city-card" href="#/projects" data-reveal>
       <img class="city-photo" src="assets/about/city-${img}-v2.webp" alt="" loading="lazy" decoding="async">
       <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div>
@@ -812,10 +812,10 @@ function setCounters() {
   const observer = new IntersectionObserver(entries => entries.forEach(e => {
     if (!e.isIntersecting) return;
     observer.unobserve(e.target);
-    const el = e.target, end = Number(el.dataset.count), start = performance.now(), dur = 1400;
+    const el = e.target, end = Number(el.dataset.count), start = performance.now(), dur = 3200;
     const tick = now => {
       const k = Math.min(1, (now - start) / dur);
-      el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3)));
+      el.textContent = Math.round(end * (1 - Math.pow(1 - k, 2)));
       if (k < 1) requestAnimationFrame(tick);
     };
     el.textContent = '0';
