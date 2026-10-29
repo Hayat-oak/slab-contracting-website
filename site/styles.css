@@ -299,7 +299,8 @@ html[dir="rtl"] .interior-hero::after { background: linear-gradient(-90deg, rgba
 /* about */
 .subnav { position: sticky; top: 0; z-index: 20; background: rgba(246, 245, 242, .95); border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .site-header:not(.hide) ~ .page .subnav { top: var(--header); }
-.subnav .container { display: flex; gap: 32px; overflow-x: auto; }
+.subnav .container { display: flex; gap: 32px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.subnav .container::-webkit-scrollbar { display: none; }
 .subnav a { padding: 18px 0; font-size: 15px; color: var(--muted); white-space: nowrap; }
 .subnav a:hover { color: var(--ink); }
 #about-story, #about-principles, #about-why { scroll-margin-top: calc(var(--header) + 60px); }
