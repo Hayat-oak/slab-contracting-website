@@ -375,7 +375,7 @@ const SECTOR_VISUALS = {
   commercial: {src: 'assets/about/sector-commercial.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3h12v18M4 21h16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M11 21v-3h2v3"/></svg>'},
   institutional: {src: 'assets/about/sector-institutional.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 4l9 5M4 9h16M6 9v8M10 9v8M14 9v8M18 9v8M3 20h18M4 17h16"/></svg>'}
 };
-const SECTOR_ALT = {hospitality: HD('soulhittin', 3), residential: HD('ajlan11', 2)};
+const SECTOR_ALT = {hospitality: HD('soulhittin', 3), residential: HD('ajlan11', 2), commercial: 'assets/about/sector-commercial-2.webp', institutional: 'assets/about/sector-institutional-2.webp'};
 function sectorsSection(link) {
   return `<section class="sectors-band" aria-labelledby="sectors-title"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title" id="sectors-title">${t('sectors')}</h2><p class="copy">${t('sectorsSub')}</p></div>${link ? `<a class="rule-link" href="#/services">${t('ourSectors')} ${ICON.diag}</a>` : ''}</div></div>
   <div class="sector-cards">${['hospitality', 'residential', 'commercial', 'institutional'].map((k, i) => { const v = !link && SECTOR_ALT[k] ? {...SECTOR_VISUALS[k], src: SECTOR_ALT[k]} : SECTOR_VISUALS[k]; return `<article class="sector-card" data-reveal style="--d:${i * 80}ms">
@@ -439,7 +439,7 @@ function impact(alt = false) {
       <span class="impact-icon">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
       <span class="impact-label">${t(key)}</span>${list.map(row => `<ul>${row.map(x => `<li>${x}</li>`).join('')}</ul>`).join('')}</div>`).join('')}</div>
     <div class="impact-cities">${cities.map(([img, name, desc]) => `<article class="city-card" data-reveal>
-      <div class="city-photo"><img src="assets/about/city-${img}.webp" alt="" loading="lazy" decoding="async"></div>
+      <div class="city-photo"><img src="assets/about/city-${img}${alt ? '-2' : ''}.webp" alt="" loading="lazy" decoding="async"></div>
       <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div></article>`).join('')}</div>
   </div>
 </section>`;
