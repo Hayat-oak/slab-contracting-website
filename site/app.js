@@ -350,7 +350,7 @@ function footer() {
 
 function projectCard(p, extra = '') {
   return `<article class="project-card ${extra}" data-reveal>
-  <a href="${href('projects/' + p.id)}" data-cursor="${t('view')}">
+  <a href="${href('projects/' + p.id)}" data-cursor="diag">
     <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${t('residential')}`)}</div>
     <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${t('riyadhShort')} · ${pclient(p)} · ${units(p)}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
   </a></article>`;
@@ -359,7 +359,7 @@ function projectCard(p, extra = '') {
 function serviceCards() {
   return `<div class="service-grid">${[1, 2, 3, 4].map(i => {
 
-    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="${t('view')}">
+    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="diag">
       <div class="photo reveal-img">${serviceImg(i)}</div>
       <div class="card-end"><div><span class="card-num">${pad(i)}</span><h3>${t('service' + i)}</h3><p class="micro">${t('service' + i + 'desc')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
     </a>`;
@@ -513,7 +513,7 @@ function galleryMarkup(p) {
   return `<div class="gallery" data-gallery>
   <div class="gallery-frame" id="gallery-frame">
     <div class="gallery-backdrop" id="gallery-backdrop" style="background-image:url('${IMAGE(p.id, n)}')"></div>
-    <button type="button" class="gallery-open" data-action="lightbox" aria-label="${t('openPhoto')}" data-cursor="${t('expand')}">
+    <button type="button" class="gallery-open" data-action="lightbox" aria-label="${t('openPhoto')}" data-cursor="expand">
       <img id="gallery-main" src="${IMAGE(p.id, n)}" alt="${esc(`${pname(p)} — ${t('photo')} ${n} ${t('photoOf')} ${p.images}`)}" decoding="async">
     </button>
     <button type="button" class="gallery-control prev" data-action="gallery" data-move="-1" aria-label="${t('prevPhoto')}">${ICON.prev}</button>
@@ -871,7 +871,7 @@ function showHero(i) {
   if (cap && p) { cap.href = href('projects/' + p.id); cap.querySelector('span').textContent = pname(p); }
 }
 
-// Desktop-only "View" cursor label over project and service cards.
+// Desktop-only round cursor with an icon (arrow on cards, expand on the gallery).
 const cursor = document.createElement('div');
 cursor.className = 'cursor-label';
 cursor.setAttribute('aria-hidden', 'true');
@@ -1356,7 +1356,7 @@ $app.addEventListener('pointerover', e => {
   heroPaused = !!(e.target.closest && e.target.closest('.hero-bottom'));
   if (!matches('(pointer: fine)')) return;
   const card = e.target.closest && e.target.closest('[data-cursor]');
-  cursor.textContent = card ? card.dataset.cursor : cursor.textContent;
+  if (card && ICON[card.dataset.cursor]) cursor.innerHTML = ICON[card.dataset.cursor];
   cursor.classList.toggle('show', !!card);
 });
 $app.addEventListener('pointermove', e => {
