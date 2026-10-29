@@ -120,7 +120,7 @@ function renderLogin(step = 'email', email = '') {
     <button class="admin-btn" type="submit">إرسال رمز الدخول</button>
     <p class="admin-hint">يصلك رمز من 6 أرقام على بريدك. الدخول متاح فقط للإيميلات المضافة كمستخدمين.</p>
   </form>` : `<form id="login-code" novalidate>
-    <p class="admin-hint">أرسلنا رمز الدخول إلى <b dir="ltr">${esc(email)}</b></p>
+    <p class="admin-hint">أرسلنا إيميل الدخول إلى <b dir="ltr">${esc(email)}</b>. اكتبي الرمز اللي فيه، أو اضغطي رابط الدخول في الإيميل من نفس هذا المتصفح.</p>
     <label for="login-otp">رمز الدخول</label>
     <input id="login-otp" inputmode="numeric" autocomplete="one-time-code" dir="ltr" maxlength="10" required>
     <button class="admin-btn" type="submit">دخول</button>
@@ -142,7 +142,8 @@ function renderLogin(step = 'email', email = '') {
         const allowed = await fetch(`${SUPABASE_URL}/rest/v1/rpc/is_admin_email`, {method: 'POST', headers: {apikey: SUPABASE_KEY, 'Content-Type': 'application/json'}, body: JSON.stringify({p_email: mail})}).then(r => r.json()).catch(() => false);
         if (allowed && allowed.code === 'PGRST202') throw new Error('لوحة الأدمن غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.');
         if (allowed !== true) throw new Error('هذا البريد غير مضاف كمستخدم في لوحة الأدمن.');
-        await auth('otp', {email: mail, create_user: true});
+        // The email carries a 6-digit code (custom template) or, with Supabase's default template, a sign-in link back to this page.
+        await auth(`otp?redirect_to=${encodeURIComponent(location.origin + location.pathname)}`, {email: mail, create_user: true});
         renderLogin('code', mail);
       } else {
         const code = f.querySelector('input').value.replace(/\D/g, '');
@@ -449,4 +450,21 @@ $root.addEventListener('submit', e => {
   }, 'تمت إضافة المستخدم').finally(done);
 });
 
-if (session && session.refresh_token) renderApp(); else renderLogin();
+// Returning from the sign-in link in the email: Supabase puts the session in the URL fragment.
+async function start() {
+  const hash = new URLSearchParams(location.hash.slice(1));
+  if (hash.get('access_token')) {
+    history.replaceState(null, '', location.pathname);
+    try {
+      const user = await fetch(`${SUPABASE_URL}/auth/v1/user`, {headers: {apikey: SUPABASE_KEY, Authorization: `Bearer ${hash.get('access_token')}`}}).then(r => r.json());
+      saveSession({access_token: hash.get('access_token'), refresh_token: hash.get('refresh_token'), expires_in: +hash.get('expires_in') || 3600, user});
+    } catch { session = null; }
+  } else if (hash.get('error_description')) {
+    history.replaceState(null, '', location.pathname);
+    renderLogin();
+    document.getElementById('login-msg').textContent = 'رابط الدخول غير صالح أو منتهي. اطلبي رمزًا جديدًا.';
+    return;
+  }
+  if (session && session.refresh_token) renderApp(); else renderLogin();
+}
+start();
