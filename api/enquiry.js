@@ -15,6 +15,7 @@ const FROM = process.env.ENQUIRY_FROM || 'SLAB Website <website@slab.sa>';
 
 const SECTORS = {residential: ['Residential', 'سكني'], hospitality: ['Hospitality', 'ضيافة'], commercial: ['Commercial', 'تجاري'], institutional: ['Government & Institutional', 'حكومي ومؤسسي']};
 const SERVICES = {'fit-out-execution': ['Fit-Out & Execution', 'التشطيبات والتنفيذ'], design: ['Design', 'التصميم'], 'interior-fit-out': ['Interior Fit-Out', 'التشطيبات الداخلية'], 'project-contract-management': ['Project & Contract Management', 'إدارة المشاريع والعقود']};
+const BUDGETS = {lt500k: ['Under SAR 500,000', 'أقل من 500 ألف ريال'], '500k1m': ['SAR 500,000 – 1 million', 'من 500 ألف إلى مليون ريال'], '1m3m': ['SAR 1 – 3 million', 'من 1 إلى 3 ملايين ريال'], gt3m: ['Over SAR 3 million', 'أكثر من 3 ملايين ريال'], tbd: ['Not decided yet', 'غير محددة بعد']};
 
 const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -26,10 +27,11 @@ function validate(body) {
     services: Array.isArray(body.services) ? body.services.filter(s => typeof s === 'string').slice(0, 8) : [],
     message: str(body.message, 3000), consent: body.consent === true, language: body.language === 'ar' ? 'ar' : 'en'
   };
-  const budget = str(body.budget, 80);
+  const budgetKey = str(body.budget, 20);
+  const budget = BUDGETS[budgetKey] ? `${BUDGETS[budgetKey][0]} / ${BUDGETS[budgetKey][1]}` : '';
   const ok = row.full_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) && row.phone.replace(/\D/g, '').length >= 7
-    && row.project_location && row.message.length >= 12 && row.consent && row.services.length > 0;
-  return {ok, row, budget};
+    && row.project_location && row.message.length >= 12 && row.consent && row.services.length > 0 && !!budget;
+  return {ok, row, budget, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : ''};
 }
 
 function emailHtml(row, budget) {
@@ -62,11 +64,11 @@ module.exports = async (req, res) => {
   if (!body || typeof body !== 'object') return res.status(400).json({ok: false, error: 'bad_request'});
   if (body.bot_field) return res.status(200).json({ok: true}); // honeypot: pretend success, store nothing
 
-  const {ok, row, budget} = validate(body);
+  const {ok, row, budget, budgetEn} = validate(body);
   if (!ok) return res.status(400).json({ok: false, error: 'invalid'});
 
   // 1) Store (the table has no budget column yet, so it travels inside the message).
-  const stored = {...row, message: budget ? `${row.message}\n\n[Estimated budget: ${budget}]` : row.message};
+  const stored = {...row, message: budget ? `${row.message}\n\n[Estimated budget: ${budgetEn}]` : row.message};
   const db = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'return=minimal'},

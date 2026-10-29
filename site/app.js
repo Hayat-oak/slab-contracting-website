@@ -75,6 +75,8 @@ const SERVICE_PAGE_PHOTOS = [
 const serviceImg = (i, set = servicePhotos) => { const s = set[i - 1]; return `<img src="${s.src}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
 // Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
 const SERVICE_KEYS = ['fit-out-execution', 'design', 'interior-fit-out', 'project-contract-management'];
+// Estimated budget ranges (SAR) offered in the enquiry form; /api/enquiry accepts the same keys.
+const BUDGET_KEYS = ['lt500k', '500k1m', '1m3m', 'gt3m', 'tbd'];
 const ICON_CHECK = '<svg class="icon chip-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const PHONE = '920066197'; // UNVERIFIED: not in the profile — confirm before launch.
 const PHONE_DISPLAY = '9200 66197';
@@ -93,7 +95,7 @@ const phrases = {
  aboutSlab:'About SLAB', featured:'Featured Projects', featuredSub:'Real spaces. Delivered with purpose and precision.',
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
  projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', showing:'projects shown', filterLabel:'Filter projects by client',
- projectTitle:'Residential Fit-Out', type:'Type', budget:'Estimated budget', optional:'(optional)', budgetHint:'For example: SAR 500,000 – 1,000,000', projectTypeTag:'Residential',
+ projectTitle:'Residential Fit-Out', type:'Type', budget:'Estimated budget', budgetChoose:'Select a range', budget_lt500k:'Under SAR 500,000', budget_500k1m:'SAR 500,000 – 1 million', budget_1m3m:'SAR 1 – 3 million', budget_gt3m:'Over SAR 3 million', budget_tbd:'Not decided yet', errBudget:'Please select an estimated budget.', projectTypeTag:'Residential',
  location:'Location', client:'Client', units:'Number of units', size:'Apartment size', scope:'Scope of work', riyadh:'Riyadh, Saudi Arabia', riyadhShort:'Riyadh', residential:'Residential', projScope:'Design, Furniture & Fit-Out',
  scopeItems:'Design|Furniture|Fit-Out',
  gallery:'Gallery', overview:'Overview', nextProject:'Next Project', prevProject:'Previous Project', similarProjects:'More Projects', projectTabs:'Project sections',
@@ -156,7 +158,7 @@ const phrases = {
  creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب للمقاولات شركة سعودية متخصصة في الإنشاءات والتشطيبات، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
  projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عليّة هومز',soul:'سول',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
- projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',optional:'(اختياري)',budgetHint:'مثال: 500,000 – 1,000,000 ريال',projectTypeTag:'سكني',
+ projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
  location:'الموقع',client:'العميل',units:'عدد الوحدات',size:'مساحات الشقق',scope:'نطاق العمل',riyadh:'الرياض، المملكة العربية السعودية',riyadhShort:'الرياض',residential:'سكني',projScope:'التصميم والأثاث والتشطيبات',
  scopeItems:'التصميم|الأثاث|التشطيبات',
  gallery:'الصور',overview:'نبذة',nextProject:'المشروع التالي',prevProject:'المشروع السابق',similarProjects:'مشاريع أخرى',projectTabs:'أقسام المشروع',
@@ -648,7 +650,7 @@ function contact() {
     <small class="error" id="services-error" hidden></small>
   </fieldset>
   ${field('project-location', t('projectLocation'), `<input id="project-location" name="project-location" required maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`)}
-  <div class="field full"><label for="budget">${t('budget')} <span class="optional">${t('optional')}</span></label><input id="budget" name="budget" maxlength="80" inputmode="text" aria-describedby="budget-hint"><small class="hint" id="budget-hint">${t('budgetHint')}</small></div>
+  ${field('budget', t('budget'), `<select id="budget" name="budget" required aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`)}
   ${field('message', t('message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
@@ -1121,7 +1123,7 @@ function setStep(i, focus) {
 function validateField(el) {
   const v = (el.type === 'checkbox' ? (el.checked ? 'yes' : '') : el.value).trim();
   let msg = '';
-  if (el.required && !v) msg = el.type === 'checkbox' ? t('errConsent') : t('errRequired');
+  if (el.required && !v) msg = el.type === 'checkbox' ? t('errConsent') : el.name === 'budget' ? t('errBudget') : t('errRequired');
   else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = t('errEmail');
   else if (el.type === 'tel' && !/^\+?[\d\s()-]{8,20}$/.test(v) || (el.type === 'tel' && (v.match(/\d/g) || []).length < 8)) msg = t('errPhone');
   else if (el.name === 'message' && v.length < 12) msg = t('errShort');
@@ -1197,7 +1199,7 @@ async function submitForm(form) {
       resp = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Prefer: 'return=minimal'},
-        body: JSON.stringify({...row, message: budget ? `${row.message}\n\n[Estimated budget: ${budget}]` : row.message})
+        body: JSON.stringify({...row, message: budget ? `${row.message}\n\n[Estimated budget: ${phrases.en['budget_' + budget] || budget}]` : row.message})
       });
     }
     if (!resp.ok) throw new Error('HTTP ' + resp.status);

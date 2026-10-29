@@ -105,7 +105,7 @@
     // Valid submission from file:// must show the offline notice — never a fake success message.
     $('#full-name').value = 'Test Person'; $('#email').value = 'test@example.com'; $('#phone').value = '+966 5 0000 0000';
     $('#project-type').value = 'residential'; $('#project-location').value = 'Riyadh'; $('#message').value = 'Fit-out for a 3-unit residential building.';
-    $('#consent').checked = true;
+    $('#consent').checked = true; $('#budget').value = 'tbd';
     $$('input[name="services"]').slice(0, 2).forEach(c => { c.checked = true; });
     $('#lead-form button[type=submit]').click();
     await new Promise(r => setTimeout(r, 50));
