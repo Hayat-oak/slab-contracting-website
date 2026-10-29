@@ -5,15 +5,13 @@
 // Environment variables (Vercel → Project → Settings → Environment Variables):
 //   RESEND_API_KEY  (required for email) Resend API key, kept server-side only
 //   ENQUIRY_TO      (optional) recipient, default info@slab.sa
-//   ENQUIRY_FROM    (optional) sender, default "SLAB Website <onboarding@resend.dev>".
-//                   Resend's test sender only delivers to the Resend account's own email address;
-//                   after slab.sa is verified in Resend use e.g. "SLAB Website <website@slab.sa>".
+//   ENQUIRY_FROM    (optional) sender, default "SLAB Website <website@slab.sa>" (slab.sa must be verified in Resend).
 //   SUPABASE_URL / SUPABASE_KEY (optional) default to the site's public project and publishable key
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://oydrudnqcazzytauodup.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_KEY || 'sb_publishable_4Ep7dLPR3odGYd_uf3GDtw_0U4ieWvw';
 const TO = process.env.ENQUIRY_TO || 'info@slab.sa';
-const FROM = process.env.ENQUIRY_FROM || 'SLAB Website <onboarding@resend.dev>';
+const FROM = process.env.ENQUIRY_FROM || 'SLAB Website <website@slab.sa>';
 
 const SECTORS = {residential: ['Residential', 'سكني'], hospitality: ['Hospitality', 'ضيافة'], commercial: ['Commercial', 'تجاري'], institutional: ['Government & Institutional', 'حكومي ومؤسسي']};
 const SERVICES = {'fit-out-execution': ['Fit-Out & Execution', 'التشطيبات والتنفيذ'], design: ['Design', 'التصميم'], 'interior-fit-out': ['Interior Fit-Out', 'التشطيبات الداخلية'], 'project-contract-management': ['Project & Contract Management', 'إدارة المشاريع والعقود']};
