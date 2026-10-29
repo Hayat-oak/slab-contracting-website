@@ -31,19 +31,19 @@ const localAsset = url => url.replace(ASSET_BASE, 'assets/');
 // Jawhara Al Narjis 8 -> 1 unit. Project ids are unchanged so image files and links keep working.
 const projects = [
   {id:'soulhittin', name:'SOUL Hittin', ar:'سول حطين', client:'OHG', clientAr:'OHG', units:9, sizes:['132.26'], images:6, category:'soul', source:26},
-  {id:'almughrizat', name:'Almughrizat Building', ar:'مبنى المغرزات', client:'Aliyah Homes', clientAr:'عليّة هومز', units:25, sizes:['50','107'], images:3, category:'aliyah', source:13},
-  {id:'masharef', name:'Masharef Building', ar:'مبنى مشارف', client:'Aliyah Homes', clientAr:'عليّة هومز', units:14, sizes:['117','121','160'], images:3, category:'aliyah', source:14},
-  {id:'mkin30', name:'Mkin 30', ar:'مكين 30', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['245'], images:2, category:'aliyah', source:16},
-  {id:'nirvana12', name:'Nirvana 12', ar:'نيرفانا 12', client:'Aliyah Homes', clientAr:'عليّة هومز', units:2, sizes:['50','145'], images:3, category:'aliyah', source:15},
-  {id:'ajlan11', name:'Ajlan Riviera 12', ar:'عجلان ريفيرا 12', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['92','169'], images:3, category:'aliyah', source:17},
-  {id:'almajidiya116', name:'Almajidiya 116', ar:'المجيدية 116', client:'Aliyah Homes', clientAr:'عليّة هومز', units:4, sizes:['77','101','128','130'], images:2, category:'aliyah', source:19},
-  {id:'almajidiya111', name:'Al Majidiya Residence 111', ar:'المجيدية ريزيدنس 111', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['120'], images:4, category:'aliyah', source:20},
-  {id:'jawhara8', name:'Jawhara Al Narjis 8', ar:'جوهرة النرجس 8', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['50','145'], images:4, category:'aliyah', source:21},
-  {id:'ajlan19', name:'Ajlan Riviera 21', ar:'عجلان ريفيرا 21', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['137'], images:2, category:'aliyah', source:22},
-  {id:'almajidiya70', name:'Almajidiya 70', ar:'المجيدية 70', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['90'], images:3, category:'aliyah', source:23},
-  {id:'almajidiya130', name:'Almajidiya 130', ar:'المجيدية 130', client:'Aliyah Homes', clientAr:'عليّة هومز', units:1, sizes:['128'], images:4, category:'aliyah', source:24},
+  {id:'almughrizat', name:'Almughrizat Building', ar:'مبنى المغرزات', client:'Aliyah Homes', clientAr:'عالية هوم', units:25, sizes:['50','107'], images:3, category:'aliyah', source:13},
+  {id:'masharef', name:'Masharef Building', ar:'مبنى مشارف', client:'Aliyah Homes', clientAr:'عالية هوم', units:14, sizes:['117','121','160'], images:3, category:'aliyah', source:14},
+  {id:'mkin30', name:'Mkin 30', ar:'مكين 30', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['245'], images:2, category:'aliyah', source:16},
+  {id:'nirvana12', name:'Nirvana 12', ar:'نيرفانا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:2, sizes:['50','145'], images:3, category:'aliyah', source:15},
+  {id:'ajlan11', name:'Ajlan Riviera 12', ar:'عجلان ريفيرا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['92','169'], images:3, category:'aliyah', source:17},
+  {id:'almajidiya116', name:'Almajidiya 116', ar:'المجيدية 116', client:'Aliyah Homes', clientAr:'عالية هوم', units:4, sizes:['77','101','128','130'], images:2, category:'aliyah', source:19},
+  {id:'almajidiya111', name:'Al Majidiya Residence 111', ar:'المجيدية ريزيدنس 111', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['120'], images:4, category:'aliyah', source:20},
+  {id:'jawhara8', name:'Jawhara Al Narjis 8', ar:'جوهرة النرجس 8', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['50','145'], images:4, category:'aliyah', source:21},
+  {id:'ajlan19', name:'Ajlan Riviera 21', ar:'عجلان ريفيرا 21', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['137'], images:2, category:'aliyah', source:22},
+  {id:'almajidiya70', name:'Almajidiya 70', ar:'المجيدية 70', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['90'], images:3, category:'aliyah', source:23},
+  {id:'almajidiya130', name:'Almajidiya 130', ar:'المجيدية 130', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['128'], images:4, category:'aliyah', source:24},
   // NEEDS CLIENT REVIEW: profile p.18 lists 2 units but four sizes, identical to Almajidiya 116 (p.19). Shown as printed.
-  {id:'ajlan37', name:'Ajlan Riviera 37', ar:'عجلان ريفيرا 37', client:'Aliyah Homes', clientAr:'عليّة هومز', units:2, sizes:['77','101','128','130'], images:2, category:'aliyah', source:18, review:true}
+  {id:'ajlan37', name:'Ajlan Riviera 37', ar:'عجلان ريفيرا 37', client:'Aliyah Homes', clientAr:'عالية هوم', units:2, sizes:['77','101','128','130'], images:2, category:'aliyah', source:18, review:true}
 ];
 
 // Full-width and large placements use photos that have high-resolution originals (assets/hd, from SLAB's Drive folders).
@@ -167,7 +167,7 @@ const phrases = {
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
  creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب للمقاولات شركة سعودية متخصصة في الإنشاءات والتشطيبات، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
- projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عليّة هومز',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الأدمن',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
+ projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عالية هوم',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الأدمن',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
  projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
  location:'الموقع',client:'العميل',units:'عدد الوحدات',size:'مساحات الشقق',scope:'نطاق العمل',riyadh:'الرياض، المملكة العربية السعودية',riyadhShort:'الرياض',residential:'سكني',projScope:'التصميم والأثاث والتشطيبات',
  scopeItems:'التصميم|الأثاث|التشطيبات',
