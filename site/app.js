@@ -809,17 +809,24 @@ function setReveal() {
 function setCounters() {
   const nodes = document.querySelectorAll('[data-count]');
   if (!('IntersectionObserver' in window) || reducedMotion()) return;
-  const observer = new IntersectionObserver(entries => entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    observer.unobserve(e.target);
-    const el = e.target, end = Number(el.dataset.count), start = performance.now(), dur = 3200;
+  // Counters in the same row start together and run at one even pace, so 3, 4, 7 and 125 all land at the same moment.
+  const DUR = 5000;
+  const run = els => {
+    const start = performance.now();
     const tick = now => {
-      const k = Math.min(1, (now - start) / dur);
-      el.textContent = Math.round(end * (1 - Math.pow(1 - k, 2)));
+      const k = Math.min(1, (now - start) / DUR);
+      els.forEach(el => { el.textContent = Math.floor(Number(el.dataset.count) * k); });
       if (k < 1) requestAnimationFrame(tick);
     };
-    el.textContent = '0';
+    els.forEach(el => { el.textContent = '0'; });
     requestAnimationFrame(tick);
+  };
+  const observer = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const row = e.target.closest('.impact-stats, .stats-band') || e.target;
+    const group = Array.from(row.querySelectorAll('[data-count]')).concat(row.matches('[data-count]') ? [row] : []);
+    group.forEach(el => observer.unobserve(el));
+    run(group);
   }), {threshold: 0.5});
   nodes.forEach(n => observer.observe(n));
 }
