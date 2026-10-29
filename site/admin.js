@@ -140,6 +140,7 @@ function renderLogin(step = 'email', email = '') {
         const mail = f.querySelector('input').value.trim().toLowerCase();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) throw new Error('اكتبي بريدًا صحيحًا.');
         const allowed = await fetch(`${SUPABASE_URL}/rest/v1/rpc/is_admin_email`, {method: 'POST', headers: {apikey: SUPABASE_KEY, 'Content-Type': 'application/json'}, body: JSON.stringify({p_email: mail})}).then(r => r.json()).catch(() => false);
+        if (allowed && allowed.code === 'PGRST202') throw new Error('لوحة الأدمن غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.');
         if (allowed !== true) throw new Error('هذا البريد غير مضاف كمستخدم في لوحة الأدمن.');
         await auth('otp', {email: mail, create_user: true});
         renderLogin('code', mail);
