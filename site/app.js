@@ -1182,7 +1182,7 @@ async function submitForm(form) {
   btn.setAttribute('aria-busy', 'true');
   label.textContent = t('sending');
   try {
-    const v = name => form.elements[name].value.trim();
+    const v = name => (form.elements[name] ? form.elements[name].value.trim() : '');
     const row = {
       full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'), services: selectedServices(form),
       project_location: v('project-location'), message: v('message'), consent: form.elements.consent.checked, language: state.language
