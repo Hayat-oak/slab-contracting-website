@@ -830,11 +830,9 @@ html[dir="rtl"] .eyebrow-line { letter-spacing: 0; font-size: 15px; }
   .eyebrow-line::after { width: 60px; }
 }
 
-/* Footer v2 (client design): photo on the far side fading into the paper, four columns, bottom bar */
-.site-footer { position: relative; isolation: isolate; overflow: hidden; background: #f1eee8; padding-top: clamp(70px, 9vw, 190px); }
-.site-footer::before { content: ''; position: absolute; inset: 0 0 auto auto; width: 46%; height: calc(100% - 96px); z-index: -1; background: url('assets/about/footer-bg.webp') center / cover no-repeat; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 42%); mask-image: linear-gradient(90deg, transparent 0%, #000 42%); }
-html[dir="rtl"] .site-footer::before { inset: 0 auto auto 0; transform: scaleX(-1); }
-.footer-top { grid-template-columns: 1.25fr .95fr 1.15fr 1.2fr; max-width: 64%; }
+/* Footer v2 (client design): warm cream band in the site palette, four columns, bottom bar */
+.site-footer { position: relative; background: var(--cream); border-top: 1px solid var(--border); padding-top: clamp(70px, 8vw, 150px); }
+.footer-top { grid-template-columns: 1.25fr .95fr 1.15fr 1.2fr; max-width: none; }
 .footer-top > :last-child { padding-inline-end: 0; }
 .footer-brand .logo { height: 100px; }
 .footer-rule { display: block; width: 64px; height: 1px; background: #b9b3a8; margin: 18px 0 14px; }
@@ -857,8 +855,6 @@ html[dir="rtl"] .footer-links a:hover .icon { transform: scaleX(-1) translateX(4
 .footer-social { width: 46px; height: 46px; border-radius: 50%; border: 1px solid #8f8a82; display: grid; place-items: center; font-size: 20px; }
 .footer-social:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
 .footer-sep { width: 1px; height: 34px; background: #cfcac1; }
-@media (max-width: 1400px) { .footer-top { max-width: none; } .site-footer::before { opacity: .35; } }
-@media (max-width: 1180px) { .site-footer::before { display: none; } }
 @media (max-width: 1180px) {
   .footer-top { grid-template-columns: 1fr 1fr 1fr; row-gap: 44px; }
   .footer-brand-wrap { grid-column: 1 / -1; }
