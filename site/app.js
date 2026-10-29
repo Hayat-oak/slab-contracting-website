@@ -60,12 +60,19 @@ const processVisuals = [
 ];
 // One image per service, chosen to show that service (SLAB team photos where available). pos = focal point when cropped.
 const servicePhotos = [
-  {src: 'assets/process/svc-1-fitout-execution.webp', pos: 'center 70%'}, // Fit-Out & Execution: SLAB team installing (logo/frame removed)
-  {src: 'assets/process/4-plan.webp', pos: 'center'},                    // Design: drawings + laptop
-  {src: HD('soulhittin', 1), pos: 'center'},                              // Interior Fit-Out: finished SOUL Hittin interior
-  {src: 'assets/process/svc-4-project-management.webp', pos: 'center 25%'} // Project & Contract Management: engineers on site (logo removed)
+  {src: HD('ajlan19', 2), pos: 'center'},                               // Fit-Out & Execution: completed fitted kitchen
+  {src: HD('jawhara8', 2), pos: 'center'},                              // Design: designed dining space
+  {src: HD('nirvana12', 3), pos: 'center'},                             // Interior Fit-Out: finished bedroom interior
+  {src: 'assets/about/svc-4-inspection.webp', pos: 'center'}            // Project & Contract Management: on-site inspection (Unsplash)
 ];
-const serviceImg = i => { const s = servicePhotos[i - 1]; return `<img src="${s.src}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
+// Services page uses its own set so no photo repeats the home-page service cards.
+const SERVICE_PAGE_PHOTOS = [
+  {src: HD('mkin30', 2), pos: 'center'},            // Fit-Out & Execution: fitted kitchen
+  {src: HD('jawhara8', 3), pos: 'center'},          // Design: detailed bathroom design
+  {src: HD('soulhittin', 4), pos: 'center'},        // Interior Fit-Out: bedroom suite
+  {src: 'assets/about/svc-4-site.webp', pos: 'center'} // Project & Contract Management: site works (Unsplash)
+];
+const serviceImg = (i, set = servicePhotos) => { const s = set[i - 1]; return `<img src="${s.src}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
 // Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
 const SERVICE_KEYS = ['fit-out-execution', 'design', 'interior-fit-out', 'project-contract-management'];
 const ICON_CHECK = '<svg class="icon chip-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -363,14 +370,15 @@ function serviceCards() {
 // Sectors and seven-stage strip (client design). Photos are SLAB's own; the profile has no dedicated
 // commercial/government photography, so those two use SLAB team / planning images.
 const SECTOR_VISUALS = {
-  hospitality: {src: HD('soulhittin', 1), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-9M21 19v-5a3 3 0 0 0-3-3H10v6M3 17h18M6.5 13.5a1.5 1.5 0 1 0 0-.01"/></svg>'},
-  residential: {src: HD('almajidiya116', 1), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>'},
-  commercial: {src: 'assets/process/svc-4-project-management.webp', pos: 'center 25%', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3h12v18M4 21h16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M11 21v-3h2v3"/></svg>'},
-  institutional: {src: 'assets/process/4-plan.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 4l9 5M4 9h16M6 9v8M10 9v8M14 9v8M18 9v8M3 20h18M4 17h16"/></svg>'}
+  hospitality: {src: HD('soulhittin', 2), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-9M21 19v-5a3 3 0 0 0-3-3H10v6M3 17h18M6.5 13.5a1.5 1.5 0 1 0 0-.01"/></svg>'},
+  residential: {src: HD('almajidiya111', 2), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>'},
+  commercial: {src: 'assets/about/sector-commercial.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3h12v18M4 21h16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M11 21v-3h2v3"/></svg>'},
+  institutional: {src: 'assets/about/sector-institutional.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 4l9 5M4 9h16M6 9v8M10 9v8M14 9v8M18 9v8M3 20h18M4 17h16"/></svg>'}
 };
+const SECTOR_ALT = {hospitality: HD('soulhittin', 3), residential: HD('ajlan11', 2)};
 function sectorsSection(link) {
   return `<section class="sectors-band" aria-labelledby="sectors-title"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title" id="sectors-title">${t('sectors')}</h2><p class="copy">${t('sectorsSub')}</p></div>${link ? `<a class="rule-link" href="#/services">${t('ourSectors')} ${ICON.diag}</a>` : ''}</div></div>
-  <div class="sector-cards">${['hospitality', 'residential', 'commercial', 'institutional'].map((k, i) => { const v = SECTOR_VISUALS[k]; return `<article class="sector-card" data-reveal style="--d:${i * 80}ms">
+  <div class="sector-cards">${['hospitality', 'residential', 'commercial', 'institutional'].map((k, i) => { const v = !link && SECTOR_ALT[k] ? {...SECTOR_VISUALS[k], src: SECTOR_ALT[k]} : SECTOR_VISUALS[k]; return `<article class="sector-card" data-reveal style="--d:${i * 80}ms">
     <img src="${v.src}" alt="" loading="lazy" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}>
     <div class="sector-band"><span class="sector-icon">${v.icon}</span><div><span class="sector-num">${pad(i + 1)}</span><h3>${t(k)}</h3><p>${t(k + 'Desc')}</p></div></div></article>`; }).join('')}</div></section>`;
 }
@@ -411,7 +419,8 @@ const IMPACT_ICON = {
   cities: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9.5s3-2.8 3-5a3 3 0 0 0-6 0c0 2.2 3 5 3 5z"/><circle cx="12" cy="4.6" r=".9"/><path d="M6 19.5s2.6-2.4 2.6-4.3a2.6 2.6 0 0 0-5.2 0c0 1.9 2.6 4.3 2.6 4.3zM18 19.5s2.6-2.4 2.6-4.3a2.6 2.6 0 0 0-5.2 0c0 1.9 2.6 4.3 2.6 4.3z"/><path d="M8.6 9.8 7.2 11.6M15.4 9.8l1.4 1.8M9 20.5c2 .8 4 .8 6 0" stroke-dasharray="1.4 1.6"/></svg>',
   sectors: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg>',
   stages: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="5" r="2"/><path d="m4.6 5 .7.7 1.2-1.4M7.5 5h9a3 3 0 0 1 0 6h-9a3 3 0 0 0 0 6h9"/><circle cx="18.5" cy="17" r="2"/><path d="m17.6 17 .7.7 1.2-1.4"/><circle cx="5.5" cy="11" r="1.4"/></svg>'
-};function impact() {
+};
+function impact(alt = false) {
   const items = [
     ['units', 125, '+', 'stats1', []],
     ['cities', 3, '', 'stats2', []],
@@ -420,7 +429,7 @@ const IMPACT_ICON = {
   ];
   const cities = [['riyadh', 'cityRiyadh', 'cityRiyadhD'], ['madinah', 'cityMadinah', 'cityMadinahD'], ['jeddah', 'cityJeddah', 'cityJeddahD']];
   return `<section class="impact" aria-labelledby="impact-title">
-  <div class="impact-intro" style="background-image:url('assets/about/why-main.webp')">
+  <div class="impact-intro" style="background-image:url('${alt ? HD('almajidiya130', 4) : HD('ajlan37', 2)}')">
     <div class="impact-intro-copy" data-reveal><span class="eyebrow-rule">${t('impactEyebrow')}</span>
       <h2 id="impact-title">${t('impactTitle').replace('\n', '<br>')}</h2><p>${t('impactDesc')}</p>
       <a class="outline-cta light" href="#/projects">${t('explore')} ${ICON.arrow}</a></div>
@@ -472,7 +481,7 @@ function home() {
 </section>
 <section class="section-sm"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('ourServices')}</h2><p class="micro">${t('servicesSub')}</p></div><a class="text-link" href="#/services">${t('viewAll')} ${ICON.diag}</a></div>${serviceCards()}</div></section>
 <section class="section-sm"><div class="container split-editorial">
-  <div class="feature-image reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('ajlan11', 1, '')}</div></div>
+  <div class="feature-image reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('ajlan11', 3, '')}</div></div>
   <div class="editorial-copy" data-reveal><span class="eyebrow">${t('part')}</span><h2 class="section-title">${t('creating')}</h2><p class="copy">${t('aboutHome')}</p><a class="text-link" href="#/about">${t('aboutSlab')} ${ICON.diag}</a></div>
 </div></section>
 <section class="section-sm"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('featured')}</h2><p class="micro">${t('featuredSub')}</p></div><a class="text-link" href="#/projects">${t('viewAll')} ${ICON.diag}</a></div>
@@ -549,12 +558,12 @@ function detail(p) {
 }
 
 function services() {
-  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('servicesHero'), t('servicesHeroSub'), 'almajidiya130', 1)}
+  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('servicesHero'), t('servicesHeroSub'), 'masharef', 2)}
 <section class="section"><div class="container"><div class="section-head" data-reveal><h2 class="section-title">${t('servicesIntro')}</h2></div>
 <div class="service-rows">${[1, 2, 3, 4].map(i => {
 
   return `<article class="service-row" id="service-${i}" data-reveal>
-    <div class="photo reveal-img"><div class="parallax-inner" data-parallax>${serviceImg(i)}</div></div>
+    <div class="photo reveal-img"><div class="parallax-inner" data-parallax>${serviceImg(i, SERVICE_PAGE_PHOTOS)}</div></div>
     <div class="service-copy"><span class="service-num">${pad(i)}</span><h2>${t('service' + i)}</h2><p>${t('serviceLong' + i)}</p></div>
   </article>`;
 }).join('')}</div></div></section>
@@ -568,10 +577,10 @@ function about() {
 <nav class="subnav" aria-label="${t('aboutNav')}"><div class="container">${sub.map(([id, label]) => `<a href="#about-${id}" data-action="scroll-to" data-target="about-${id}" class="${id === 'story' ? 'active' : ''}"><span>${pad(sub.findIndex(s => s[0] === id) + 1)}</span>${label}</a>`).join('')}</div><i class="subnav-progress" aria-hidden="true"></i></nav>
 <section class="section" id="about-story"><div class="container about-feature">
   <div data-reveal><span class="eyebrow">${t('ourStory')}</span><h2 class="section-title">${t('storyTitle')}</h2><p class="copy">${t('storyCopy')}</p><p class="copy">${t('storyCopy2')}</p></div>
-  <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 1, '')}</div></div>
+  <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 3, '')}</div></div>
 </div>
 <div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><div class="pillar-photo reveal-img"><img src="assets/about/pillar-${k}.webp" alt="" loading="lazy" decoding="async"></div><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
-${impact()}
+${impact(true)}
 <section class="section" id="about-principles"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('principles')}</h2><p class="copy narrow">${t('principlesLead')}</p></div></div>
 <div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<article class="principle" data-reveal style="--d:${i * 90}ms"><span class="eyebrow">${pad(i + 1)}</span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp" alt="" loading="lazy" decoding="async"></div></article>`).join('')}</div></div></section>
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
@@ -613,7 +622,7 @@ function field(id, label, input, hint = '') {
 
 function contact() {
   const sectors = ['residential', 'hospitality', 'commercial', 'institutional'];
-  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('contactHero'), t('contactHeroSub'), 'jawhara8', 1)}
+  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('contactHero'), t('contactHeroSub'), 'almajidiya70', 2)}
 <section class="container contact-layout">
 <div class="contact-details" data-reveal><h2>${t('getInTouch')}</h2><p class="copy">${t('contactCopy')}</p>
   <ul class="contact-points">
