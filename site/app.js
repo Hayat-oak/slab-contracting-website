@@ -16,10 +16,12 @@ const SUPABASE_KEY = 'sb_publishable_4Ep7dLPR3odGYd_uf3GDtw_0U4ieWvw';
 const ASSET_BASE = `${SUPABASE_URL}/storage/v1/object/public/site-assets/projects/`;
 
 // Photos load from Supabase Storage; site/assets keeps identical local copies used as a fallback (see 'error' listener).
-const IMAGE = (slug, i = 1) => `${ASSET_BASE}${slug}_${i}.webp`;
+// Photos added in the admin panel (table project_photos), keyed `${slug}_${n}`; they follow a project's built-in photos.
+const PHOTO_EXTRA = {};
+const IMAGE = (slug, i = 1) => PHOTO_EXTRA[`${slug}_${i}`] || `${ASSET_BASE}${slug}_${i}.webp`;
 // Large versions (up to 2400px) for backgrounds, gallery and lightbox. Most come from SLAB's original photography;
 // 4 (Ajlan Riviera 19 #1-2, Almajidiya 116 #2, Almajidiya 130 #4) are enhanced upscales until originals are supplied.
-const HD = (slug, i = 1) => `${ASSET_BASE}hd/${slug}_${i}.webp`;
+const HD = (slug, i = 1) => PHOTO_EXTRA[`${slug}_${i}`] || `${ASSET_BASE}hd/${slug}_${i}.webp`;
 const localAsset = url => url.replace(ASSET_BASE, 'assets/');
 
 // `images` must equal the number of assets/{id}_{n}.webp files (checked by verify_site.cjs and qa/selftest.html).
@@ -72,14 +74,22 @@ const SERVICE_PAGE_PHOTOS = [
   {src: HD('soulhittin', 4), pos: 'center'},        // Interior Fit-Out: bedroom suite
   {src: 'assets/about/svc-4-manage.webp', pos: 'center 40%'} // Project & Contract Management: manager reviewing plans (Unsplash)
 ];
-const serviceImg = (i, set = servicePhotos) => { const s = set[i - 1]; return `<img src="${s.src}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
+const serviceImg = (i, set = servicePhotos) => { const s = set[i - 1]; const slot = (set === servicePhotos ? 'home-service-' : 'services-') + i; return `<img src="${slotSrc(slot, s.src)}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
 // Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
 const SERVICE_KEYS = ['fit-out-execution', 'design', 'interior-fit-out', 'project-contract-management'];
 // Estimated budget ranges (SAR) offered in the enquiry form; /api/enquiry accepts the same keys.
 const BUDGET_KEYS = ['lt500k', '500k1m', '1m3m', 'gt3m', 'tbd'];
 const ICON_CHECK = '<svg class="icon chip-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-const PHONE = '920066197'; // UNVERIFIED: not in the profile — confirm before launch.
-const PHONE_DISPLAY = '9200 66197';
+// Contact details: defaults below, replaced by site_settings.contact when edited in the admin panel.
+let PHONE = '920066197'; // confirmed in SLAB's requirements document (2026-10-29)
+let PHONE_DISPLAY = '9200 66197';
+// Content editable in the admin panel (admin.html). Defaults keep the site complete if Supabase is unreachable.
+const CMS = {
+  stats: [{n: 125, suffix: '+'}, {n: 3, suffix: ''}, {n: 4, suffix: ''}, {n: 7, suffix: ''}],
+  questions: [],   // extra enquiry-form questions (form_questions)
+  images: {}       // section photo replacements (image_overrides), by slot name
+};
+const slotSrc = (slot, fallback) => CMS.images[slot] || fallback;
 
 const phrases = {
  en: {
@@ -94,7 +104,7 @@ const phrases = {
  creating:'Crafting Meaningful Spaces', aboutHome:'SLAB Contracting is a Saudi construction and fit-out company, part of Oaktree Group. We bring design coordination, procurement, site execution, quality control and handover together in one integrated delivery process.',
  aboutSlab:'About SLAB', featured:'Featured Projects', featuredSub:'Real spaces. Delivered with purpose and precision.',
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
- projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', showing:'projects shown', filterLabel:'Filter projects by client',
+ projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', other:'Other Projects', adminLogin:'Admin login', showing:'projects shown', filterLabel:'Filter projects by client',
  projectTitle:'Residential Fit-Out', type:'Type', budget:'Estimated budget', budgetChoose:'Select a range', budget_lt500k:'Under SAR 500,000', budget_500k1m:'SAR 500,000 – 1 million', budget_1m3m:'SAR 1 – 3 million', budget_gt3m:'Over SAR 3 million', budget_tbd:'Not decided yet', errBudget:'Please select an estimated budget.', projectTypeTag:'Residential',
  location:'Location', client:'Client', units:'Number of units', size:'Apartment size', scope:'Scope of work', riyadh:'Riyadh, Saudi Arabia', riyadhShort:'Riyadh', residential:'Residential', projScope:'Design, Furniture & Fit-Out',
  scopeItems:'Design|Furniture|Fit-Out',
@@ -133,7 +143,7 @@ const phrases = {
  p7:'Deliver',p7d:'Inspect, close out, hand over and prepare the asset for its intended use.',
  tech:'Technology Supporting Delivery',tech1:'Cost & Resource Visibility',tech1d:'Clear insight into costs and resource allocation to support faster, better-informed decisions.',tech2:'Progress Reporting',tech2d:'Regular reporting on project status and completion progress.',tech3:'Digital Project Management',tech3d:'Centralized coordination of tasks, schedules and resources across active projects.',tech4:'AI Workforce Monitoring',tech4d:'Real-time attendance and site activity tracking powered by AI.',
  contactHero:'Contact',contactHeroSub:'LET’S DISCUSS YOUR NEXT PROJECT',getInTouch:'Get in Touch',contactCopy:'Whether you are defining a new project or preparing for fit-out, tell us what you have in mind. Our team will review your enquiry.',
- phone:'Phone', locationOffice:'Saudi Arabia', activeIn:'Active in Riyadh, Madinah & Jeddah', fullName:'Full name',email:'Email address',phoneField:'Phone number',sector:'Project sector', servicesNeeded:'Services required', servicesHint:'Select one or more.', errServices:'Please select at least one service.',projectLocation:'Project location (city)',message:'Project description',messageHint:'Scope, size, timing — whatever you know so far.',send:'Send Enquiry',sending:'Sending…',choose:'Select a sector',required:'Required',
+ phone:'Phone', locationOffice:'Saudi Arabia', activeIn:'Active in Riyadh, Madinah & Jeddah', fullName:'Full name',email:'Email address',phoneField:'Phone number',sector:'Project sector', servicesNeeded:'Services required', servicesHint:'Select one or more.', errServices:'Please select at least one service.',projectLocation:'Project location (city)',message:'Project description',messageHint:'Scope, size, timing — whatever you know so far.',send:'Send Enquiry',sending:'Sending…',choose:'Select a sector', chooseOne:'Select',required:'Required',
  consent:'I agree that SLAB may use these details to respond to my enquiry, as described in the', consentLink:'privacy notice',
  errRequired:'Please fill in this field.', errEmail:'Please enter a valid email address.', errPhone:'Please enter a valid phone number (8–15 digits).', errShort:'Please add a little more detail (at least 12 characters).', errConsent:'Please confirm you agree to the privacy notice.', errSummary:'Please correct the highlighted fields.', errTooFast:'That was very fast — please review your details and send again.',
  formNote:'Fields marked * are required. Your details are used only to respond to this enquiry.',
@@ -157,7 +167,7 @@ const phrases = {
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
  creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب للمقاولات شركة سعودية متخصصة في الإنشاءات والتشطيبات، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
- projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عليّة هومز',soul:'سول',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
+ projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عليّة هومز',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الأدمن',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
  projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
  location:'الموقع',client:'العميل',units:'عدد الوحدات',size:'مساحات الشقق',scope:'نطاق العمل',riyadh:'الرياض، المملكة العربية السعودية',riyadhShort:'الرياض',residential:'سكني',projScope:'التصميم والأثاث والتشطيبات',
  scopeItems:'التصميم|الأثاث|التشطيبات',
@@ -185,7 +195,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  processTeaser:'سبع مراحل. فريق واحد مسؤول.',processTeaserSub:'من أول اجتماع حتى التسليم، يمر كل مشروع لدى سلاب بالمسار المنظم نفسه.',
  p1:'الفهم',p1d:'تحديد الأهداف والمتطلبات الفنية والأولويات المالية وظروف الموقع والاحتياجات التشغيلية.',p2:'التصميم',p2d:'تحويل متطلبات المشروع إلى تصاميم ومواصفات معمارية وداخلية وفنية منسقة.',p3:'الاعتماد',p3d:'إكمال المراجعات والموافقات قبل بدء المشتريات والإنشاءات.',p4:'التخطيط',p4d:'تحديد النطاق والجدول والموارد والمشتريات واستراتيجية الموردين وضوابط المشروع.',p5:'التنفيذ',p5d:'تنسيق الأعمال الميدانية تحت إشراف منظم وإدارة للجودة.',p6:'الرقابة',p6d:'متابعة التقدم والعمالة والموارد والتكلفة والجداول والتقارير.',p7:'التسليم',p7d:'الفحص وإغلاق الملاحظات والتسليم وتجهيز المشروع للاستخدام.',
  tech:'التقنيات الداعمة للتنفيذ',tech1:'وضوح التكاليف والموارد',tech1d:'متابعة التكاليف وتوزيع الموارد لدعم قرارات أسرع وأدق.',tech2:'تقارير التقدم',tech2d:'تحديثات منتظمة لحالة المشاريع ونسب الإنجاز.',tech3:'إدارة رقمية للمشاريع',tech3d:'تنسيق المهام والجداول والموارد في نظام موحد عبر المشاريع القائمة.',tech4:'مراقبة العمالة بالذكاء الاصطناعي',tech4d:'متابعة لحظية للحضور والنشاط في الموقع بتقنيات الذكاء الاصطناعي.',
- contactHero:'تواصل معنا',contactHeroSub:'لنتحدث عن مشروعك القادم',getInTouch:'يسعدنا تواصلك',contactCopy:'سواء كنت تخطط لمشروع جديد أو تستعد لأعمال التشطيب، شاركنا فكرتك ومتطلباتك ليتواصل معك فريقنا.',phone:'الهاتف',locationOffice:'المملكة العربية السعودية',activeIn:'مشاريع في الرياض والمدينة المنورة وجدة',fullName:'الاسم الكامل',email:'البريد الإلكتروني',phoneField:'رقم الجوال',sector:'قطاع المشروع',servicesNeeded:'الخدمات المطلوبة',servicesHint:'يمكنك اختيار أكثر من خدمة.',errServices:'يرجى اختيار خدمة واحدة على الأقل.',projectLocation:'موقع المشروع (المدينة)',message:'وصف المشروع',messageHint:'النطاق والمساحة والتوقيت — ما يتوفر لديك حاليًا.',send:'إرسال الطلب',sending:'جارٍ الإرسال…',choose:'اختر القطاع',required:'إلزامي',
+ contactHero:'تواصل معنا',contactHeroSub:'لنتحدث عن مشروعك القادم',getInTouch:'يسعدنا تواصلك',contactCopy:'سواء كنت تخطط لمشروع جديد أو تستعد لأعمال التشطيب، شاركنا فكرتك ومتطلباتك ليتواصل معك فريقنا.',phone:'الهاتف',locationOffice:'المملكة العربية السعودية',activeIn:'مشاريع في الرياض والمدينة المنورة وجدة',fullName:'الاسم الكامل',email:'البريد الإلكتروني',phoneField:'رقم الجوال',sector:'قطاع المشروع',servicesNeeded:'الخدمات المطلوبة',servicesHint:'يمكنك اختيار أكثر من خدمة.',errServices:'يرجى اختيار خدمة واحدة على الأقل.',projectLocation:'موقع المشروع (المدينة)',message:'وصف المشروع',messageHint:'النطاق والمساحة والتوقيت — ما يتوفر لديك حاليًا.',send:'إرسال الطلب',sending:'جارٍ الإرسال…',choose:'اختر القطاع',chooseOne:'اختر',required:'إلزامي',
  consent:'أوافق على استخدام سلاب لهذه البيانات للرد على طلبي، وفق',consentLink:'إشعار الخصوصية',
  errRequired:'يرجى تعبئة هذا الحقل.',errEmail:'يرجى إدخال بريد إلكتروني صحيح.',errPhone:'يرجى إدخال رقم جوال صحيح (من 8 إلى 15 رقمًا).',errShort:'يرجى إضافة تفاصيل أكثر (12 حرفًا على الأقل).',errConsent:'يرجى الموافقة على إشعار الخصوصية.',errSummary:'يرجى تصحيح الحقول المحددة.',errTooFast:'تم الإرسال بسرعة كبيرة — يرجى مراجعة البيانات والإرسال مجددًا.',
  formNote:'الحقول المعلّمة بـ * إلزامية. تُستخدم بياناتك فقط للرد على هذا الطلب.',
@@ -238,6 +248,12 @@ const t = k => (phrases[state.language][k] ?? phrases.en[k] ?? k);
 const isAR = () => state.language === 'ar';
 const pname = p => isAR() ? p.ar : p.name;
 const pclient = p => isAR() ? p.clientAr : p.client;
+// Projects added in the admin panel carry their own city and type; built-in ones are Riyadh / residential fit-out.
+const pcity = p => p.city ? (isAR() ? p.cityAr : p.city) : t('riyadhShort');
+const ptype = p => t(p.type || 'residential');
+const plead = p => p.cms
+  ? (isAR() ? `مشروع ${ptype(p)} في ${pcity(p)}${pclient(p) ? ` لصالح ${pclient(p)}` : ''}.` : `${ptype(p)} project in ${pcity(p)}${pclient(p) ? ` for ${pclient(p)}` : ''}.`)
+  : t('projectLead')(p);
 const href = s => `#/${s}`;
 const pad = n => String(n).padStart(2, '0');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -270,7 +286,8 @@ const ICON = {
   mail: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="12" rx="1.5"/><path d="m4 7 8 6 8-6"/></svg>',
   search: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>',
   pause: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
-  play: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>'
+  play: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
+  lock: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>'
 };
 
 
@@ -329,7 +346,7 @@ function header(route) {
 }
 
 // Official enquiries email (confirmed by SLAB, 2026-10-25).
-const EMAIL = 'info@slab.sa';
+let EMAIL = 'info@slab.sa';
 // Official social accounts (supplied by SLAB).
 const SOCIAL = [
   {label: 'LinkedIn', href: 'https://www.linkedin.com/company/slab-saudi/', icon: '<svg class="icon social-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.1c0-1.22-.02-2.78-1.7-2.78-1.7 0-1.96 1.33-1.96 2.7V21h-4z"/></svg>'},
@@ -347,14 +364,14 @@ function footer() {
     <a href="mailto:${EMAIL}">${ICON.mail}<span dir="ltr">${EMAIL}</span></a>
     <a class="footer-cta" href="#/contact"><span>${t('start')}</span>${ICON.arrow}</a></div>
 </div>
-<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal">${SOCIAL.map(s => `<a class="footer-social" href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}">${s.icon}</a>`).join('')}<a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a></span></div></footer>`;
+<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal">${SOCIAL.map(s => `<a class="footer-social" href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}">${s.icon}</a>`).join('')}<a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a><span class="footer-sep" aria-hidden="true"></span><a class="admin-link" href="admin.html">${ICON.lock}<span>${t('adminLogin')}</span></a></span></div></footer>`;
 }
 
 function projectCard(p, extra = '') {
   return `<article class="project-card ${extra}" data-reveal>
   <a href="${href('projects/' + p.id)}" data-cursor="diag">
-    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${t('residential')}`)}<span class="card-tag">${t('projectTypeTag')}</span></div>
-    <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${t('riyadhShort')} · ${pclient(p)} · ${units(p)}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
+    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${ptype(p)}`)}<span class="card-tag">${ptype(p)}</span></div>
+    <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${[pcity(p), pclient(p), p.units ? units(p) : ''].filter(Boolean).join(' · ')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
   </a></article>`;
 }
 
@@ -381,7 +398,7 @@ const SECTOR_ALT = {hospitality: HD('soulhittin', 3), residential: HD('ajlan11',
 function sectorsSection(link) {
   return `<section class="sectors-band" aria-labelledby="sectors-title"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title" id="sectors-title">${t('sectors')}</h2><p class="copy">${t('sectorsSub')}</p></div>${link ? `<a class="rule-link" href="#/services">${t('ourSectors')} ${ICON.diag}</a>` : ''}</div></div>
   <div class="sector-cards">${['hospitality', 'residential', 'commercial', 'institutional'].map((k, i) => { const v = !link && SECTOR_ALT[k] ? {...SECTOR_VISUALS[k], src: SECTOR_ALT[k]} : SECTOR_VISUALS[k]; return `<article class="sector-card" data-reveal style="--d:${i * 80}ms">
-    <img src="${v.src}" alt="" loading="lazy" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}>
+    <img src="${slotSrc(`sector-${k}${link ? '' : '-2'}`, v.src)}" alt="" loading="lazy" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}>
     <div class="sector-band"><span class="sector-icon">${v.icon}</span><div><span class="sector-num">${pad(i + 1)}</span><h3>${t(k)}</h3><p>${t(k + 'Desc')}</p></div></div></article>`; }).join('')}</div></section>`;
 }
 // Icon system (client design): earthy palette circles with an arc accent. Index i -> STAGE_TONES[i].
@@ -403,7 +420,7 @@ function processStrip() {
 </div></section>`;
 }
 function cta() {
-  return `<section class="cta-banner" aria-labelledby="cta-title"><div class="bg-image" data-parallax style="background-image:url('assets/about/cta-bedroom.webp')"></div>
+  return `<section class="cta-banner" aria-labelledby="cta-title"><div class="bg-image" data-parallax style="background-image:url('${slotSrc('cta-banner', 'assets/about/cta-bedroom.webp')}')"></div>
   <div class="content" data-reveal><span class="cta-rule" aria-hidden="true"></span><h2 id="cta-title">${t('bannerTitle').replace('\n', '<br>')}</h2><p>${t('bannerDesc')}</p>
   <a class="outline-cta light" href="#/contact">${t('start')} ${ICON.arrow}</a></div></section>`;
 }
@@ -424,14 +441,14 @@ const IMPACT_ICON = {
 };
 function impact() {
   const items = [
-    ['units', 125, '+', 'stats1'],
-    ['cities', 3, '', 'stats2'],
-    ['sectors', 4, '', 'stats3'],
-    ['stages', 7, '', 'stats4']
+    ['units', CMS.stats[0].n, CMS.stats[0].suffix, 'stats1'],
+    ['cities', CMS.stats[1].n, CMS.stats[1].suffix, 'stats2'],
+    ['sectors', CMS.stats[2].n, CMS.stats[2].suffix, 'stats3'],
+    ['stages', CMS.stats[3].n, CMS.stats[3].suffix, 'stats4']
   ];
   const cities = [['riyadh', 'cityRiyadh', 'cityRiyadhD'], ['madinah', 'cityMadinah', 'cityMadinahD'], ['jeddah', 'cityJeddah', 'cityJeddahD']];
   return `<section class="impact" aria-labelledby="impact-title">
-  <div class="impact-intro" style="background-image:url('${HD('ajlan37', 2)}')">
+  <div class="impact-intro" style="background-image:url('${slotSrc('impact-intro', HD('ajlan37', 2))}')">
     <div class="impact-intro-copy" data-reveal><span class="eyebrow-rule">${t('impactEyebrow')}</span>
       <h2 id="impact-title">${t('impactTitle').replace('\n', '<br>')}</h2><p>${t('impactDesc')}</p>
       <a class="outline-cta light" href="#/projects">${t('explore')} ${ICON.arrow}</a></div>
@@ -441,14 +458,14 @@ function impact() {
       <span class="impact-icon icon-ring">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
       <span class="impact-label">${t(key)}</span></div>`).join('')}</div>
     <div class="impact-cities">${cities.map(([img, name, desc]) => `<a class="city-card" href="#/projects" data-reveal>
-      <img class="city-photo" src="assets/about/city-${img}-v2.webp" alt="" loading="lazy" decoding="async">
+      <img class="city-photo" src="${slotSrc('city-' + img, `assets/about/city-${img}-v2.webp`)}" alt="" loading="lazy" decoding="async">
       <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div>
       <span class="city-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div>
   </div>
 </section>`;
 }
 function stats(extra = '') {
-  const items = [[125, '+', 'stats1'], [3, '', 'stats2'], [4, '', 'stats3'], [7, '', 'stats4']];
+  const items = CMS.stats.map((s, i) => [s.n, s.suffix, 'stats' + (i + 1)]);
   return `<div class="stats-band ${extra}" data-reveal style="--stats-bg:url('${HD('masharef', 3)}')">${items.map(([n, suffix, key]) =>
     `<div class="stat"><b><span data-count="${n}">${n}</span>${suffix}</b><span>${t(key)}</span></div>`).join('')}</div>`;
 }
@@ -499,7 +516,7 @@ function projectList() {
   const count = f => projects.filter(p => f === 'all' || p.category === f).length;
   return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('projectHero'), t('projectsTagline'), 'masharef', 3)}
 <section class="section-sm"><div class="container">
-  <div class="filters" role="group" aria-label="${t('filterLabel')}">${['all', 'aliyah', 'soul'].map(f =>
+  <div class="filters" role="group" aria-label="${t('filterLabel')}">${['all', 'aliyah', 'soul', 'other'].filter(f => count(f)).map(f =>
     `<button type="button" class="filter ${state.filter === f ? 'active' : ''}" data-action="filter" data-filter="${f}" aria-pressed="${state.filter === f}">${t(f)} <sup>${count(f)}</sup></button>`).join('')}
     <span class="results-count" id="results-count" aria-live="polite">${list.length} ${t('showing')}</span></div>
   <div class="project-grid listing" id="project-results">${projectResults(list)}</div>
@@ -534,20 +551,22 @@ function detail(p) {
   if (state.gallery >= p.images) state.gallery = 0;
   const more = [2, 3, 4].map(k => projects[(index + k) % projects.length]);
   const tab = (key, label) => `<button type="button" role="tab" class="tab ${state.projectTab === key ? 'active' : ''}" id="tab-${key}" aria-controls="panel-${key}" aria-selected="${state.projectTab === key}" tabindex="${state.projectTab === key ? 0 : -1}" data-action="project-tab" data-tab="${key}">${label}</button>`;
-  const meta = [[t('location'), t('riyadh')], [t('client'), pclient(p)], [t('type'), t('projectTitle')], [t('units'), p.units], [t('size'), sizes(p)], [t('scope'), t('projScope')]];
+  const meta = p.cms
+    ? [[t('location'), pcity(p)], [t('client'), pclient(p)], [t('type'), ptype(p)], [t('units'), p.units], [t('size'), p.sizes.length ? sizes(p) : '']].filter(([, v]) => v !== '' && v != null)
+    : [[t('location'), t('riyadh')], [t('client'), pclient(p)], [t('type'), t('projectTitle')], [t('units'), p.units], [t('size'), sizes(p)], [t('scope'), t('projScope')]];
   return `<main class="page" id="main-content" tabindex="-1"><div class="container">
 <div class="project-detail-head">
   <div>
     <nav class="breadcrumb" aria-label="${isAR() ? 'مسار التنقل' : 'Breadcrumb'}"><a href="#/projects">${ICON.back} ${t('back')}</a><span aria-hidden="true">/</span><span aria-current="page">${pname(p)}</span></nav>
     <h1 class="hero-title-anim">${pname(p)}</h1>
-    <p class="copy lead">${t('projectLead')(p)}</p>
+    <p class="copy lead">${plead(p)}</p>
   </div>
   <dl class="project-meta">${meta.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
 </div>
 <div class="tabs" role="tablist" aria-label="${t('projectTabs')}">${tab('gallery', t('gallery'))}${tab('overview', t('overview'))}</div>
 <div class="tab-panel" role="tabpanel" id="panel-gallery" aria-labelledby="tab-gallery" ${state.projectTab === 'gallery' ? '' : 'hidden'}>${galleryMarkup(p)}</div>
 <div class="tab-panel overview-panel" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="0" ${state.projectTab === 'overview' ? '' : 'hidden'}>
-  <div><h2 class="section-title small">${pname(p)}</h2><p class="copy">${t('projectLead')(p)}</p><p class="copy">${t('projectOverview')}</p></div>
+  <div><h2 class="section-title small">${pname(p)}</h2><p class="copy">${plead(p)}</p><p class="copy">${t('projectOverview')}</p></div>
   <div><h3 class="eyebrow">${t('scope')}</h3><ul class="scope-list">${t('scopeItems').split('|').map((s, i) => `<li><span>${pad(i + 1)}</span>${s}</li>`).join('')}</ul>
   <a class="text-link" href="#/process">${t('seeProcess')} ${ICON.diag}</a></div>
 </div>
@@ -584,7 +603,7 @@ function about() {
 </div>
 <div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><div class="pillar-photo reveal-img"><img src="assets/about/pillar-${k}.webp" alt="" loading="lazy" decoding="async"></div><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
 <section class="section principles-section" id="about-principles"><div class="principles-wall" aria-hidden="true"></div><div class="container"><div class="principles-head" data-reveal><span class="eyebrow eyebrow-trail">${t('ourApproach')}</span><h2 class="section-title">${t('principles')}</h2><p class="copy">${t('principlesLead')}</p></div>
-<div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<a class="principle" href="#/process" data-reveal style="--d:${i * 90}ms"><span class="principle-num"><span class="eyebrow">${pad(i + 1)}</span><i aria-hidden="true"></i></span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp" alt="" loading="lazy" decoding="async"></div><span class="principle-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div></div></section>
+<div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<a class="principle" href="#/process" data-reveal style="--d:${i * 90}ms"><span class="principle-num"><span class="eyebrow">${pad(i + 1)}</span><i aria-hidden="true"></i></span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="${slotSrc('principle-' + (key === 'controlPrinciple' ? 'control' : key), `assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp`)}" alt="" loading="lazy" decoding="async"></div><span class="principle-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div></div></section>
 
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
   <div class="why-intro" data-reveal><span class="why-rule" aria-hidden="true"></span><h2 class="section-title">${t('why')}</h2><p class="copy">${t('whyDesc')}</p><div class="feature-image reveal-img"><img src="assets/about/why-main.webp" alt="" loading="lazy" decoding="async"></div></div>
@@ -595,7 +614,7 @@ ${cta()}</main>`;
 
 function processPanel() {
   const st = state.step + 1;
-  const v = processVisuals[state.step];
+  const v = {...processVisuals[state.step], src: slotSrc('process-' + st, processVisuals[state.step].src)};
   return `<div class="photo is-${v.kind}"${v.kind === 'full' ? ` style="--bg:url('${v.src}')"` : ''}><img src="${v.src}" alt="${esc(t('p' + st))}" decoding="async"${v.pos ? ` style="object-position:${v.pos}"` : ''}></div>
   <div class="process-description"><span class="eyebrow">${t('stage')} ${pad(st)} / 07</span><h2>${t('p' + st)}</h2><p>${t('p' + st + 'd')}</p>
   <div class="process-navigation"><button type="button" data-action="step-move" data-move="-1" aria-label="${t('prevStage')}">${ICON.prev}</button><span>${pad(st)} / 07</span><button type="button" data-action="step-move" data-move="1" aria-label="${t('nextStage')}">${ICON.next}</button></div></div>`;
@@ -621,6 +640,19 @@ function process() {
 
 function field(id, label, input, hint = '') {
   return `<div class="field ${id === 'project-location' || id === 'message' ? 'full' : ''}"><label for="${id}">${label} <span aria-hidden="true">*</span></label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
+}
+
+// Extra question added in the admin panel (form_questions). Select answers are sent as the option index.
+function questionField(q) {
+  const id = 'q-' + q.id;
+  const req = q.required ? ' required' : '';
+  const label = `${esc(isAR() ? q.label_ar : q.label_en)}${q.required ? ' <span aria-hidden="true">*</span>' : ''}`;
+  const input = q.kind === 'select'
+    ? `<select id="${id}" name="${id}"${req} aria-describedby="${id}-error"><option value="">${t('chooseOne')}</option>${(q.options || []).map((o, i) => `<option value="${i}">${esc(isAR() ? o.ar : o.en)}</option>`).join('')}</select>`
+    : q.kind === 'textarea'
+      ? `<textarea id="${id}" name="${id}"${req} maxlength="1000" aria-describedby="${id}-error"></textarea>`
+      : `<input id="${id}" name="${id}"${q.kind === 'number' ? ' type="number" inputmode="decimal"' : ''}${req} maxlength="200" aria-describedby="${id}-error">`;
+  return `<div class="field ${q.kind === 'textarea' ? 'full' : ''}"><label for="${id}">${label}</label>${input}<small class="error" id="${id}-error" hidden></small></div>`;
 }
 
 function contact() {
@@ -651,6 +683,7 @@ function contact() {
   </fieldset>
   ${field('project-location', t('projectLocation'), `<input id="project-location" name="project-location" required maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`)}
   ${field('budget', t('budget'), `<select id="budget" name="budget" required aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`)}
+  ${CMS.questions.map(questionField).join('')}
   ${field('message', t('message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
@@ -701,7 +734,7 @@ function updateMeta(r) {
   const brand = isAR() ? 'سلاب للمقاولات' : 'SLAB Contracting';
   document.title = r.page === 'home' ? `${brand} | ${isAR() ? 'نصمم · ننفذ · نسلّم' : 'Design · Build · Deliver'}`
     : `${p ? pname(p) : (titleKey ? t(titleKey) : '404')} | ${brand}`;
-  const desc = p ? t('projectLead')(p) : (metaDescriptions[state.language][r.page] || metaDescriptions[state.language].home);
+  const desc = p ? plead(p) : (metaDescriptions[state.language][r.page] || metaDescriptions[state.language].home);
   const tag = document.querySelector && document.querySelector('meta[name="description"]');
   if (tag) tag.setAttribute('content', desc);
 }
@@ -1191,7 +1224,7 @@ async function submitForm(form) {
     };
     // /api/enquiry (Vercel function) stores the enquiry in Supabase and emails it to SLAB through Resend.
     let resp = await fetch('/api/enquiry', {
-      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...row, budget: v('budget')})
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...row, budget: v('budget'), answers: Object.fromEntries(CMS.questions.map(q => [q.id, v('q-' + q.id)]).filter(([, a]) => a !== ''))})
     });
     // Hosts without the function (e.g. a static-only copy): store directly so the enquiry is never lost.
     if (resp.status === 404) {
@@ -1368,4 +1401,39 @@ $app.addEventListener('pointermove', e => {
 });
 document.addEventListener('pointerleave', () => cursor.classList.remove('show'));
 
+// Load content edited in the admin panel, then re-render. Local file copies keep the built-in defaults.
+async function loadCms() {
+  if (location.protocol === 'file:' || !window.fetch) return;
+  const get = path => fetch(`${SUPABASE_URL}/rest/v1/${path}`, {headers: {apikey: SUPABASE_KEY}}).then(r => (r.ok ? r.json() : [])).catch(() => []);
+  const [settings, questions, extra, photos, images] = await Promise.all([
+    get('site_settings?select=key,value'),
+    get('form_questions?select=id,label_en,label_ar,kind,options,required&active=eq.true&order=position,id'),
+    get('cms_projects?select=*&published=eq.true&order=position,created_at'),
+    get('project_photos?select=project_id,url&order=position,id'),
+    get('image_overrides?select=slot,url')
+  ]);
+  const setting = key => (settings.find(s => s.key === key) || {}).value;
+  const stats = setting('stats');
+  if (Array.isArray(stats) && stats.length === 4 && stats.every(s => Number.isFinite(+s.n))) CMS.stats = stats.map(s => ({n: +s.n, suffix: String(s.suffix || '').slice(0, 3)}));
+  const c = setting('contact') || {};
+  if (c.phone) { PHONE = String(c.phone).replace(/[^\d+]/g, ''); PHONE_DISPLAY = c.phone_display || c.phone; }
+  if (c.email) EMAIL = c.email;
+  SOCIAL.forEach(s => { const url = c[s.label.toLowerCase()]; if (/^https:\/\//.test(url || '')) s.href = url; });
+  CMS.questions = Array.isArray(questions) ? questions : [];
+  images.forEach(i => { CMS.images[i.slot] = i.url; });
+  extra.forEach(p => {
+    if (projects.some(x => x.id === p.id)) return;
+    projects.push({id: p.id, name: p.name, ar: p.name_ar, client: p.client, clientAr: p.client_ar, city: p.city, cityAr: p.city_ar, type: p.type,
+      units: p.units, sizes: p.sizes || [], images: 0, category: 'other', cms: true});
+  });
+  photos.forEach(ph => {
+    const p = projects.find(x => x.id === ph.project_id);
+    if (p) { p.images += 1; PHOTO_EXTRA[`${p.id}_${p.images}`] = ph.url; }
+  });
+  // A project added without photos is not shown until it has at least one.
+  for (let i = projects.length - 1; i >= 0; i--) if (projects[i].cms && !projects[i].images) projects.splice(i, 1);
+  render();
+}
+
 render();
+loadCms();

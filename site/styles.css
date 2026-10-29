@@ -972,3 +972,8 @@ html[dir="rtl"] .process-step { padding: 0; }
 .card-tag { position: absolute; top: 14px; inset-inline-start: 14px; padding: 6px 12px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: rgba(246, 245, 242, .9); backdrop-filter: blur(4px); }
 html[dir="rtl"] .card-tag { letter-spacing: 0; font-size: 14px; }
 .field label .optional { font-weight: 400; color: var(--subtle); font-size: .9em; }
+
+/* Footer: discreet admin sign-in link */
+.footer-legal .admin-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; }
+.footer-legal .admin-link .icon { font-size: 15px; }
+.footer-legal .admin-link:hover { color: var(--ink); }

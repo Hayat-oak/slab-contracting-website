@@ -31,10 +31,27 @@ function validate(body) {
   const budget = BUDGETS[budgetKey] ? `${BUDGETS[budgetKey][0]} / ${BUDGETS[budgetKey][1]}` : '';
   const ok = row.full_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) && row.phone.replace(/\D/g, '').length >= 7
     && row.project_location && row.message.length >= 12 && row.consent && row.services.length > 0 && !!budget;
-  return {ok, row, budget, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : ''};
+  return {ok, row, budget, budgetKey, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : ''};
 }
 
-function emailHtml(row, budget) {
+// Extra questions from the admin panel. Answers are checked against the live list and stored with their wording,
+// so an enquiry stays readable after a question is edited or removed. Returns null when a required answer is missing.
+async function readAnswers(raw) {
+  const qs = await fetch(`${SUPABASE_URL}/rest/v1/form_questions?select=id,label_en,label_ar,kind,options,required&active=eq.true&order=position,id`,
+    {headers: {apikey: SUPABASE_KEY}}).then(r => (r.ok ? r.json() : [])).catch(() => []);
+  const given = raw && typeof raw === 'object' ? raw : {};
+  const out = {};
+  for (const q of qs) {
+    let a = str(String(given[q.id] ?? ''), q.kind === 'textarea' ? 1000 : 200);
+    if (q.kind === 'select') { const o = (q.options || [])[+a]; a = a !== '' && o ? `${o.en} / ${o.ar}` : ''; }
+    if (q.kind === 'number' && a !== '' && !Number.isFinite(+a)) a = '';
+    if (!a && q.required) return null;
+    if (a) out[q.id] = {question_en: q.label_en, question_ar: q.label_ar, answer: a};
+  }
+  return out;
+}
+
+function emailHtml(row, budget, answers = {}) {
   const sector = SECTORS[row.project_type] || [row.project_type, row.project_type];
   const services = row.services.map(k => (SERVICES[k] ? `${SERVICES[k][0]} / ${SERVICES[k][1]}` : k)).join('<br>');
   const tel = row.phone.replace(/[^\d+]/g, '');
@@ -46,6 +63,7 @@ function emailHtml(row, budget) {
     ['Services', 'الخدمات', services],
     ['Location', 'الموقع', esc(row.project_location)],
     ['Estimated budget', 'الميزانية التقديرية', budget ? esc(budget) : '—'],
+    ...Object.values(answers).map(a => [esc(a.question_en), esc(a.question_ar), esc(a.answer).replace(/\n/g, '<br>')]),
     ['Message', 'الرسالة', esc(row.message).replace(/\n/g, '<br>')],
     ['Form language', 'لغة النموذج', row.language === 'ar' ? 'العربية' : 'English']
   ];
@@ -64,16 +82,21 @@ module.exports = async (req, res) => {
   if (!body || typeof body !== 'object') return res.status(400).json({ok: false, error: 'bad_request'});
   if (body.bot_field) return res.status(200).json({ok: true}); // honeypot: pretend success, store nothing
 
-  const {ok, row, budget, budgetEn} = validate(body);
-  if (!ok) return res.status(400).json({ok: false, error: 'invalid'});
+  const {ok, row, budget, budgetKey, budgetEn} = validate(body);
+  const answers = ok ? await readAnswers(body.answers) : null;
+  if (!ok || !answers) return res.status(400).json({ok: false, error: 'invalid'});
 
-  // 1) Store (the table has no budget column yet, so it travels inside the message).
-  const stored = {...row, message: budget ? `${row.message}\n\n[Estimated budget: ${budgetEn}]` : row.message};
-  const db = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
+  // 1) Store. Before supabase/admin_setup.sql has run the table has no budget/answers columns, so retry in the old shape.
+  const insert = data => fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'return=minimal'},
-    body: JSON.stringify(stored)
+    body: JSON.stringify(data)
   }).catch(() => null);
+  let db = await insert({...row, budget: budgetKey, answers});
+  if (db && db.status === 400) {
+    const extra = Object.values(answers).map(a => `${a.question_en}: ${a.answer}`).join('\n');
+    db = await insert({...row, message: `${row.message}\n\n[Estimated budget: ${budgetEn}]${extra ? '\n' + extra : ''}`});
+  }
   if (!db || !db.ok) return res.status(502).json({ok: false, error: 'store_failed'});
 
   // 2) Email. A failure here is reported but the enquiry is already saved.
@@ -83,7 +106,7 @@ module.exports = async (req, res) => {
     const mail = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Authorization: `Bearer ${process.env.RESEND_API_KEY}`},
-      body: JSON.stringify({from: FROM, to: [TO], reply_to: row.email, subject: `New enquiry — ${row.full_name}${city}`, html: emailHtml(row, budget)})
+      body: JSON.stringify({from: FROM, to: [TO], reply_to: row.email, subject: `New enquiry — ${row.full_name}${city}`, html: emailHtml(row, budget, answers)})
     }).catch(() => null);
     emailed = !!(mail && mail.ok);
     if (!emailed) console.error('Resend failed', mail && mail.status, mail && await mail.text().catch(() => ''));
