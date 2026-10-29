@@ -67,7 +67,7 @@ const servicePhotos = [
 ];
 // Services page uses its own set so no photo repeats the home-page service cards.
 const SERVICE_PAGE_PHOTOS = [
-  {src: HD('mkin30', 2), pos: 'center'},            // Fit-Out & Execution: fitted kitchen
+  {src: HD('nirvana12', 2), pos: 'center'},         // Fit-Out & Execution: finished fitted kitchen (2400px original)
   {src: HD('jawhara8', 3), pos: 'center'},          // Design: detailed bathroom design
   {src: HD('soulhittin', 4), pos: 'center'},        // Interior Fit-Out: bedroom suite
   {src: 'assets/about/svc-4-site.webp', pos: 'center'} // Project & Contract Management: site works (Unsplash)
