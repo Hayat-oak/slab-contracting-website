@@ -909,6 +909,18 @@ html[dir="rtl"] .subnav-progress { transform-origin: right; }
 .icon-ring { position: relative; background: var(--tone, #ece4dc); color: var(--tone-ink, #4a4038); border: 0; }
 .icon-ring::after { content: ''; position: absolute; inset: -9px; border-radius: 50%; border: 1.5px solid transparent; border-top-color: color-mix(in srgb, var(--tone, #b8826a) 70%, #4a4038); border-right-color: color-mix(in srgb, var(--tone, #b8826a) 70%, #4a4038); transform: rotate(10deg); opacity: .75; transition: transform .6s var(--ease); pointer-events: none; }
 .icon-ring .icon { stroke-width: 1.5; }
+/* The arc orbits slowly around every icon circle; neighbours start at different angles so they never move in lockstep.
+   Uses the individual `rotate` property so hover/active `transform` rotations still add on top. */
+@keyframes ringOrbit { to { rotate: 360deg; } }
+.icon-ring::after { animation: ringOrbit 9s linear infinite; }
+:nth-child(2) > .icon-ring::after, :nth-child(2) > * > .icon-ring::after { animation-delay: -1.3s; }
+:nth-child(3) > .icon-ring::after, :nth-child(3) > * > .icon-ring::after { animation-delay: -2.6s; }
+:nth-child(4) > .icon-ring::after, :nth-child(4) > * > .icon-ring::after { animation-delay: -3.9s; }
+:nth-child(5) > .icon-ring::after, :nth-child(5) > * > .icon-ring::after { animation-delay: -5.2s; }
+:nth-child(6) > .icon-ring::after, :nth-child(6) > * > .icon-ring::after { animation-delay: -6.5s; }
+:nth-child(7) > .icon-ring::after, :nth-child(7) > * > .icon-ring::after { animation-delay: -7.8s; }
+@media (prefers-reduced-motion: reduce) { .icon-ring::after { animation: none; } }
+
 
 /* Seven-stage strip */
 .process-strip { margin-top: 26px; }
