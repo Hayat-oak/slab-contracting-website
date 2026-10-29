@@ -93,7 +93,7 @@ const phrases = {
  aboutSlab:'About SLAB', featured:'Featured Projects', featuredSub:'Real spaces. Delivered with purpose and precision.',
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
  projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', showing:'projects shown', filterLabel:'Filter projects by client',
- projectTitle:'Residential Fit-Out', type:'Type',
+ projectTitle:'Residential Fit-Out', type:'Type', budget:'Estimated budget', optional:'(optional)', budgetHint:'For example: SAR 500,000 – 1,000,000', projectTypeTag:'Residential',
  location:'Location', client:'Client', units:'Number of units', size:'Apartment size', scope:'Scope of work', riyadh:'Riyadh, Saudi Arabia', riyadhShort:'Riyadh', residential:'Residential', projScope:'Design, Furniture & Fit-Out',
  scopeItems:'Design|Furniture|Fit-Out',
  gallery:'Gallery', overview:'Overview', nextProject:'Next Project', prevProject:'Previous Project', similarProjects:'More Projects', projectTabs:'Project sections',
@@ -156,7 +156,7 @@ const phrases = {
  creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب للمقاولات شركة سعودية متخصصة في الإنشاءات والتشطيبات، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
  projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عليّة هومز',soul:'سول',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
- projectTitle:'تشطيبات سكنية',type:'النوع',
+ projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',optional:'(اختياري)',budgetHint:'مثال: 500,000 – 1,000,000 ريال',projectTypeTag:'سكني',
  location:'الموقع',client:'العميل',units:'عدد الوحدات',size:'مساحات الشقق',scope:'نطاق العمل',riyadh:'الرياض، المملكة العربية السعودية',riyadhShort:'الرياض',residential:'سكني',projScope:'التصميم والأثاث والتشطيبات',
  scopeItems:'التصميم|الأثاث|التشطيبات',
  gallery:'الصور',overview:'نبذة',nextProject:'المشروع التالي',prevProject:'المشروع السابق',similarProjects:'مشاريع أخرى',projectTabs:'أقسام المشروع',
@@ -351,7 +351,7 @@ function footer() {
 function projectCard(p, extra = '') {
   return `<article class="project-card ${extra}" data-reveal>
   <a href="${href('projects/' + p.id)}" data-cursor="diag">
-    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${t('residential')}`)}</div>
+    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${t('residential')}`)}<span class="card-tag">${t('projectTypeTag')}</span></div>
     <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${t('riyadhShort')} · ${pclient(p)} · ${units(p)}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
   </a></article>`;
 }
@@ -648,6 +648,7 @@ function contact() {
     <small class="error" id="services-error" hidden></small>
   </fieldset>
   ${field('project-location', t('projectLocation'), `<input id="project-location" name="project-location" required maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`)}
+  <div class="field full"><label for="budget">${t('budget')} <span class="optional">${t('optional')}</span></label><input id="budget" name="budget" maxlength="80" inputmode="text" aria-describedby="budget-hint"><small class="hint" id="budget-hint">${t('budgetHint')}</small></div>
   ${field('message', t('message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
@@ -1148,7 +1149,7 @@ function validateServices(form) {
 // Email copy of each enquiry to SLAB's inbox via FormSubmit (chosen by SLAB). The enquiry is already saved in
 // Supabase before this runs, so a failed email never loses an enquiry. FormSubmit requires a one-time activation
 // click in the first email it sends to EMAIL.
-function notifyByEmail(row) {
+function notifyByEmail(row, budget = '') {
   const serviceNames = row.services.map(k => phrases.en['service' + (SERVICE_KEYS.indexOf(k) + 1)]).join(', ');
   fetch(`https://formsubmit.co/ajax/${EMAIL}`, {
     method: 'POST',
@@ -1156,7 +1157,7 @@ function notifyByEmail(row) {
     body: JSON.stringify({
       _subject: `New project enquiry — ${row.full_name}`, _template: 'table', _captcha: 'false', _replyto: row.email,
       Name: row.full_name, Email: row.email, Phone: row.phone, Sector: phrases.en[row.project_type] || row.project_type,
-      Services: serviceNames, Location: row.project_location, Message: row.message, Language: row.language
+      Services: serviceNames, Location: row.project_location, Budget: budget || '—', Message: row.message, Language: row.language
     })
   }).catch(() => {});
 }
@@ -1200,7 +1201,9 @@ async function submitForm(form) {
     const v = name => form.elements[name].value.trim();
     const row = {
       full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'), services: selectedServices(form),
-      project_location: v('project-location'), message: v('message'), consent: form.elements.consent.checked, language: state.language
+      project_location: v('project-location'), message: v('message') + (v('budget') ? `
+
+[Estimated budget: ${v('budget')}]` : ''), consent: form.elements.consent.checked, language: state.language
     };
     const resp = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
       method: 'POST',
@@ -1208,7 +1211,7 @@ async function submitForm(form) {
       body: JSON.stringify(row)
     });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    notifyByEmail(row);
+    notifyByEmail(row, v('budget'));
     // Success is shown only after the server accepted the submission.
     const wrap = form.parentElement;
     wrap.innerHTML = `<div class="form-success" tabindex="-1" role="status"><span class="success-mark" aria-hidden="true"></span><h2>${t('sendSuccessTitle')}</h2><p class="copy">${t('sendSuccess')}</p><button type="button" class="text-link" data-action="form-reset">${t('sendAnother')} ${ICON.diag}</button></div>`;
