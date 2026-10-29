@@ -420,7 +420,7 @@ const IMPACT_ICON = {
   sectors: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg>',
   stages: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="5" r="2"/><path d="m4.6 5 .7.7 1.2-1.4M7.5 5h9a3 3 0 0 1 0 6h-9a3 3 0 0 0 0 6h9"/><circle cx="18.5" cy="17" r="2"/><path d="m17.6 17 .7.7 1.2-1.4"/><circle cx="5.5" cy="11" r="1.4"/></svg>'
 };
-function impact(alt = false) {
+function impact() {
   const items = [
     ['units', 125, '+', 'stats1', []],
     ['cities', 3, '', 'stats2', []],
@@ -429,7 +429,7 @@ function impact(alt = false) {
   ];
   const cities = [['riyadh', 'cityRiyadh', 'cityRiyadhD'], ['madinah', 'cityMadinah', 'cityMadinahD'], ['jeddah', 'cityJeddah', 'cityJeddahD']];
   return `<section class="impact" aria-labelledby="impact-title">
-  <div class="impact-intro" style="background-image:url('${alt ? HD('almajidiya130', 4) : HD('ajlan37', 2)}')">
+  <div class="impact-intro" style="background-image:url('${HD('ajlan37', 2)}')">
     <div class="impact-intro-copy" data-reveal><span class="eyebrow-rule">${t('impactEyebrow')}</span>
       <h2 id="impact-title">${t('impactTitle').replace('\n', '<br>')}</h2><p>${t('impactDesc')}</p>
       <a class="outline-cta light" href="#/projects">${t('explore')} ${ICON.arrow}</a></div>
@@ -439,7 +439,7 @@ function impact(alt = false) {
       <span class="impact-icon">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
       <span class="impact-label">${t(key)}</span>${list.map(row => `<ul>${row.map(x => `<li>${x}</li>`).join('')}</ul>`).join('')}</div>`).join('')}</div>
     <div class="impact-cities">${cities.map(([img, name, desc]) => `<article class="city-card" data-reveal>
-      <div class="city-photo"><img src="assets/about/city-${img}${alt ? '-2' : ''}.webp" alt="" loading="lazy" decoding="async"></div>
+      <div class="city-photo"><img src="assets/about/city-${img}.webp" alt="" loading="lazy" decoding="async"></div>
       <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div></article>`).join('')}</div>
   </div>
 </section>`;
@@ -580,7 +580,6 @@ function about() {
   <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 3, '')}</div></div>
 </div>
 <div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><div class="pillar-photo reveal-img"><img src="assets/about/pillar-${k}.webp" alt="" loading="lazy" decoding="async"></div><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
-${impact(true)}
 <section class="section" id="about-principles"><div class="container"><div class="section-head" data-reveal><div><h2 class="section-title">${t('principles')}</h2><p class="copy narrow">${t('principlesLead')}</p></div></div>
 <div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<article class="principle" data-reveal style="--d:${i * 90}ms"><span class="eyebrow">${pad(i + 1)}</span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp" alt="" loading="lazy" decoding="async"></div></article>`).join('')}</div></div></section>
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
