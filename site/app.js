@@ -70,7 +70,7 @@ const SERVICE_PAGE_PHOTOS = [
   {src: HD('nirvana12', 2), pos: 'center'},         // Fit-Out & Execution: finished fitted kitchen (2400px original)
   {src: 'assets/about/svc-2-design.webp', pos: 'center'}, // Design: designer sketching drawings (Unsplash)
   {src: HD('soulhittin', 4), pos: 'center'},        // Interior Fit-Out: bedroom suite
-  {src: 'assets/about/svc-4-site.webp', pos: 'center'} // Project & Contract Management: site works (Unsplash)
+  {src: 'assets/about/svc-4-manage.webp', pos: 'center 40%'} // Project & Contract Management: manager reviewing plans (Unsplash)
 ];
 const serviceImg = (i, set = servicePhotos) => { const s = set[i - 1]; return `<img src="${s.src}" alt="" loading="lazy" decoding="async" style="object-position:${s.pos}">`; };
 // Form values for the 'services' multi-select; must match the check constraint on project_enquiries.services.
