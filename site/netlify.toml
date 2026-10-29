@@ -14,7 +14,7 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
     Strict-Transport-Security = "max-age=31536000"
     # Inline style attributes are used for background images; scripts are same-origin only.
-    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://oydrudnqcazzytauodup.supabase.co; font-src 'self'; connect-src 'self' https://oydrudnqcazzytauodup.supabase.co https://formsubmit.co; form-action 'self'; frame-ancestors 'none'; base-uri 'self'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://oydrudnqcazzytauodup.supabase.co; font-src 'self'; connect-src 'self' https://oydrudnqcazzytauodup.supabase.co; form-action 'self'; frame-ancestors 'none'; base-uri 'self'"
 
 [[headers]]
   for = "/assets/*"

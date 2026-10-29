@@ -1146,22 +1146,6 @@ function validateServices(form) {
   return ok;
 }
 
-// Email copy of each enquiry to SLAB's inbox via FormSubmit (chosen by SLAB). The enquiry is already saved in
-// Supabase before this runs, so a failed email never loses an enquiry. FormSubmit requires a one-time activation
-// click in the first email it sends to EMAIL.
-function notifyByEmail(row, budget = '') {
-  const serviceNames = row.services.map(k => phrases.en['service' + (SERVICE_KEYS.indexOf(k) + 1)]).join(', ');
-  fetch(`https://formsubmit.co/ajax/${EMAIL}`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-    body: JSON.stringify({
-      _subject: `New project enquiry — ${row.full_name}`, _template: 'table', _captcha: 'false', _replyto: row.email,
-      Name: row.full_name, Email: row.email, Phone: row.phone, Sector: phrases.en[row.project_type] || row.project_type,
-      Services: serviceNames, Location: row.project_location, Budget: budget || '—', Message: row.message, Language: row.language
-    })
-  }).catch(() => {});
-}
-
 async function submitForm(form) {
   const feedback = document.getElementById('form-feedback');
   const summary = document.getElementById('form-summary');
@@ -1201,17 +1185,22 @@ async function submitForm(form) {
     const v = name => form.elements[name].value.trim();
     const row = {
       full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'), services: selectedServices(form),
-      project_location: v('project-location'), message: v('message') + (v('budget') ? `
-
-[Estimated budget: ${v('budget')}]` : ''), consent: form.elements.consent.checked, language: state.language
+      project_location: v('project-location'), message: v('message'), consent: form.elements.consent.checked, language: state.language
     };
-    const resp = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Prefer: 'return=minimal'},
-      body: JSON.stringify(row)
+    // /api/enquiry (Vercel function) stores the enquiry in Supabase and emails it to SLAB through Resend.
+    let resp = await fetch('/api/enquiry', {
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...row, budget: v('budget')})
     });
+    // Hosts without the function (e.g. a static-only copy): store directly so the enquiry is never lost.
+    if (resp.status === 404) {
+      const budget = v('budget');
+      resp = await fetch(`${SUPABASE_URL}/rest/v1/project_enquiries`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Prefer: 'return=minimal'},
+        body: JSON.stringify({...row, message: budget ? `${row.message}\n\n[Estimated budget: ${budget}]` : row.message})
+      });
+    }
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    notifyByEmail(row, v('budget'));
     // Success is shown only after the server accepted the submission.
     const wrap = form.parentElement;
     wrap.innerHTML = `<div class="form-success" tabindex="-1" role="status"><span class="success-mark" aria-hidden="true"></span><h2>${t('sendSuccessTitle')}</h2><p class="copy">${t('sendSuccess')}</p><button type="button" class="text-link" data-action="form-reset">${t('sendAnother')} ${ICON.diag}</button></div>`;
