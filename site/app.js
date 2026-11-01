@@ -146,7 +146,7 @@ const phrases = {
  contactHero:'Contact',contactHeroSub:'LET’S DISCUSS YOUR NEXT PROJECT',getInTouch:'Get in Touch',contactCopy:'Whether you are defining a new project or preparing for fit-out, tell us what you have in mind. Our team will review your enquiry.',
  phone:'Phone', locationOffice:'Saudi Arabia', activeIn:'Active in Riyadh, Madinah & Jeddah', fullName:'Full name',email:'Email address',phoneField:'Phone number',sector:'Project sector', servicesNeeded:'Services required', servicesHint:'Select one or more.', errServices:'Please select at least one service.',projectLocation:'Project location (city)',message:'Project description',messageHint:'Scope, size, timing — whatever you know so far.',send:'Send Enquiry',sending:'Sending…',choose:'Select a sector', chooseOne:'Select',required:'Required',
  consent:'I agree that SLAB may use these details to respond to my enquiry, as described in the', consentLink:'privacy notice',
- errRequired:'Please fill in this field.', errEmail:'Please enter a valid email address.', errPhone:'Please enter a valid phone number (8–15 digits).', errShort:'Please add a little more detail (at least 12 characters).', errConsent:'Please confirm you agree to the privacy notice.', errSummary:'Please correct the highlighted fields.', errTooFast:'That was very fast — please review your details and send again.',
+ attachmentsLabel:'Project photos', choosePhotos:'Choose photos', noPhotos:'No photos selected', photosChosen:n => `${n} ${n === 1 ? 'photo' : 'photos'} selected`, attachmentsHint:'Up to 6 photos of the space or drawings (JPG, PNG or WebP).', errFiles:'Please attach up to 6 photos, each under 10 MB.', uploading:'Uploading photos…', errRequired:'Please fill in this field.', errEmail:'Please enter a valid email address.', errPhone:'Please enter a valid phone number (8–15 digits).', errShort:'Please add a little more detail (at least 12 characters).', errConsent:'Please confirm you agree to the privacy notice.', errSummary:'Please correct the highlighted fields.', errTooFast:'That was very fast — please review your details and send again.',
  formNote:'Fields marked * are required. Your details are used only to respond to this enquiry.',
  localNote:'This is a local preview file, so nothing was sent. Please use the published website to send an enquiry, or call SLAB on the number shown.', sendSuccessTitle:'Thank you — your enquiry has been received.', sendSuccess:'Our team will review your project details and get back to you.', sendAnother:'Send another enquiry', sendError:'The form could not be submitted. Please try again or call the phone number shown.',
  privacyTitle:'Privacy Notice', privacyDraft:'Draft for review — this notice must be approved by SLAB management and legal before launch.',
@@ -198,7 +198,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  tech:'التقنيات الداعمة للتنفيذ',tech1:'وضوح التكاليف والموارد',tech1d:'متابعة التكاليف وتوزيع الموارد لدعم قرارات أسرع وأدق.',tech2:'تقارير التقدم',tech2d:'تحديثات منتظمة لحالة المشاريع ونسب الإنجاز.',tech3:'إدارة رقمية للمشاريع',tech3d:'تنسيق المهام والجداول والموارد في نظام موحد عبر المشاريع القائمة.',tech4:'مراقبة العمالة بالذكاء الاصطناعي',tech4d:'متابعة لحظية للحضور والنشاط في الموقع بتقنيات الذكاء الاصطناعي.',
  contactHero:'تواصل معنا',contactHeroSub:'لنتحدث عن مشروعك القادم',getInTouch:'يسعدنا تواصلك',contactCopy:'سواء كنت تخطط لمشروع جديد أو تستعد لأعمال التشطيب، شاركنا فكرتك ومتطلباتك ليتواصل معك فريقنا.',phone:'الهاتف',locationOffice:'المملكة العربية السعودية',activeIn:'مشاريع في الرياض والمدينة المنورة وجدة',fullName:'الاسم الكامل',email:'البريد الإلكتروني',phoneField:'رقم الجوال',sector:'قطاع المشروع',servicesNeeded:'الخدمات المطلوبة',servicesHint:'يمكنك اختيار أكثر من خدمة.',errServices:'يرجى اختيار خدمة واحدة على الأقل.',projectLocation:'موقع المشروع (المدينة)',message:'وصف المشروع',messageHint:'النطاق والمساحة والتوقيت — ما يتوفر لديك حاليًا.',send:'إرسال الطلب',sending:'جارٍ الإرسال…',choose:'اختر القطاع',chooseOne:'اختر',required:'إلزامي',
  consent:'أوافق على استخدام سلاب لهذه البيانات للرد على طلبي، وفق',consentLink:'إشعار الخصوصية',
- errRequired:'يرجى تعبئة هذا الحقل.',errEmail:'يرجى إدخال بريد إلكتروني صحيح.',errPhone:'يرجى إدخال رقم جوال صحيح (من 8 إلى 15 رقمًا).',errShort:'يرجى إضافة تفاصيل أكثر (12 حرفًا على الأقل).',errConsent:'يرجى الموافقة على إشعار الخصوصية.',errSummary:'يرجى تصحيح الحقول المحددة.',errTooFast:'تم الإرسال بسرعة كبيرة — يرجى مراجعة البيانات والإرسال مجددًا.',
+ attachmentsLabel:'صور المشروع',choosePhotos:'اختيار الصور',noPhotos:'لم يتم اختيار صور',photosChosen:n => n === 1 ? 'صورة واحدة مختارة' : n === 2 ? 'صورتان مختارتان' : `${n} صور مختارة`,attachmentsHint:'حتى 6 صور للمكان أو المخططات (JPG أو PNG أو WebP).',errFiles:'يمكن إرفاق 6 صور كحد أقصى، وحجم كل صورة أقل من 10 ميجابايت.',uploading:'جارٍ رفع الصور…',errRequired:'يرجى تعبئة هذا الحقل.',errEmail:'يرجى إدخال بريد إلكتروني صحيح.',errPhone:'يرجى إدخال رقم جوال صحيح (من 8 إلى 15 رقمًا).',errShort:'يرجى إضافة تفاصيل أكثر (12 حرفًا على الأقل).',errConsent:'يرجى الموافقة على إشعار الخصوصية.',errSummary:'يرجى تصحيح الحقول المحددة.',errTooFast:'تم الإرسال بسرعة كبيرة — يرجى مراجعة البيانات والإرسال مجددًا.',
  formNote:'الحقول المعلّمة بـ * إلزامية. تُستخدم بياناتك فقط للرد على هذا الطلب.',
  localNote:'هذا ملف معاينة محلي، لذلك لم يُرسل أي طلب. يرجى استخدام الموقع المنشور لإرسال طلبك، أو الاتصال بسلاب على الرقم الموضح.',sendSuccessTitle:'شكرًا لك، تم استلام طلبك.',sendSuccess:'سيراجع فريقنا تفاصيل مشروعك ويتواصل معك.',sendAnother:'إرسال طلب آخر',sendError:'تعذّر إرسال الطلب. يرجى المحاولة مجددًا أو الاتصال بالرقم الموضح.',
  privacyTitle:'إشعار الخصوصية',privacyDraft:'مسودة للمراجعة — يجب اعتماد هذا الإشعار من إدارة سلاب والإدارة القانونية قبل الإطلاق.',
@@ -639,13 +639,15 @@ function process() {
 </main>`;
 }
 
-// Core form fields can be relabelled in the admin panel; location, budget and description can also be made optional or hidden.
+// Core form fields can be relabelled in the admin panel; location, budget and photos can also be made optional or hidden.
 const fieldCfg = key => CMS.fields[key] || {};
 const flabel = (key, phrase) => (isAR() ? fieldCfg(key).label_ar : fieldCfg(key).label_en) || t(phrase);
 const fshown = key => !fieldCfg(key).hidden;
-const freq = key => fieldCfg(key).required !== false;
+// Photos are optional unless the admin makes them required; the other flexible fields are required by default.
+const freq = key => (key === 'attachments' ? fieldCfg(key).required === true : fieldCfg(key).required !== false);
+const MAX_PHOTOS = 6;
 function field(id, label, input, hint = '', req = true) {
-  return `<div class="field ${id === 'project-location' || id === 'message' ? 'full' : ''}"><label for="${id}">${label}${req ? ' <span aria-hidden="true">*</span>' : ''}</label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
+  return `<div class="field ${['project-location', 'message', 'attachments'].includes(id) ? 'full' : ''}"><label for="${id}">${label}${req ? ' <span aria-hidden="true">*</span>' : ''}</label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
 }
 
 // Extra question added in the admin panel (form_questions). Select answers are sent as the option index.
@@ -690,7 +692,8 @@ function contact() {
   ${fshown('project-location') ? field('project-location', flabel('project-location', 'projectLocation'), `<input id="project-location" name="project-location"${freq('project-location') ? ' required' : ''} maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`, '', freq('project-location')) : ''}
   ${fshown('budget') ? field('budget', flabel('budget', 'budget'), `<select id="budget" name="budget"${freq('budget') ? ' required' : ''} aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`, '', freq('budget')) : ''}
   ${CMS.questions.map(questionField).join('')}
-  ${fshown('message') ? field('message', flabel('message', 'message'), `<textarea id="message" name="message"${freq('message') ? ' required' : ''} minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'), freq('message')) : ''}
+  ${field('message', flabel('message', 'message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
+  ${fshown('attachments') ? field('attachments', flabel('attachments', 'attachmentsLabel'), `<div class="file-pick"><input id="attachments" name="attachments" type="file" accept="image/*" multiple${freq('attachments') ? ' required' : ''} aria-describedby="attachments-hint attachments-error"><label for="attachments" class="file-btn" aria-hidden="true">${ICON.expand}${t('choosePhotos')}</label><span class="file-names" id="attachments-names">${t('noPhotos')}</span></div>`, t('attachmentsHint'), freq('attachments')) : ''}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
   <div id="form-feedback" class="form-message" role="status" aria-live="polite" hidden></div>
@@ -1187,6 +1190,35 @@ function validateServices(form) {
   return ok;
 }
 
+// Client photos go to the private 'enquiry-files' bucket (anyone may upload, only admins may view).
+// Large photos are scaled to 2000px WebP first; formats the browser cannot decode (e.g. HEIC) are sent as they are.
+async function shrinkPhoto(file) {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 2000 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale); canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/webp', 0.85));
+    if (blob) return {blob, ext: 'webp'};
+  } catch {}
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z]/g, '').slice(0, 4) || 'jpg';
+  return {blob: file, ext};
+}
+async function uploadPhotos(files) {
+  if (!files.length) return [];
+  const batch = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  const paths = [];
+  for (let i = 0; i < files.length; i++) {
+    const {blob, ext} = await shrinkPhoto(files[i]);
+    const path = `enquiries/${batch}/${i + 1}.${ext}`;
+    const r = await fetch(`${SUPABASE_URL}/storage/v1/object/enquiry-files/${path}`, {method: 'POST', headers: {apikey: SUPABASE_KEY, 'Content-Type': blob.type || 'application/octet-stream'}, body: blob});
+    if (!r.ok) throw new Error('upload ' + r.status);
+    paths.push(path);
+  }
+  return paths;
+}
+
 async function submitForm(form) {
   const feedback = document.getElementById('form-feedback');
   const summary = document.getElementById('form-summary');
@@ -1210,6 +1242,14 @@ async function submitForm(form) {
     feedback.hidden = false;
     return;
   }
+  const files = Array.from((form.elements.attachments && form.elements.attachments.files) || []);
+  if (files.length > MAX_PHOTOS || files.some(f => !/^image\//.test(f.type) || f.size > 10 * 1024 * 1024)) {
+    const err = document.getElementById('attachments-error');
+    err.textContent = t('errFiles'); err.hidden = false;
+    form.elements.attachments.setAttribute('aria-invalid', 'true');
+    form.elements.attachments.focus();
+    return;
+  }
   // Opened as a local file (review copy): don't send real enquiries.
   if (location.protocol === 'file:') {
     feedback.textContent = t('localNote');
@@ -1228,9 +1268,12 @@ async function submitForm(form) {
       full_name: v('full-name'), email: v('email'), phone: v('phone'), project_type: v('project-type'), services: selectedServices(form),
       project_location: v('project-location'), message: v('message'), consent: form.elements.consent.checked, language: state.language
     };
+    if (files.length) label.textContent = t('uploading');
+    const attachments = await uploadPhotos(files);
+    label.textContent = t('sending');
     // /api/enquiry (Vercel function) stores the enquiry in Supabase and emails it to SLAB through Resend.
     let resp = await fetch('/api/enquiry', {
-      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...row, budget: v('budget'), answers: Object.fromEntries(CMS.questions.map(q => [q.id, v('q-' + q.id)]).filter(([, a]) => a !== ''))})
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...row, budget: v('budget'), attachments, answers: Object.fromEntries(CMS.questions.map(q => [q.id, v('q-' + q.id)]).filter(([, a]) => a !== ''))})
     });
     // Hosts without the function (e.g. a static-only copy): store directly so the enquiry is never lost.
     if (resp.status === 404) {
@@ -1380,6 +1423,12 @@ $app.addEventListener('change', e => {
   if (e.target.name === 'services') {
     if (document.getElementById('services-field').classList.contains('invalid')) validateServices(e.target.form);
     return;
+  }
+  if (e.target.id === 'attachments') {
+    const n = e.target.files.length;
+    document.getElementById('attachments-names').textContent = n ? t('photosChosen')(n) : t('noPhotos');
+    document.getElementById('attachments-error').hidden = true;
+    e.target.removeAttribute('aria-invalid');
   }
   if (e.target.id === 'consent' || e.target.tagName === 'SELECT') {
     if (e.target.getAttribute('aria-invalid') === 'true') validateField(e.target);

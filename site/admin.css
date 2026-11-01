@@ -104,3 +104,5 @@
 .admin-core input { padding: 9px 10px; border: 1px solid var(--border); background: var(--paper); font-size: 15px; }
 #core-fields .admin-qs li { align-items: center; }
 .admin-tools input[type=checkbox] { min-width: 0; padding: 0; width: 18px; height: 18px; }
+.admin-core-extra { flex: 1; min-width: 280px; }
+.admin-detail .admin-thumbs { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); margin: 0; }

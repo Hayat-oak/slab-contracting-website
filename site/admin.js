@@ -49,7 +49,7 @@ const STAT_LABELS = ['الوحدات المسلّمة أو قيد التنفيذ
 
 const $root = document.getElementById('admin');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-const state = {tab: 'enquiries', data: {}, filter: {q: '', status: ''}, open: null, project: null};
+const state = {tab: 'enquiries', data: {}, filter: {q: '', status: ''}, open: null, project: null, addQ: false, signed: {}};
 let session = null;
 try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch { session = null; }
 
@@ -223,6 +223,7 @@ function enquiriesView() {
       <dt>البريد</dt><dd dir="ltr"><a href="mailto:${esc(e.email)}">${esc(e.email)}</a></dd>
       <dt>الخدمات</dt><dd>${(e.services || []).map(s => SERVICES[s] || esc(s)).join('، ')}</dd>
       ${Object.values(e.answers || {}).map(a => `<dt>${esc(a.question_ar)}</dt><dd>${esc(a.answer)}</dd>`).join('')}
+      ${(e.attachments || []).length ? `<dt>صور المشروع</dt><dd><div class="admin-thumbs">${e.attachments.map(p => state.signed[p] ? `<a href="${esc(state.signed[p])}" target="_blank" rel="noopener"><img src="${esc(state.signed[p])}" alt=""></a>` : '<span class="admin-hint">جارٍ التحميل…</span>').join('')}</div></dd>` : ''}
       <dt>الرسالة</dt><dd class="pre">${esc(e.message)}</dd><dt>لغة النموذج</dt><dd>${e.language === 'ar' ? 'العربية' : 'English'}</dd></dl>
       <button type="button" class="admin-danger" data-act="delete-enq" data-id="${e.id}">حذف الطلب</button></td></tr>` : ''}`).join('')}
   </tbody></table></div>` : '<p class="admin-hint">لا توجد طلبات.</p>'}</section>`;
@@ -232,10 +233,10 @@ function exportExcel() {
   const list = filteredEnquiries();
   const qCols = [];
   list.forEach(e => Object.entries(e.answers || {}).forEach(([id, a]) => { if (!qCols.some(c => c[0] === id)) qCols.push([id, a.question_ar]); }));
-  const head = ['التاريخ', 'الاسم', 'الجوال', 'البريد', 'القطاع', 'الخدمات', 'المدينة', 'الميزانية', ...qCols.map(c => c[1]), 'الرسالة', 'الحالة', 'لغة النموذج'];
+  const head = ['التاريخ', 'الاسم', 'الجوال', 'البريد', 'القطاع', 'الخدمات', 'المدينة', 'الميزانية', ...qCols.map(c => c[1]), 'الرسالة', 'عدد الصور', 'الحالة', 'لغة النموذج'];
   const rows = list.map(e => [fmtDate(e.created_at), e.full_name, e.phone, e.email, SECTORS[e.project_type] || e.project_type,
     (e.services || []).map(s => SERVICES[s] || s).join('، '), e.project_location, BUDGETS[e.budget] || '', ...qCols.map(c => ((e.answers || {})[c[0]] || {}).answer || ''),
-    e.message, STATUS[e.status] || e.status, e.language === 'ar' ? 'العربية' : 'English']);
+    e.message, (e.attachments || []).length, STATUS[e.status] || e.status, e.language === 'ar' ? 'العربية' : 'English']);
   const cell = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const csv = '﻿' + [head, ...rows].map(r => r.map(cell).join(',')).join('\r\n');
   const a = document.createElement('a');
@@ -243,6 +244,17 @@ function exportExcel() {
   a.download = `slab-enquiries-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+// Client photos are private: show them through short-lived signed links (admins only, enforced by storage policy).
+async function loadPhotos(e) {
+  const paths = (e && e.attachments || []).filter(p => !state.signed[p]);
+  if (!paths.length) return;
+  try {
+    const out = await api('/storage/v1/object/sign/enquiry-files', {method: 'POST', body: {expiresIn: 3600, paths}});
+    out.forEach(o => { if (o.signedURL) state.signed[o.path] = `${SUPABASE_URL}/storage/v1${o.signedURL}`; });
+    redraw();
+  } catch (err) { toast('تعذّر عرض الصور: ' + err.message, true); }
 }
 
 /* ---------- Projects & photos ---------- */
@@ -321,41 +333,39 @@ function imagesView() {
 
 /* ---------- Form questions ---------- */
 // The form's own fields, in page order. `flex`: can be made optional or hidden (the others are always required).
+// Photos are optional by default; the other flexible fields are required by default.
 const CORE_FIELDS = [
   ['full-name', 'الاسم الكامل', 'Full name'], ['email', 'البريد الإلكتروني', 'Email address'], ['phone', 'رقم الجوال', 'Phone number'],
   ['project-type', 'قطاع المشروع', 'Project sector'], ['services', 'الخدمات المطلوبة', 'Services required'],
   ['project-location', 'موقع المشروع (المدينة)', 'Project location (city)', true], ['budget', 'الميزانية التقديرية', 'Estimated budget', true],
-  ['message', 'وصف المشروع', 'Project description', true]
+  ['message', 'وصف المشروع', 'Project description'], ['attachments', 'صور المشروع', 'Project photos', true]
 ];
-function coreFieldsForm() {
-  const cfg = ((state.data.settings || []).find(s => s.key === 'form_fields') || {}).value || {};
-  return `<form id="core-fields" class="admin-card"><h3>الأسئلة الأساسية في النموذج</h3>
-  <p class="admin-hint">هذي الأسئلة الموجودة في نموذج «ابدأ مشروعك» بنفس ترتيبها. تقدرين تغيّرين نصّها، وتجعلين الموقع والميزانية والوصف اختيارية أو تخفينها.</p>
-  <ol class="admin-qs">${CORE_FIELDS.map(([key, ar, en, flex]) => { const c = cfg[key] || {}; return `<li><div class="admin-core">
-    <label>العربي<input name="${key}-ar" maxlength="120" value="${esc(c.label_ar || ar)}"></label>
-    <label>English<input name="${key}-en" dir="ltr" maxlength="120" value="${esc(c.label_en || en)}"></label></div>
-    <div class="admin-tools">${flex ? `<label class="check"><input type="checkbox" name="${key}-req" ${c.required === false ? '' : 'checked'}> إجباري</label>
-      <label class="check"><input type="checkbox" name="${key}-hide" ${c.hidden ? 'checked' : ''}> مخفي</label>` : '<span class="admin-tag">إجباري دائمًا</span>'}</div></li>`; }).join('')}</ol>
-  <button class="admin-btn" type="submit">حفظ الأسئلة الأساسية</button></form>`;
-}
+const coreRequired = (key, c) => (key === 'attachments' ? c.required === true : c.required !== false);
+// One list: the form's own questions (editable labels) followed by the questions added here. A single form saves the labels.
 function questionsView() {
   const qs = state.data.questions || [];
-  return `<section><div class="admin-head"><h2>أسئلة نموذج التواصل</h2></div>
-  ${coreFieldsForm()}
-  <h3 class="admin-sub">أسئلة إضافية</h3>
-  <p class="admin-hint">الأسئلة الإضافية النشطة تظهر في النموذج بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.</p>
-  <div class="admin-card">${qs.length ? `<ol class="admin-qs">${qs.map((q, i) => `<li class="${q.active ? '' : 'is-off'}">
-    <div><b>${esc(q.label_ar)}</b> <span dir="ltr">${esc(q.label_en)}</span><br><small>${KINDS[q.kind]}${q.required ? ' · إجباري' : ' · اختياري'}${q.kind === 'select' ? ' · ' + (q.options || []).map(o => esc(o.ar)).join(' / ') : ''}</small></div>
-    <div class="admin-tools"><button type="button" data-act="q-move" data-id="${q.id}" data-dir="-1" ${i ? '' : 'disabled'} aria-label="لأعلى">↑</button><button type="button" data-act="q-move" data-id="${q.id}" data-dir="1" ${i < qs.length - 1 ? '' : 'disabled'} aria-label="لأسفل">↓</button>
-    <button type="button" class="admin-link-btn" data-act="q-toggle" data-id="${q.id}">${q.active ? 'إيقاف' : 'تفعيل'}</button>
-    <button type="button" class="admin-link-btn" data-act="q-required" data-id="${q.id}">${q.required ? 'جعله اختياري' : 'جعله إجباري'}</button>
-    <button type="button" class="admin-danger" data-act="q-delete" data-id="${q.id}">حذف</button></div></li>`).join('')}</ol>` : '<p class="admin-hint">لا توجد أسئلة إضافية بعد.</p>'}</div>
-  <div class="admin-card"><h3>إضافة سؤال</h3><form id="new-question" class="admin-form">
+  const cfg = ((state.data.settings || []).find(s => s.key === 'form_fields') || {}).value || {};
+  return `<section><div class="admin-head"><h2>أسئلة نموذج التواصل</h2><button type="button" class="admin-btn" data-act="q-add-open">+ إضافة سؤال</button></div>
+  <p class="admin-hint">كل أسئلة نموذج «ابدأ مشروعك» هنا. غيّري النص ثم اضغطي «حفظ». الأسئلة المضافة تظهر في النموذج بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.</p>
+  ${state.addQ ? `<div class="admin-card" id="add-question"><div class="admin-head"><h3>سؤال جديد</h3><button type="button" class="admin-link-btn" data-act="q-add-close">إلغاء</button></div><form id="new-question" class="admin-form">
     <label>السؤال (عربي)<input name="label_ar" required maxlength="200"></label><label>السؤال (English)<input name="label_en" required maxlength="200"></label>
     <label>نوع الإجابة<select name="kind">${Object.entries(KINDS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
     <label class="check"><input type="checkbox" name="required"> إجباري</label>
     <label class="span2">الاختيارات (لنوع «قائمة اختيارات»): كل اختيار في سطر بالشكل <code>English | عربي</code><textarea name="options" rows="4" placeholder="Within 3 months | خلال 3 أشهر"></textarea></label>
-    <button class="admin-btn span2" type="submit">إضافة السؤال</button></form></div></section>`;
+    <button class="admin-btn span2" type="submit">إضافة السؤال</button></form></div>` : ''}
+  <form id="core-fields" class="admin-card"><ol class="admin-qs">
+  ${CORE_FIELDS.map(([key, ar, en, flex]) => { const c = cfg[key] || {}; return `<li><div class="admin-core">
+    <label>العربي<input name="${key}-ar" maxlength="120" value="${esc(c.label_ar || ar)}"></label>
+    <label>English<input name="${key}-en" dir="ltr" maxlength="120" value="${esc(c.label_en || en)}"></label></div>
+    <div class="admin-tools">${flex ? `<label class="check"><input type="checkbox" name="${key}-req" ${coreRequired(key, c) ? 'checked' : ''}> إجباري</label>
+      <label class="check"><input type="checkbox" name="${key}-hide" ${c.hidden ? 'checked' : ''}> مخفي</label>` : '<span class="admin-tag">إجباري دائمًا</span>'}</div></li>`; }).join('')}
+  ${qs.map((q, i) => `<li class="${q.active ? '' : 'is-off'}">
+    <div class="admin-core-extra"><span class="admin-tag">مضاف</span> <b>${esc(q.label_ar)}</b> <span dir="ltr">${esc(q.label_en)}</span><br><small>${KINDS[q.kind]}${q.kind === 'select' ? ' · ' + (q.options || []).map(o => esc(o.ar)).join(' / ') : ''}</small></div>
+    <div class="admin-tools"><button type="button" data-act="q-move" data-id="${q.id}" data-dir="-1" ${i ? '' : 'disabled'} aria-label="لأعلى">↑</button><button type="button" data-act="q-move" data-id="${q.id}" data-dir="1" ${i < qs.length - 1 ? '' : 'disabled'} aria-label="لأسفل">↓</button>
+    <button type="button" class="admin-link-btn" data-act="q-required" data-id="${q.id}">${q.required ? 'إجباري ✓' : 'اختياري'}</button>
+    <button type="button" class="admin-link-btn" data-act="q-toggle" data-id="${q.id}">${q.active ? 'إخفاء' : 'إظهار'}</button>
+    <button type="button" class="admin-danger" data-act="q-delete" data-id="${q.id}">حذف</button></div></li>`).join('')}
+  </ol><button class="admin-btn" type="submit">حفظ</button></form></section>`;
 }
 
 /* ---------- Settings ---------- */
@@ -402,9 +412,13 @@ $root.addEventListener('click', e => {
     case 'logout': signOut(); break;
     case 'login-restart': renderLogin('email'); break;
     case 'export': exportExcel(); break;
-    case 'toggle-enq': state.open = state.open === id ? null : id; redraw(); break;
+    case 'toggle-enq': state.open = state.open === id ? null : id; redraw(); if (state.open) loadPhotos(d.enquiries.find(x => x.id === id)); break;
+    case 'q-add-open': case 'q-add-close':
+      state.addQ = t.dataset.act === 'q-add-open'; redraw();
+      if (state.addQ) document.getElementById('add-question').querySelector('input').focus();
+      break;
     case 'delete-enq':
-      if (confirm('حذف هذا الطلب نهائيًا؟')) run(async () => { await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); d.enquiries = d.enquiries.filter(x => x.id !== id); redraw(); }, 'تم حذف الطلب');
+      if (confirm('حذف هذا الطلب نهائيًا؟')) run(async () => { const gone = d.enquiries.find(x => x.id === id); await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); if ((gone.attachments || []).length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: gone.attachments}}).catch(() => {}); d.enquiries = d.enquiries.filter(x => x.id !== id); redraw(); }, 'تم حذف الطلب');
       break;
     case 'pick-project': case 'new-project':
       state.project = t.dataset.act === 'pick-project' ? id : null; redraw();
@@ -514,7 +528,7 @@ $root.addEventListener('submit', e => {
     const options = kind === 'select' ? v('options').split('\n').map(l => l.split('|').map(s => s.trim())).filter(([en]) => en).map(([en, ar]) => ({en, ar: ar || en})) : [];
     if (kind === 'select' && options.length < 2) throw new Error('أضيفي اختيارين على الأقل للقائمة.');
     const [q] = await rest('form_questions', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {label_ar: v('label_ar'), label_en: v('label_en'), kind, options, required: f.elements.required.checked, position: d.questions.length}});
-    d.questions.push(q); redraw();
+    d.questions.push(q); state.addQ = false; redraw();
   }, 'تمت إضافة السؤال').finally(done);
   if (f.id === 'settings') run(async () => {
     const stats = [0, 1, 2, 3].map(i => ({n: Number(v('n' + i)), suffix: v('s' + i)}));

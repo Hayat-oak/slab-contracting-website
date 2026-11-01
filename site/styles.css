@@ -977,3 +977,11 @@ html[dir="rtl"] .card-tag { letter-spacing: 0; font-size: 14px; }
 .footer-legal .admin-link { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; }
 .footer-legal .admin-link .icon { font-size: 15px; }
 .footer-legal .admin-link:hover { color: var(--ink); }
+
+/* Enquiry form: photo picker (native file input kept for keyboard and screen readers, visually replaced) */
+.file-pick { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 6px 0 12px; border-bottom: 1px solid var(--border); position: relative; }
+.file-pick input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.file-btn { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px; border: 1px solid var(--ink); cursor: pointer; font-size: 15px; transition: background .2s, color .2s; }
+.file-btn:hover { background: var(--ink); color: #fff; }
+.file-pick input[type=file]:focus-visible + .file-btn { outline: 2px solid var(--accent); outline-offset: 3px; }
+.file-names { color: var(--muted); font-size: 15px; }

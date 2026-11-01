@@ -11,6 +11,7 @@
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://oydrudnqcazzytauodup.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_KEY || 'sb_publishable_4Ep7dLPR3odGYd_uf3GDtw_0U4ieWvw';
 const TO = process.env.ENQUIRY_TO || 'info@slab.sa';
+const SITE = 'https://slab-contracting-website.vercel.app';
 const FROM = process.env.ENQUIRY_FROM || 'SLAB Website <website@slab.sa>';
 
 const SECTORS = {residential: ['Residential', 'سكني'], hospitality: ['Hospitality', 'ضيافة'], commercial: ['Commercial', 'تجاري'], institutional: ['Government & Institutional', 'حكومي ومؤسسي']};
@@ -38,14 +39,17 @@ function validate(body, cfg = {}) {
     message: str(body.message, 3000), consent: body.consent === true, language: body.language === 'ar' ? 'ar' : 'en'
   };
   const budgetKey = str(body.budget, 20);
+  // Paths of photos the visitor uploaded to the private enquiry-files bucket.
+  const attachments = (Array.isArray(body.attachments) ? body.attachments : [])
+    .filter(p => typeof p === 'string' && /^enquiries/[A-Za-z0-9-]{8,60}/d{1,2}.[a-z]{2,4}$/.test(p)).slice(0, 6);
   const budget = BUDGETS[budgetKey] ? `${BUDGETS[budgetKey][0]} / ${BUDGETS[budgetKey][1]}` : '';
   const ok = row.full_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) && row.phone.replace(/\D/g, '').length >= 7
     && (row.project_location || !isRequired(cfg, 'project-location'))
-    && (row.message.length >= 12 || (!row.message && !isRequired(cfg, 'message')))
-    && row.consent && row.services.length > 0 && (!!budget || !isRequired(cfg, 'budget'));
+    && row.message.length >= 12
+    && row.consent && row.services.length > 0 && (!!budget || !isRequired(cfg, 'budget'))
+    && (attachments.length > 0 || !(cfg.attachments && cfg.attachments.required === true && !cfg.attachments.hidden));
   if (!row.project_location) row.project_location = '—';
-  if (!row.message) row.message = 'No description provided.';
-  return {ok, row, budget, budgetKey: budget ? budgetKey : null, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : '—'};
+  return {ok, row, attachments, budget, budgetKey: budget ? budgetKey : null, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : '—'};
 }
 
 // Extra questions from the admin panel. Answers are checked against the live list and stored with their wording,
@@ -65,7 +69,7 @@ async function readAnswers(raw) {
   return out;
 }
 
-function emailHtml(row, budget, answers = {}) {
+function emailHtml(row, budget, answers = {}, photos = 0) {
   const sector = SECTORS[row.project_type] || [row.project_type, row.project_type];
   const services = row.services.map(k => (SERVICES[k] ? `${SERVICES[k][0]} / ${SERVICES[k][1]}` : k)).join('<br>');
   const tel = row.phone.replace(/[^\d+]/g, '');
@@ -79,6 +83,7 @@ function emailHtml(row, budget, answers = {}) {
     ['Estimated budget', 'الميزانية التقديرية', budget ? esc(budget) : '—'],
     ...Object.values(answers).map(a => [esc(a.question_en), esc(a.question_ar), esc(a.answer).replace(/\n/g, '<br>')]),
     ['Message', 'الرسالة', esc(row.message).replace(/\n/g, '<br>')],
+    ...(photos ? [['Photos', 'الصور', `${photos} attached · ${photos} مرفقة — <a href="${SITE}/admin.html">open in the admin panel · افتحيها في لوحة الأدمن</a>`]] : []),
     ['Form language', 'لغة النموذج', row.language === 'ar' ? 'العربية' : 'English']
   ];
   return `<div style="font-family:Arial,sans-serif;color:#252728;max-width:640px">
@@ -96,7 +101,7 @@ module.exports = async (req, res) => {
   if (!body || typeof body !== 'object') return res.status(400).json({ok: false, error: 'bad_request'});
   if (body.bot_field) return res.status(200).json({ok: true}); // honeypot: pretend success, store nothing
 
-  const {ok, row, budget, budgetKey, budgetEn} = validate(body, await readFieldSettings());
+  const {ok, row, attachments, budget, budgetKey, budgetEn} = validate(body, await readFieldSettings());
   const answers = ok ? await readAnswers(body.answers) : null;
   if (!ok || !answers) return res.status(400).json({ok: false, error: 'invalid'});
 
@@ -106,7 +111,7 @@ module.exports = async (req, res) => {
     headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'return=minimal'},
     body: JSON.stringify(data)
   }).catch(() => null);
-  let db = await insert({...row, budget: budgetKey, answers});
+  let db = await insert({...row, budget: budgetKey, answers, attachments});
   if (db && db.status === 400) {
     const extra = Object.values(answers).map(a => `${a.question_en}: ${a.answer}`).join('\n');
     db = await insert({...row, message: `${row.message}\n\n[Estimated budget: ${budgetEn}]${extra ? '\n' + extra : ''}`});
@@ -120,7 +125,7 @@ module.exports = async (req, res) => {
     const mail = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Authorization: `Bearer ${process.env.RESEND_API_KEY}`},
-      body: JSON.stringify({from: FROM, to: [TO], reply_to: row.email, subject: `New enquiry — ${row.full_name}${city}`, html: emailHtml(row, budget, answers)})
+      body: JSON.stringify({from: FROM, to: [TO], reply_to: row.email, subject: `New enquiry — ${row.full_name}${city}`, html: emailHtml(row, budget, answers, attachments.length)})
     }).catch(() => null);
     emailed = !!(mail && mail.ok);
     if (!emailed) console.error('Resend failed', mail && mail.status, mail && await mail.text().catch(() => ''));
