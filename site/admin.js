@@ -133,6 +133,7 @@ function renderLogin(step = 'email', email = '') {
     <label for="login-mail">البريد الإلكتروني</label>
     <input id="login-mail" type="email" dir="ltr" autocomplete="email" required value="${esc(email)}">
     <button class="admin-btn" type="submit">إرسال رمز الدخول</button>
+    <button class="admin-link-btn" type="button" data-act="login-have-code">عندي رمز وصلني بالإيميل</button>
     <p class="admin-hint">يصلك رمز من 6 أرقام على بريدك. الدخول متاح فقط للإيميلات المضافة كمستخدمين.</p>
   </form>` : `<form id="login-code" novalidate>
     <p class="admin-hint">أرسلنا رمز الدخول إلى <b dir="ltr">${esc(email)}</b>. اكتبيه هنا. إذا ما وصل خلال دقيقة، شيّكي مجلد Junk.</p>
@@ -411,6 +412,12 @@ $root.addEventListener('click', e => {
   switch (t.dataset.act) {
     case 'logout': signOut(); break;
     case 'login-restart': renderLogin('email'); break;
+    case 'login-have-code': {
+      // A code already arrived: go to the code step without requesting (and invalidating) a new one.
+      const mail = (document.getElementById('login-mail').value || '').trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) { document.getElementById('login-msg').textContent = 'اكتبي بريدك أول.'; break; }
+      renderLogin('code', mail); break;
+    }
     case 'export': exportExcel(); break;
     case 'toggle-enq': state.open = state.open === id ? null : id; redraw(); if (state.open) loadPhotos(d.enquiries.find(x => x.id === id)); break;
     case 'q-add-open': case 'q-add-close':
