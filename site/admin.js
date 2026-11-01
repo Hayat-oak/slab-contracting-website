@@ -174,32 +174,69 @@ function renderLogin(step = 'email', email = '') {
 }
 
 /* ---------- App shell ---------- */
+// Line icons (24px grid, stroke = currentColor) for the menu, tabs and table headers.
+const AI = Object.fromEntries(Object.entries({
+  enquiries: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/>',
+  projects: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-5 4 4 3-3 4 4"/>',
+  images: '<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
+  questions: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/>',
+  settings: '<path d="M4 20V10M9 20V4M14 20v-7M19 20V8M3 20h18"/>',
+  users: '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 5.2a3 3 0 0 1 0 5.6M18 14.6c1.8.7 3 2.5 3 5.4"/>',
+  logout: '<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l-4-4 4-4M6 12h10"/>',
+  bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/>',
+  download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  coins: '<ellipse cx="9" cy="7" rx="5" ry="2.5"/><path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7M10 16.8c.9.5 2.4.7 4 .7 2.8 0 5-1.1 5-2.5v-4c0-1-1.2-1.9-3-2.3M4 11v4c0 1.4 2.2 2.5 5 2.5"/>',
+  status: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8M6 8v8M18 8v8M8 18h8"/>',
+  open: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  dots: '<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>'
+}).map(([k, d]) => [k, `<svg class="ai" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`]));
+const LOGO_MARK = '<svg class="admin-mark" viewBox="0 0 60 44" aria-hidden="true"><path d="M2 14 22 2h36v14L38 24H2z" fill="#adbfca"/><path d="M2 38 22 26h36v10L38 42H2z" fill="#c7d6ca"/></svg>';
 const TABS = [['enquiries', 'الطلبات'], ['projects', 'المشاريع والصور'], ['images', 'صور الأقسام'], ['questions', 'أسئلة النموذج'], ['settings', 'الأرقام والإعدادات'], ['users', 'المستخدمين']];
 async function renderApp() {
-  $root.innerHTML = `<div class="admin-shell">
-  <header class="admin-top"><a class="admin-brand" href="./">SLAB <span>لوحة الأدمن</span></a>
-    <span class="admin-who" dir="ltr">${esc(session.email)}</span>
-    <button type="button" class="admin-link-btn" data-act="logout">تسجيل الخروج</button></header>
-  <nav class="admin-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${state.tab === k}">${l}</button>`).join('')}</nav>
-  <main id="admin-main" class="admin-main"><p class="admin-hint">جارٍ التحميل…</p></main></div>`;
+  $root.innerHTML = `<div class="admin-layout">
+  <aside class="admin-side">
+    <a class="admin-logo" href="./">${LOGO_MARK}<span><b>SLAB</b><small>لوحة الأدمن</small></span></a>
+    <nav class="admin-side-nav">${TABS.map(([k, l]) => `<button type="button" data-tab="${k}" aria-current="${state.tab === k}">${AI[k]}<span>${l}</span></button>`).join('')}</nav>
+  </aside>
+  <div class="admin-body-col">
+    <header class="admin-topbar">
+      <button type="button" class="admin-bell" data-act="bell" aria-label="الطلبات الجديدة">${AI.bell}<i id="admin-bell-dot" hidden></i></button>
+      <span class="admin-who">${AI.user}<span dir="ltr">${esc(session.email)}</span></span>
+      <button type="button" class="admin-logout" data-act="logout">${AI.logout}<span>تسجيل الخروج</span></button>
+    </header>
+    <nav class="admin-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${state.tab === k}">${AI[k]}<span>${l}</span></button>`).join('')}</nav>
+    <main id="admin-main" class="admin-main"><p class="admin-hint">جارٍ التحميل…</p></main>
+  </div></div>`;
   await loadTab();
 }
 async function loadTab() {
   const main = document.getElementById('admin-main');
-  document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === state.tab)));
+  document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute(b.getAttribute('role') === 'tab' ? 'aria-selected' : 'aria-current', String(b.dataset.tab === state.tab)));
   try {
     const d = state.data;
-    if (state.tab === 'enquiries') d.enquiries = await rest('project_enquiries?select=*&order=created_at.desc');
+    if (state.tab === 'enquiries' || !d.enquiries) d.enquiries = await rest('project_enquiries?select=*&order=created_at.desc');
     if (state.tab === 'projects') [d.cms, d.photos] = await Promise.all([rest('cms_projects?select=*&order=position,created_at'), rest('project_photos?select=*&order=position,id')]);
     if (state.tab === 'images') d.images = await rest('image_overrides?select=*');
     if (state.tab === 'questions') [d.questions, d.settings] = await Promise.all([rest('form_questions?select=*&order=position,id'), rest('site_settings?select=*')]);
     if (state.tab === 'settings') d.settings = await rest('site_settings?select=*');
     if (state.tab === 'users') d.users = await rest('site_admins?select=*&order=created_at');
+    updateBell();
     main.innerHTML = VIEWS[state.tab]();
   } catch (e) {
     main.innerHTML = `<p class="admin-msg">تعذّر التحميل: ${esc(e.message)}</p>
       <p class="admin-hint">إذا كانت هذه أول مرة، تأكدي أن ملف <code>supabase/admin_setup.sql</code> تم تشغيله في Supabase، وأن بريدك مضاف في جدول المستخدمين.</p>`;
   }
+}
+// Dot on the bell while any enquiry is still "new".
+function updateBell() {
+  const dot = document.getElementById('admin-bell-dot');
+  if (dot) dot.hidden = !(state.data.enquiries || []).some(e => e.status === 'new');
 }
 
 /* ---------- Enquiries ---------- */
@@ -211,22 +248,26 @@ function filteredEnquiries() {
 const fmtDate = s => new Date(s).toLocaleString('ar-SA-u-nu-latn', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
 function enquiriesView() {
   const list = filteredEnquiries();
-  return `<section><div class="admin-head"><h2>الطلبات <small>${list.length} من ${(state.data.enquiries || []).length}</small></h2>
-  <div class="admin-tools"><input type="search" id="enq-search" placeholder="بحث بالاسم أو الجوال أو المدينة…" value="${esc(state.filter.q)}">
-    <select id="enq-status"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${state.filter.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
-    <button type="button" class="admin-btn" data-act="export">تصدير Excel</button></div></div>
-  ${list.length ? `<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>التاريخ</th><th>الاسم</th><th>الجوال</th><th>القطاع</th><th>المدينة</th><th>الميزانية</th><th>الحالة</th><th></th></tr></thead><tbody>
-  ${list.map(e => `<tr><td>${fmtDate(e.created_at)}</td><td>${esc(e.full_name)}</td><td dir="ltr"><a href="tel:${esc(e.phone)}">${esc(e.phone)}</a></td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td>
+  const th = (icon, label) => `<th><span>${AI[icon]}${label}</span></th>`;
+  return `<section><div class="admin-pagehead">
+    <div><h2>${AI.enquiries}الطلبات</h2><small>${list.length} من ${(state.data.enquiries || []).length} طلبات</small></div>
+    <div class="admin-tools">
+      <label class="admin-search">${AI.search}<input type="search" id="enq-search" placeholder="بحث بالاسم أو الجوال أو البريد…" value="${esc(state.filter.q)}"></label>
+      <select id="enq-status" aria-label="الحالة"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${state.filter.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+      <button type="button" class="admin-btn admin-export" data-act="export">${AI.download}<span>تصدير Excel</span></button></div></div>
+  ${list.length ? `<div class="admin-table-wrap"><table class="admin-table"><thead><tr>${th('calendar', 'التاريخ')}${th('user', 'الاسم')}${th('phone', 'الجوال')}${th('layers', 'القطاع')}${th('pin', 'المدينة')}${th('coins', 'الميزانية')}${th('status', 'الحالة')}<th>الإجراءات</th></tr></thead><tbody>
+  ${list.map(e => `<tr class="${state.open === e.id ? 'is-open' : ''}"><td>${fmtDate(e.created_at)}</td><td>${esc(e.full_name)}</td><td dir="ltr"><a href="tel:${esc(e.phone)}">${esc(e.phone)}</a></td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td>
     <td>${esc(e.project_location)}</td><td>${BUDGETS[e.budget] || '—'}</td>
-    <td><select data-act="status" data-id="${e.id}" aria-label="الحالة">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${e.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
-    <td><button type="button" class="admin-link-btn" data-act="toggle-enq" data-id="${e.id}">${state.open === e.id ? 'إخفاء' : 'التفاصيل'}</button></td></tr>
+    <td><select class="admin-status s-${esc(e.status)}" data-act="status" data-id="${e.id}" aria-label="الحالة">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${e.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
+    <td class="admin-actions"><button type="button" class="admin-icon-btn" data-act="toggle-enq" data-id="${e.id}" aria-label="${state.open === e.id ? 'إخفاء التفاصيل' : 'التفاصيل'}" title="التفاصيل">${AI.open}</button>
+      <span class="admin-menu-wrap"><button type="button" class="admin-icon-btn" data-act="enq-menu" data-id="${e.id}" aria-label="المزيد" aria-expanded="${state.menu === e.id}">${AI.dots}</button>
+      ${state.menu === e.id ? `<span class="admin-menu" role="menu"><a role="menuitem" href="mailto:${esc(e.email)}">مراسلة العميل</a><a role="menuitem" href="tel:${esc(e.phone)}">اتصال</a><button type="button" role="menuitem" class="danger" data-act="delete-enq" data-id="${e.id}">حذف الطلب</button></span>` : ''}</span></td></tr>
     ${state.open === e.id ? `<tr class="admin-detail"><td colspan="8"><dl>
       <dt>البريد</dt><dd dir="ltr"><a href="mailto:${esc(e.email)}">${esc(e.email)}</a></dd>
       <dt>الخدمات</dt><dd>${(e.services || []).map(s => SERVICES[s] || esc(s)).join('، ')}</dd>
       ${Object.values(e.answers || {}).map(a => `<dt>${esc(a.question_ar)}</dt><dd>${esc(a.answer)}</dd>`).join('')}
       ${(e.attachments || []).length ? `<dt>صور المشروع</dt><dd><div class="admin-thumbs">${e.attachments.map(p => state.signed[p] ? `<a href="${esc(state.signed[p])}" target="_blank" rel="noopener"><img src="${esc(state.signed[p])}" alt=""></a>` : '<span class="admin-hint">جارٍ التحميل…</span>').join('')}</div></dd>` : ''}
-      <dt>الرسالة</dt><dd class="pre">${esc(e.message)}</dd><dt>لغة النموذج</dt><dd>${e.language === 'ar' ? 'العربية' : 'English'}</dd></dl>
-      <button type="button" class="admin-danger" data-act="delete-enq" data-id="${e.id}">حذف الطلب</button></td></tr>` : ''}`).join('')}
+      <dt>الرسالة</dt><dd class="pre">${esc(e.message)}</dd><dt>لغة النموذج</dt><dd>${e.language === 'ar' ? 'العربية' : 'English'}</dd></dl></td></tr>` : ''}`).join('')}
   </tbody></table></div>` : '<p class="admin-hint">لا توجد طلبات.</p>'}</section>`;
 }
 // CSV with a UTF-8 BOM so Excel opens Arabic text correctly.
@@ -405,12 +446,15 @@ const redraw = () => { const m = document.getElementById('admin-main'); if (m) m
 /* ---------- Events ---------- */
 $root.addEventListener('click', e => {
   const t = e.target.closest('[data-tab],[data-act]');
+  if (state.menu && !(e.target.closest && e.target.closest('.admin-menu-wrap'))) { state.menu = null; redraw(); }
   if (!t || t.tagName === 'SELECT' || t.type === 'file') return;
   if (t.dataset.tab) { state.tab = t.dataset.tab; state.open = null; loadTab(); return; }
   const id = t.dataset.id;
   const d = state.data;
   switch (t.dataset.act) {
     case 'logout': signOut(); break;
+    case 'bell': state.tab = 'enquiries'; state.filter.status = 'new'; state.open = null; loadTab(); break;
+    case 'enq-menu': state.menu = state.menu === id ? null : id; redraw(); break;
     case 'login-restart': renderLogin('email'); break;
     case 'login-have-code': {
       // A code already arrived: go to the code step without requesting (and invalidating) a new one.
@@ -471,7 +515,7 @@ $root.addEventListener('change', e => {
   const t = e.target;
   const d = state.data;
   if (t.id === 'enq-status') { state.filter.status = t.value; redraw(); return; }
-  if (t.dataset.act === 'status') run(async () => { await rest(`project_enquiries?id=eq.${t.dataset.id}`, {method: 'PATCH', body: {status: t.value}}); d.enquiries.find(x => x.id === t.dataset.id).status = t.value; }, 'تم تحديث الحالة');
+  if (t.dataset.act === 'status') run(async () => { await rest(`project_enquiries?id=eq.${t.dataset.id}`, {method: 'PATCH', body: {status: t.value}}); d.enquiries.find(x => x.id === t.dataset.id).status = t.value; t.className = `admin-status s-${t.value}`; updateBell(); }, 'تم تحديث الحالة');
   if (t.dataset.act === 'add-photos' && t.files.length) run(async () => {
     t.disabled = true; toast('جارٍ رفع الصور…');
     const start = d.photos.filter(x => x.project_id === t.dataset.id).length;
