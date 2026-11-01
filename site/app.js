@@ -35,15 +35,15 @@ const projects = [
   {id:'masharef', name:'Masharef Building', ar:'مبنى مشارف', client:'Aliyah Homes', clientAr:'عالية هوم', units:14, sizes:['117','121','160'], images:3, category:'aliyah', source:14},
   {id:'mkin30', name:'Mkin 30', ar:'مكين 30', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['245'], images:2, category:'aliyah', source:16},
   {id:'nirvana12', name:'Nirvana 12', ar:'نيرفانا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:2, sizes:['50','145'], images:3, category:'aliyah', source:15},
-  {id:'ajlan11', name:'Ajlan Riviera 12', ar:'عجلان ريفيرا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['92','169'], images:3, category:'aliyah', source:17},
+  {id:'ajlan11', name:'Ajlan Riviera 12', ar:'العجلان ريفيرا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['92','169'], images:3, category:'aliyah', source:17},
   {id:'almajidiya116', name:'Almajidiya 116', ar:'المجيدية 116', client:'Aliyah Homes', clientAr:'عالية هوم', units:4, sizes:['77','101','128','130'], images:2, category:'aliyah', source:19},
   {id:'almajidiya111', name:'Al Majidiya Residence 111', ar:'المجيدية ريزيدنس 111', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['120'], images:4, category:'aliyah', source:20},
   {id:'jawhara8', name:'Jawhara Al Narjis 8', ar:'جوهرة النرجس 8', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['50','145'], images:4, category:'aliyah', source:21},
-  {id:'ajlan19', name:'Ajlan Riviera 21', ar:'عجلان ريفيرا 21', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['137'], images:2, category:'aliyah', source:22},
+  {id:'ajlan19', name:'Ajlan Riviera 21', ar:'العجلان ريفيرا 21', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['137'], images:2, category:'aliyah', source:22},
   {id:'almajidiya70', name:'Almajidiya 70', ar:'المجيدية 70', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['90'], images:3, category:'aliyah', source:23},
   {id:'almajidiya130', name:'Almajidiya 130', ar:'المجيدية 130', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['128'], images:4, category:'aliyah', source:24},
   // NEEDS CLIENT REVIEW: profile p.18 lists 2 units but four sizes, identical to Almajidiya 116 (p.19). Shown as printed.
-  {id:'ajlan37', name:'Ajlan Riviera 37', ar:'عجلان ريفيرا 37', client:'Aliyah Homes', clientAr:'عالية هوم', units:2, sizes:['77','101','128','130'], images:2, category:'aliyah', source:18, review:true}
+  {id:'ajlan37', name:'Ajlan Riviera 37', ar:'العجلان ريفيرا 37', client:'Aliyah Homes', clientAr:'عالية هوم', units:2, sizes:['77','101','128','130'], images:2, category:'aliyah', source:18, review:true}
 ];
 
 // Full-width and large placements use photos that have high-resolution originals (assets/hd, from SLAB's Drive folders).
