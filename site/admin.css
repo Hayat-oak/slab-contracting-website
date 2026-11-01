@@ -169,3 +169,11 @@
   .admin-who span { display: none; }
   .admin-search input { min-width: 0; width: 100%; }
 }
+
+/* Language button (Arabic / English) and LTR adjustments for the English panel */
+.admin-lang { padding: 7px 14px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--ink); font-size: 14px; cursor: pointer; }
+.admin-lang:hover { border-color: var(--ink); }
+.admin-login-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+[dir="ltr"] .admin-logo { justify-content: flex-start; }
+[dir="ltr"] .admin-logo small { text-align: left; }
+[dir="ltr"] .admin-status { padding: 9px 22px 9px 40px !important; background-position: right 14px center !important; }

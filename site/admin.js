@@ -53,6 +53,118 @@ const state = {tab: 'enquiries', data: {}, filter: {q: '', status: ''}, open: nu
 let session = null;
 try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch { session = null; }
 
+/* ---------- Language (Arabic / English) ---------- */
+// The panel is written in Arabic. In English mode every Arabic interface string on screen is swapped through this
+// table. Only exact matches (and the few patterns below) are replaced, so names, cities and messages typed by people
+// stay as they are. Elements marked data-raw are never translated (e.g. the language button itself).
+let LANG = 'ar';
+try { LANG = localStorage.getItem('slab-admin-lang') === 'en' ? 'en' : 'ar'; } catch {}
+const EN = {
+  // shell, login
+  'لوحة الأدمن': 'Admin panel', 'دخول الأدمن': 'Admin sign-in', '→ العودة للموقع': '← Back to the website', 'البريد الإلكتروني': 'Email address',
+  'إرسال رمز الدخول': 'Send sign-in code', 'عندي رمز وصلني بالإيميل': 'I already have a code', 'رمز الدخول': 'Sign-in code', 'دخول': 'Sign in',
+  'تغيير البريد / إعادة الإرسال': 'Change email / resend', 'أرسلنا رمز الدخول إلى': 'We sent a sign-in code to',
+  '. اكتبيه هنا. إذا ما وصل خلال دقيقة، شيّكي مجلد Junk.': '. Enter it here. If it does not arrive within a minute, check your Junk folder.',
+  'يصلك رمز من 6 أرقام على بريدك. الدخول متاح فقط للإيميلات المضافة كمستخدمين.': 'You will receive a 6-digit code by email. Only addresses added as users can sign in.',
+  'اكتبي بريدًا صحيحًا.': 'Enter a valid email address.', 'اكتبي بريدك أول.': 'Enter your email first.',
+  'هذا البريد غير مضاف كمستخدم في لوحة الأدمن.': 'This email is not an admin panel user.',
+  'لوحة الأدمن غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.': 'The admin panel is not set up yet: run supabase/admin_setup.sql in Supabase.',
+  'تعذّر إرسال إيميل الدخول. تأكدي من إعداد SMTP في Supabase (اسم المستخدم resend وكلمة المرور = مفتاح Resend).': 'The sign-in email could not be sent. Check the SMTP settings in Supabase (username resend, password = Resend API key).',
+  'طلبت رموزًا كثيرة، انتظري دقيقة ثم حاولي مرة ثانية.': 'Too many codes requested. Wait a minute and try again.',
+  'الرمز غير صحيح أو منتهي.': 'The code is wrong or has expired.', 'رابط الدخول غير صالح أو منتهي. اطلبي رمزًا جديدًا.': 'The sign-in link is invalid or expired. Request a new code.',
+  'انتهت الجلسة، سجّلي الدخول من جديد.': 'Your session has ended. Please sign in again.',
+  'تسجيل الخروج': 'Sign out', 'الطلبات الجديدة': 'New enquiries', 'جارٍ التحميل…': 'Loading…',
+  'الطلبات': 'Enquiries', 'المشاريع والصور': 'Projects & photos', 'صور الأقسام': 'Section photos', 'أسئلة النموذج': 'Form questions',
+  'الأرقام والإعدادات': 'Numbers & settings', 'المستخدمين': 'Users',
+  // enquiries
+  'بحث بالاسم أو الجوال أو البريد…': 'Search by name, mobile or email…', 'كل الحالات': 'All statuses', 'تصدير Excel': 'Export to Excel',
+  'التاريخ': 'Date', 'الاسم': 'Name', 'الجوال': 'Mobile', 'القطاع': 'Sector', 'المدينة': 'City', 'الميزانية': 'Budget', 'الحالة': 'Status', 'الإجراءات': 'Actions',
+  'جديد': 'New', 'تم التواصل': 'Contacted', 'مغلق': 'Closed', 'التفاصيل': 'Details', 'إخفاء التفاصيل': 'Hide details', 'المزيد': 'More',
+  'مراسلة العميل': 'Email the client', 'اتصال': 'Call', 'حذف الطلب': 'Delete enquiry', 'البريد': 'Email', 'الخدمات': 'Services', 'صور المشروع': 'Project photos',
+  'الرسالة': 'Message', 'لغة النموذج': 'Form language', 'العربية': 'Arabic', 'لا توجد طلبات.': 'No enquiries.',
+  'سكني': 'Residential', 'ضيافة': 'Hospitality', 'تجاري': 'Commercial', 'حكومي ومؤسسي': 'Government & institutional',
+  'التشطيبات والتنفيذ': 'Fit-Out & Execution', 'التصميم': 'Design', 'التشطيبات الداخلية': 'Interior Fit-Out', 'إدارة المشاريع والعقود': 'Project & Contract Management',
+  'أقل من 500 ألف': 'Under SAR 500k', '500 ألف – مليون': 'SAR 500k – 1m', '1 – 3 مليون': 'SAR 1 – 3m', 'أكثر من 3 مليون': 'Over SAR 3m', 'غير محددة': 'Not decided',
+  'حذف هذا الطلب نهائيًا؟': 'Delete this enquiry permanently?', 'تم حذف الطلب': 'Enquiry deleted', 'تم تحديث الحالة': 'Status updated',
+  // projects
+  'مشروع جديد': 'New project', 'أساسي': 'Original', 'مضاف': 'Added', 'مخفي': 'Hidden', 'عرض في الموقع': 'View on site', 'إخفاء من الموقع': 'Hide from site',
+  'إظهار في الموقع': 'Show on site', 'حذف المشروع': 'Delete project', 'حفظ البيانات': 'Save details', 'أصلية': 'Original', 'حذف': 'Delete', 'إضافة صور': 'Add photos',
+  'إضافة مشروع جديد': 'Add a new project', 'إضافة المشروع': 'Add project', 'الصور': 'Photos',
+  'الاسم (عربي)': 'Name (Arabic)', 'الاسم (English)': 'Name (English)', 'العميل (عربي)': 'Client (Arabic)', 'العميل (English)': 'Client (English)',
+  'المدينة (عربي)': 'City (Arabic)', 'المدينة (English)': 'City (English)', 'النوع': 'Type', 'عدد الوحدات': 'Units', 'المساحات م² (افصلي بفاصلة)': 'Sizes m² (comma separated)',
+  'ارفعي صور الغرف الداخلية بجودة عالية. أول صورة تكون صورة الغلاف.': 'Upload high-quality interior photos. The first photo is the cover.',
+  'الصور الأصلية من ملف الشركة ثابتة. الصور اللي تضيفينها تظهر بعدها في معرض المشروع.': 'Original photos from the company profile are fixed. Photos you add appear after them in the gallery.',
+  'حذف المشروع وكل صوره؟': 'Delete the project and all its photos?', 'حذف الصورة؟': 'Delete this photo?', 'تم حذف المشروع': 'Project deleted', 'تم حذف الصورة': 'Photo deleted',
+  'تم رفع الصور': 'Photos uploaded', 'جارٍ رفع الصور…': 'Uploading photos…', 'تمت إضافة المشروع': 'Project added', 'تم حفظ البيانات': 'Details saved', 'تم الحفظ': 'Saved',
+  'سول حطين': 'SOUL Hittin', 'مبنى المغرزات': 'Almughrizat Building', 'مبنى مشارف': 'Masharef Building', 'مكين 30': 'Mkin 30', 'نيرفانا 12': 'Nirvana 12',
+  'عجلان ريفيرا 12': 'Ajlan Riviera 12', 'عجلان ريفيرا 21': 'Ajlan Riviera 21', 'عجلان ريفيرا 37': 'Ajlan Riviera 37', 'المجيدية 116': 'Almajidiya 116',
+  'المجيدية ريزيدنس 111': 'Al Majidiya Residence 111', 'جوهرة النرجس 8': 'Jawhara Al Narjis 8', 'المجيدية 70': 'Almajidiya 70', 'المجيدية 130': 'Almajidiya 130',
+  // section photos
+  'استبدلي أي صورة في الموقع. «استرجاع» يرجّع الصورة الأصلية.': 'Replace any photo on the site. "Restore" brings back the original.',
+  'استبدال': 'Replace', 'استرجاع': 'Restore', 'مُستبدلة': 'Replaced', 'تم استبدال الصورة': 'Photo replaced', 'تم استرجاع الصورة الأصلية': 'Original photo restored', 'جارٍ رفع الصورة…': 'Uploading photo…',
+  'الصفحة الرئيسية — بطاقات الخدمات': 'Home — service cards', 'صفحة الخدمات': 'Services page', 'أثرنا والمدن': 'Our impact & cities', 'خلفية «أثرنا»': '"Our impact" background',
+  'الرياض': 'Riyadh', 'المدينة المنورة': 'Madinah', 'جدة': 'Jeddah', 'القطاعات (الرئيسية)': 'Sectors (home)', 'القطاعات (صفحة الخدمات)': 'Sectors (services page)',
+  'الضيافة': 'Hospitality', 'السكني': 'Residential', 'التجاري': 'Commercial', 'الحكومي والمؤسسي': 'Government & institutional',
+  'من نحن — المبادئ والدعوة': 'About — principles & call to action', 'الدقة': 'Precision', 'التحكم': 'Control', 'القيمة': 'Value', 'بانر «لنبدأ مشروعك»': '"Start your project" banner',
+  'مراحل العمل': 'Our process', '1 الفهم': '1 Understand', '2 التصميم': '2 Design', '3 الاعتماد': '3 Approve', '4 التخطيط': '4 Plan', '5 التنفيذ': '5 Execute', '6 التحكم': '6 Control', '7 التسليم': '7 Deliver',
+  // questions
+  'أسئلة نموذج التواصل': 'Contact form questions', 'إضافة سؤال': 'Add question', 'سؤال جديد': 'New question', 'إلغاء': 'Cancel',
+  'كل أسئلة نموذج «ابدأ مشروعك» هنا. غيّري النص ثم اضغطي «حفظ». الأسئلة المضافة تظهر في النموذج بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.': 'All questions of the "Start a project" form. Edit the wording, then press "Save". Added questions appear after the budget; their answers arrive by email and in the enquiries table.',
+  'العربي': 'Arabic', 'إجباري': 'Required', 'إجباري دائمًا': 'Always required', 'إجباري ✓': 'Required ✓', 'اختياري': 'Optional', 'إخفاء': 'Hide', 'إظهار': 'Show', 'حفظ': 'Save',
+  'السؤال (عربي)': 'Question (Arabic)', 'السؤال (English)': 'Question (English)', 'نوع الإجابة': 'Answer type', 'نص قصير': 'Short text', 'نص طويل': 'Long text', 'رقم': 'Number', 'قائمة اختيارات': 'Choice list',
+  'الاختيارات (لنوع «قائمة اختيارات»): كل اختيار في سطر بالشكل': 'Choices (for "Choice list"): one per line, as', 'English | عربي': 'English | Arabic', 'إضافة السؤال': 'Add question',
+  'لأعلى': 'Move up', 'لأسفل': 'Move down', 'أضيفي اختيارين على الأقل للقائمة.': 'Add at least two choices.',
+  'حذف السؤال؟ الإجابات السابقة تبقى محفوظة في الطلبات.': 'Delete this question? Earlier answers stay saved in the enquiries.',
+  'تمت إضافة السؤال': 'Question added', 'تم حذف السؤال': 'Question deleted', 'تم حفظ الأسئلة الأساسية': 'Questions saved',
+  // settings
+  'أرقام «أثرنا»': '"Our impact" numbers', 'الوحدات المسلّمة أو قيد التنفيذ': 'Units delivered or in progress', 'المدن': 'Cities', 'القطاعات': 'Sectors', 'مراحل التنفيذ': 'Delivery stages',
+  'لاحقة (مثل +)': 'Suffix (e.g. +)', 'بيانات التواصل': 'Contact details', 'رقم الهاتف (للاتصال)': 'Phone (for calls)', 'رقم الهاتف (كما يظهر)': 'Phone (as displayed)',
+  'بريد استلام الطلبات من النموذج يبقى info@slab.sa (إعداد على السيرفر).': 'Form enquiries are still delivered to info@slab.sa (a server setting).', 'تم حفظ الإعدادات': 'Settings saved',
+  // users
+  'كل بريد هنا يقدر يدخل لوحة الأدمن برمز يصله على الإيميل.': 'Every address here can sign in to the admin panel with an emailed code.',
+  'أنتِ': 'You', 'إزالة': 'Remove', 'إضافة مستخدم': 'Add user', 'إضافة': 'Add', 'تمت إضافة المستخدم': 'User added', 'تمت الإزالة': 'Removed'
+};
+// Strings built from a number, a name or a message.
+const EN_PATTERNS = [
+  [/^(\d+) من (\d+) طلبات$/, (m, a, b) => `${a} of ${b} enquiries`],
+  [/^(\d+) صور$/, (m, a) => `${a} ${a === '1' ? 'photo' : 'photos'}`],
+  [/^المشاريع \((\d+)\)$/, (m, a) => `Projects (${a})`], [/^الصور \((\d+)\)$/, (m, a) => `Photos (${a})`],
+  [/^أضافه (.+)$/, (m, a) => `Added by ${a}`],
+  [/^\+ (.+)$/, (m, a) => `+ ${T(a)}`],
+  [/^(.+?) · (.+)$/, (m, a, b) => `${T(a)} · ${b}`],
+  [/^(.+?)(: .*)$/, (m, a, b) => (EN[a] ? EN[a] + b : m)],
+  [/^تعذّر التحميل: (.*)$/, (m, a) => `Could not load: ${a}`], [/^تعذّر عرض الصور: (.*)$/, (m, a) => `Could not show photos: ${a}`],
+  [/^إزالة (.+) من لوحة الأدمن؟$/, (m, a) => `Remove ${a} from the admin panel?`], [/^الملف ليس صورة: (.+)$/, (m, a) => `Not an image: ${a}`]
+];
+function T(s) {
+  if (LANG !== 'en' || !s) return s;
+  const key = s.trim();
+  if (EN[key]) return s.replace(key, EN[key]);
+  for (const [re, fn] of EN_PATTERNS) { const m = key.match(re); if (m) { const out = fn(...m); if (out !== key) return s.replace(key, out); } }
+  return s;
+}
+function translateTree(root) {
+  if (LANG !== 'en' || !root) return;
+  if (root.nodeType === 3) { if (!(root.parentElement && root.parentElement.closest('[data-raw]'))) root.nodeValue = T(root.nodeValue); return; }
+  if (root.nodeType !== 1 || root.closest('[data-raw]')) return;
+  const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = walk.nextNode())) if (!(n.parentElement && n.parentElement.closest('[data-raw]')) && /[؀-ۿ]/.test(n.nodeValue)) n.nodeValue = T(n.nodeValue);
+  [root, ...root.querySelectorAll('[placeholder],[aria-label],[title]')].forEach(el => ['placeholder', 'aria-label', 'title'].forEach(a => {
+    const v = el.getAttribute && el.getAttribute(a);
+    if (v && /[؀-ۿ]/.test(v)) el.setAttribute(a, T(v));
+  }));
+}
+new MutationObserver(list => list.forEach(m => m.addedNodes.forEach(translateTree))).observe(document.body, {childList: true, subtree: true, characterData: false});
+const ask = msg => confirm(T(msg));
+function applyLang() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === 'en' ? 'ltr' : 'rtl';
+  document.title = LANG === 'en' ? 'Admin panel | SLAB' : 'لوحة الأدمن | SLAB';
+}
+const langButton = () => `<button type="button" class="admin-lang" data-act="lang" data-raw>${LANG === 'en' ? 'العربية' : 'English'}</button>`;
+applyLang();
+
 /* ---------- Auth (Supabase GoTrue REST) ---------- */
 async function auth(path, body) {
   const r = await fetch(`${SUPABASE_URL}/auth/v1/${path}`, {method: 'POST', headers: {apikey: SUPABASE_KEY, 'Content-Type': 'application/json'}, body: JSON.stringify(body)});
@@ -127,7 +239,7 @@ async function run(task, done) {
 /* ---------- Login ---------- */
 function renderLogin(step = 'email', email = '') {
   $root.innerHTML = `<main class="admin-login">
-  <a class="admin-back" href="./">→ العودة للموقع</a>
+  <div class="admin-login-top">${langButton()}<a class="admin-back" href="./">→ العودة للموقع</a></div>
   <h1>دخول الأدمن</h1>
   ${step === 'email' ? `<form id="login-email" novalidate>
     <label for="login-mail">البريد الإلكتروني</label>
@@ -208,6 +320,7 @@ async function renderApp() {
     <header class="admin-topbar">
       <button type="button" class="admin-bell" data-act="bell" aria-label="الطلبات الجديدة">${AI.bell}<i id="admin-bell-dot" hidden></i></button>
       <span class="admin-who">${AI.user}<span dir="ltr">${esc(session.email)}</span></span>
+      ${langButton()}
       <button type="button" class="admin-logout" data-act="logout">${AI.logout}<span>تسجيل الخروج</span></button>
     </header>
     <main id="admin-main" class="admin-main"><p class="admin-hint">جارٍ التحميل…</p></main>
@@ -244,7 +357,7 @@ function filteredEnquiries() {
   return (state.data.enquiries || []).filter(e => (!state.filter.status || e.status === state.filter.status)
     && (!q || [e.full_name, e.email, e.phone, e.project_location, e.message].join(' ').toLowerCase().includes(q)));
 }
-const fmtDate = s => new Date(s).toLocaleString('ar-SA-u-nu-latn', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
+const fmtDate = s => new Date(s).toLocaleString(LANG === 'en' ? 'en-GB' : 'ar-SA-u-nu-latn', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
 function enquiriesView() {
   const list = filteredEnquiries();
   const th = (icon, label) => `<th><span>${AI[icon]}${label}</span></th>`;
@@ -452,6 +565,12 @@ $root.addEventListener('click', e => {
   const d = state.data;
   switch (t.dataset.act) {
     case 'logout': signOut(); break;
+    case 'lang':
+      LANG = LANG === 'en' ? 'ar' : 'en';
+      try { localStorage.setItem('slab-admin-lang', LANG); } catch {}
+      applyLang();
+      if (session && session.refresh_token) renderApp(); else renderLogin();
+      break;
     case 'bell': state.tab = 'enquiries'; state.filter.status = 'new'; state.open = null; loadTab(); break;
     case 'enq-menu': state.menu = state.menu === id ? null : id; redraw(); break;
     case 'login-restart': renderLogin('email'); break;
@@ -468,7 +587,7 @@ $root.addEventListener('click', e => {
       if (state.addQ) document.getElementById('add-question').querySelector('input').focus();
       break;
     case 'delete-enq':
-      if (confirm('حذف هذا الطلب نهائيًا؟')) run(async () => { const gone = d.enquiries.find(x => x.id === id); await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); if ((gone.attachments || []).length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: gone.attachments}}).catch(() => {}); d.enquiries = d.enquiries.filter(x => x.id !== id); redraw(); }, 'تم حذف الطلب');
+      if (ask('حذف هذا الطلب نهائيًا؟')) run(async () => { const gone = d.enquiries.find(x => x.id === id); await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); if ((gone.attachments || []).length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: gone.attachments}}).catch(() => {}); d.enquiries = d.enquiries.filter(x => x.id !== id); redraw(); }, 'تم حذف الطلب');
       break;
     case 'pick-project': case 'new-project':
       state.project = t.dataset.act === 'pick-project' ? id : null; redraw();
@@ -479,7 +598,7 @@ $root.addEventListener('click', e => {
       await saveProject(id, {...projectRow(p), published: p.published === false});
     }, 'تم الحفظ'); break;
     case 'delete-project':
-      if (confirm('حذف المشروع وكل صوره؟')) run(async () => {
+      if (ask('حذف المشروع وكل صوره؟')) run(async () => {
         const urls = d.photos.filter(x => x.project_id === id).map(x => x.url);
         await rest(`project_photos?project_id=eq.${encodeURIComponent(id)}`, {method: 'DELETE'});
         await rest(`cms_projects?id=eq.${encodeURIComponent(id)}`, {method: 'DELETE'});
@@ -488,7 +607,7 @@ $root.addEventListener('click', e => {
       }, 'تم حذف المشروع');
       break;
     case 'delete-photo':
-      if (confirm('حذف الصورة؟')) run(async () => { const ph = d.photos.find(x => String(x.id) === id); await rest(`project_photos?id=eq.${id}`, {method: 'DELETE'}); await removeUpload(ph.url); d.photos = d.photos.filter(x => x !== ph); redraw(); }, 'تم حذف الصورة');
+      if (ask('حذف الصورة؟')) run(async () => { const ph = d.photos.find(x => String(x.id) === id); await rest(`project_photos?id=eq.${id}`, {method: 'DELETE'}); await removeUpload(ph.url); d.photos = d.photos.filter(x => x !== ph); redraw(); }, 'تم حذف الصورة');
       break;
     case 'slot-reset': run(async () => { const old = d.images.find(x => x.slot === t.dataset.slot); await rest(`image_overrides?slot=eq.${t.dataset.slot}`, {method: 'DELETE'}); if (old) await removeUpload(old.url); d.images = d.images.filter(x => x !== old); redraw(); }, 'تم استرجاع الصورة الأصلية'); break;
     case 'q-toggle': case 'q-required': run(async () => {
@@ -501,8 +620,8 @@ $root.addEventListener('click', e => {
       await Promise.all(qs.map((q, k) => (q.position === k ? null : rest(`form_questions?id=eq.${q.id}`, {method: 'PATCH', body: {position: k}}).then(() => { q.position = k; }))));
       redraw();
     }); break;
-    case 'q-delete': if (confirm('حذف السؤال؟ الإجابات السابقة تبقى محفوظة في الطلبات.')) run(async () => { await rest(`form_questions?id=eq.${id}`, {method: 'DELETE'}); d.questions = d.questions.filter(x => String(x.id) !== id); redraw(); }, 'تم حذف السؤال'); break;
-    case 'user-delete': if (confirm(`إزالة ${t.dataset.email} من لوحة الأدمن؟`)) run(async () => { await rest(`site_admins?email=eq.${encodeURIComponent(t.dataset.email)}`, {method: 'DELETE'}); d.users = d.users.filter(u => u.email !== t.dataset.email); redraw(); }, 'تمت الإزالة'); break;
+    case 'q-delete': if (ask('حذف السؤال؟ الإجابات السابقة تبقى محفوظة في الطلبات.')) run(async () => { await rest(`form_questions?id=eq.${id}`, {method: 'DELETE'}); d.questions = d.questions.filter(x => String(x.id) !== id); redraw(); }, 'تم حذف السؤال'); break;
+    case 'user-delete': if (ask(`إزالة ${t.dataset.email} من لوحة الأدمن؟`)) run(async () => { await rest(`site_admins?email=eq.${encodeURIComponent(t.dataset.email)}`, {method: 'DELETE'}); d.users = d.users.filter(u => u.email !== t.dataset.email); redraw(); }, 'تمت الإزالة'); break;
   }
 });
 
