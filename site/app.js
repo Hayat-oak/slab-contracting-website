@@ -101,7 +101,7 @@ const phrases = {
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
  service3:'Interior Fit-Out', service3desc:'Refined interiors designed for how spaces are used.',
  service4:'Project & Contract Management', service4desc:'Clear control of scope, resources, costs and schedules.',
- creating:'Crafting Meaningful Spaces', aboutHome:'SLAB Project Management is a Saudi company specialising in managing small projects, part of Oaktree Group. We bring design coordination, procurement, site execution, quality control and handover together in one integrated delivery process.',
+ creating:'Crafting Meaningful Spaces', aboutHome:'SLAB Project Management is a Saudi company specialising in small-project management, design, fit-out and execution, part of Oaktree Group. We bring design coordination, procurement, site execution, quality control and handover together in one integrated delivery process.',
  aboutSlab:'About SLAB', featured:'Featured Projects', featuredSub:'Real spaces. Delivered with purpose and precision.',
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
  projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', other:'Other Projects', adminLogin:'Admin login', showing:'projects shown', filterLabel:'Filter projects by client',
@@ -119,7 +119,7 @@ const phrases = {
  serviceLong3:'Deliver functional, refined interior environments aligned with the operational and design requirements of each asset.',
  serviceLong4:'Coordinate scope, contractors, schedules, procurement, resources, reporting, and contractual requirements.',
  sectors:'Sectors We Serve', sectorsSub:'Solutions shaped for a range of environments and operational needs.', hospitality:'Hospitality', hospitalityDesc:'Hotels, serviced residences and guest-facing spaces.', residentialDesc:'Apartments, villas, compounds and renovation programs.', commercial:'Commercial', commercialDesc:'Offices, towers, mixed-use environments and commercial fit-out.', institutional:'Government & Institutional', institutionalDesc:'Projects requiring governance, accountability and documented controls.',
- aboutHero:'About SLAB', aboutHeroSub:'SAUDI PROJECT MANAGEMENT · INTEGRATED DELIVERY', ourStory:'Our Story', storyCopy:'SLAB Project Management is a Saudi company specialising in managing small projects, part of Oaktree Group. We work with residential, hospitality, commercial and institutional clients through design support, procurement, construction and interior fit-out.',
+ aboutHero:'About SLAB', aboutHeroSub:'SAUDI PROJECT MANAGEMENT · INTEGRATED DELIVERY', ourStory:'Our Story', storyCopy:'SLAB Project Management is a Saudi company specialising in small-project management, design, fit-out and execution, part of Oaktree Group. We work with residential, hospitality, commercial and institutional clients through design support, procurement, construction and interior fit-out.',
  storyCopy2:'Our role spans early project definition, technical coordination, execution, quality control and handover — with a structured focus on scope, cost, schedule and quality.',
  storyTitle:'Design & Build and Fit-Out Expertise', aboutNav:'On this page',
  delivery:'Integrated Delivery', deliveryDesc:'Design coordination, construction, fit-out and handover through one framework.', control:'Structured Control', controlDesc:'Oversight of scope, schedule, procurement, cost, quality and site progress.',ksa:'KSA Coverage',ksaDesc:'Project experience across Riyadh, Madinah and Jeddah.',
@@ -165,7 +165,7 @@ const phrases = {
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
- creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
+ creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة والتصميم والتشطيبات والتنفيذ، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
  projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عالية هوم',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الأدمن',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
  projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
@@ -180,7 +180,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  serviceLong1:'تنفيذ متكامل للمشاريع بدعم من التخطيط وإدارة الموقع وضبط الجودة والتنسيق مع الأطراف المعنية.',serviceLong2:'تنسيق تطوير التصاميم والمتطلبات الفنية ومراجعة الجهات المعنية والموافقات قبل التنفيذ.',
  serviceLong3:'تنفيذ بيئات داخلية عملية ومدروسة تتماشى مع المتطلبات التشغيلية والتصميمية لكل مشروع.',serviceLong4:'تنسيق النطاق والمقاولين والجداول والمشتريات والموارد والتقارير ومتطلبات العقود.',
  sectors:'القطاعات التي نخدمها',sectorsSub:'حلول تلائم أنواعًا مختلفة من المشاريع والمتطلبات التشغيلية.',hospitality:'الضيافة',hospitalityDesc:'الفنادق والشقق المخدومة والمساحات المخصصة للضيوف.',residentialDesc:'الشقق والفلل والمجمعات السكنية وبرامج التجديد.',commercial:'التجاري',commercialDesc:'المكاتب والأبراج والمشاريع متعددة الاستخدام والتشطيبات التجارية.',institutional:'الحكومي والمؤسسي',institutionalDesc:'مشاريع تتطلب الحوكمة والمساءلة والالتزام والتوثيق.',
- aboutHero:'من نحن',aboutHeroSub:'إدارة مشاريع سعودية · تنفيذ متكامل',ourStory:'قصتنا',storyCopy:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة، وهي جزء من مجموعة أوكتري. نخدم المشاريع السكنية والضيافة والتجارية والمؤسسية عبر دعم التصميم والمشتريات والإنشاءات والتشطيبات الداخلية.',storyCopy2:'يشمل دورنا تعريف المشروع وتنسيق الجوانب الفنية والتنفيذ وضبط الجودة والتسليم، مع تركيز منظم على النطاق والتكلفة والجدول والجودة.',
+ aboutHero:'من نحن',aboutHeroSub:'إدارة مشاريع سعودية · تنفيذ متكامل',ourStory:'قصتنا',storyCopy:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة والتصميم والتشطيبات والتنفيذ، وهي جزء من مجموعة أوكتري. نخدم المشاريع السكنية والضيافة والتجارية والمؤسسية عبر دعم التصميم والمشتريات والإنشاءات والتشطيبات الداخلية.',storyCopy2:'يشمل دورنا تعريف المشروع وتنسيق الجوانب الفنية والتنفيذ وضبط الجودة والتسليم، مع تركيز منظم على النطاق والتكلفة والجدول والجودة.',
  storyTitle:'خبرة في التصميم والبناء والتشطيبات',aboutNav:'في هذه الصفحة',
  delivery:'تنفيذ متكامل',deliveryDesc:'تنسيق التصميم والإنشاءات والتشطيبات والتسليم ضمن إطار واحد.',control:'رقابة منظمة',controlDesc:'متابعة نطاق الأعمال والجدول والمشتريات والتكلفة والجودة والموقع.',ksa:'انتشار داخل المملكة',ksaDesc:'خبرة في مشاريع بالرياض والمدينة المنورة وجدة.',
  ourApproach:'نهجنا',principles:'مبادئنا في التنفيذ',principlesSub:'الدقة. التحكم. القيمة.',principlesLead:'لا يُقاس نجاح الإنشاء بالإنجاز وحده، بل بجودة التنفيذ ومستوى التحكم طوال مراحل المشروع والأداء طويل الأجل للأصل المنجز.',precision:'الدقة',precisionDesc:'التنفيذ وفق المعايير والتصاميم المنسقة والمتطلبات المعتمدة.',controlPrinciple:'التحكم',controlPrincipleDesc:'الوضوح في متابعة تقدم الأعمال والموارد والمشتريات والتكاليف والجودة.',value:'القيمة',valueDesc:'اتخاذ قرارات تراعي الجاهزية التشغيلية والمتانة والأداء طويل الأجل.',
@@ -213,18 +213,18 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
 
 const metaDescriptions = {
   en: {
-    home: 'SLAB Project Management — a Saudi company specialising in managing small projects, part of Oaktree Group. Integrated project delivery from first brief to handover.',
+    home: 'SLAB Project Management — a Saudi company specialising in small-project management, design, fit-out and execution, part of Oaktree Group. Integrated project delivery from first brief to handover.',
     projects: 'Residential design, furniture and fit-out projects delivered by SLAB Project Management in Riyadh.',
     services: 'Fit-out & execution, design, interior fit-out, and project & contract management for hospitality, residential, commercial and institutional clients.',
-    about: 'SLAB Project Management is a Saudi company specialising in managing small projects, part of Oaktree Group. Precision, control and value in every project.',
+    about: 'SLAB Project Management is a Saudi company specialising in small-project management, design, fit-out and execution, part of Oaktree Group. Precision, control and value in every project.',
     process: 'The SLAB delivery process: Understand, Design, Approve, Plan, Execute, Control, Deliver.',
     contact: 'Start a project with SLAB Project Management. Tell us about your project and our team will review your enquiry.'
   },
   ar: {
-    home: 'سلاب لإدارة المشاريع — شركة سعودية متخصصة في إدارة المشاريع الصغيرة، جزء من مجموعة أوكتري. تنفيذ متكامل من الفكرة إلى التسليم.',
+    home: 'سلاب لإدارة المشاريع — شركة سعودية متخصصة في إدارة المشاريع الصغيرة والتصميم والتشطيبات والتنفيذ، جزء من مجموعة أوكتري. تنفيذ متكامل من الفكرة إلى التسليم.',
     projects: 'مشاريع تصميم وأثاث وتشطيبات سكنية نفذتها سلاب لإدارة المشاريع في الرياض.',
     services: 'التشطيبات والتنفيذ، التصميم، التشطيبات الداخلية، وإدارة المشاريع والعقود لقطاعات الضيافة والسكني والتجاري والمؤسسي.',
-    about: 'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة، جزء من مجموعة أوكتري. الدقة والتحكم والقيمة في كل مشروع.',
+    about: 'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة والتصميم والتشطيبات والتنفيذ، جزء من مجموعة أوكتري. الدقة والتحكم والقيمة في كل مشروع.',
     process: 'مراحل التنفيذ لدى سلاب: الفهم، التصميم، الاعتماد، التخطيط، التنفيذ، الرقابة، التسليم.',
     contact: 'ابدأ مشروعك مع سلاب لإدارة المشاريع. شاركنا تفاصيل مشروعك ليتواصل معك فريقنا.'
   }
