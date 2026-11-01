@@ -41,7 +41,7 @@ function validate(body, cfg = {}) {
   const budgetKey = str(body.budget, 20);
   // Paths of photos the visitor uploaded to the private enquiry-files bucket.
   const attachments = (Array.isArray(body.attachments) ? body.attachments : [])
-    .filter(p => typeof p === 'string' && /^enquiries/[A-Za-z0-9-]{8,60}/d{1,2}.[a-z]{2,4}$/.test(p)).slice(0, 6);
+    .filter(p => typeof p === 'string' && /^enquiries\/[A-Za-z0-9-]{8,60}\/\d{1,2}\.[a-z]{2,4}$/.test(p)).slice(0, 6);
   const budget = BUDGETS[budgetKey] ? `${BUDGETS[budgetKey][0]} / ${BUDGETS[budgetKey][1]}` : '';
   const ok = row.full_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) && row.phone.replace(/\D/g, '').length >= 7
     && (row.project_location || !isRequired(cfg, 'project-location'))
@@ -75,23 +75,46 @@ function emailHtml(row, budget, answers = {}, photos = 0) {
   const tel = row.phone.replace(/[^\d+]/g, '');
   const rows = [
     ['Name', 'الاسم', esc(row.full_name)],
-    ['Phone', 'الجوال', `<a href="tel:${esc(tel)}" dir="ltr">${esc(row.phone)}</a>`],
-    ['Email', 'البريد', `<a href="mailto:${esc(row.email)}">${esc(row.email)}</a>`],
-    ['Sector', 'القطاع', `${esc(sector[0])} / ${esc(sector[1])}`],
+    ['Phone', 'الجوال', `<a href="tel:${esc(tel)}" dir="ltr" style="color:#546a78">${esc(row.phone)}</a>`],
+    ['Email', 'البريد', `<a href="mailto:${esc(row.email)}" style="color:#546a78">${esc(row.email)}</a>`],
+    ['Sector', 'القطاع', `${esc(sector[1])} · ${esc(sector[0])}`],
     ['Services', 'الخدمات', services],
-    ['Location', 'الموقع', esc(row.project_location)],
-    ['Estimated budget', 'الميزانية التقديرية', budget ? esc(budget) : '—'],
     ...Object.values(answers).map(a => [esc(a.question_en), esc(a.question_ar), esc(a.answer).replace(/\n/g, '<br>')]),
     ['Message', 'الرسالة', esc(row.message).replace(/\n/g, '<br>')],
-    ...(photos ? [['Photos', 'الصور', `${photos} attached · ${photos} مرفقة — <a href="${SITE}/admin.html">open in the admin panel · افتحيها في لوحة الأدمن</a>`]] : []),
+    ...(photos ? [['Photos', 'الصور', `${photos} مرفقة · ${photos} attached`]] : []),
     ['Form language', 'لغة النموذج', row.language === 'ar' ? 'العربية' : 'English']
   ];
-  return `<div style="font-family:Arial,sans-serif;color:#252728;max-width:640px">
-<h2 style="font-weight:500;margin:0 0 6px">New project enquiry · طلب مشروع جديد</h2>
-<p style="color:#77736c;margin:0 0 18px">Submitted on the SLAB website. Reply to this email to answer the client directly.</p>
-<table style="border-collapse:collapse;width:100%;font-size:15px">${rows.map(([en, ar, v]) => `
-<tr><td style="padding:10px 12px;border-bottom:1px solid #dedcd7;width:170px;vertical-align:top;color:#546a78">${en}<br><span style="font-size:13px">${ar}</span></td><td style="padding:10px 12px;border-bottom:1px solid #dedcd7;vertical-align:top">${v}</td></tr>`).join('')}
-</table></div>`;
+  // Same look as the admin sign-in email (supabase/email_signin.html): navy header with logo, white card, info tiles.
+  const tile = (label, value) => `<td width="33%" valign="top" style="background:#f3f5f2;border:1px solid #dfe6df;padding:12px 14px">
+    <div style="font-size:11px;color:#77736c;letter-spacing:1px">${label}</div><div style="font-size:15px;font-weight:bold;color:#252728;margin-top:4px">${value}</div></td>`;
+  const gap = '<td width="10" style="font-size:0">&nbsp;</td>';
+  return `<div style="margin:0;padding:0;background:#eeeae4"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eeeae4;font-family:Arial,Helvetica,sans-serif"><tr><td align="center" style="padding:28px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px">
+  <tr><td align="center" style="background:#2b373e;padding:28px 24px 24px">
+    <img src="${SITE}/assets/email/slab-logo-white.png" width="140" alt="SLAB" style="display:block;border:0;width:140px;height:auto">
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:12px"><tr><td style="width:26px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td>
+      <td style="padding:0 12px;color:#c7d6ca;font-size:13px;letter-spacing:2px">PROJECT ENQUIRY · طلب مشروع</td><td style="width:26px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td></tr></table>
+  </td></tr>
+  <tr><td style="background:#f6f5f2;padding:22px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #dedcd7">
+    <tr><td align="center" style="padding:30px 26px 8px" dir="rtl">
+      <span style="display:inline-block;background:#e9eef1;color:#546a78;font-size:12px;font-weight:bold;letter-spacing:1px;padding:4px 10px">طلب جديد · NEW ENQUIRY</span>
+      <h1 style="margin:16px 0 6px;font-size:26px;line-height:1.3;color:#252728">${esc(row.full_name)}</h1>
+      <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="width:50px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td><td style="padding:0 6px;color:#546a78;font-size:12px">●</td><td style="width:50px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td></tr></table>
+      <p style="margin:14px 0 0;font-size:15px;color:#3d3e3a">${esc(sector[1])} · ${esc(row.project_location)}</p>
+    </td></tr>
+    <tr><td style="padding:18px 22px 4px" dir="rtl"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      ${tile('الجوال · PHONE', `<a href="tel:${esc(tel)}" dir="ltr" style="color:#252728;text-decoration:none">${esc(row.phone)}</a>`)}${gap}
+      ${tile('الميزانية · BUDGET', budget ? esc(budget.split(' / ')[1] || budget) : '—')}${gap}
+      ${tile('المدينة · CITY', esc(row.project_location))}</tr></table></td></tr>
+    <tr><td style="padding:16px 22px 6px" dir="rtl"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">${rows.map(([en, ar, v]) => `
+      <tr><td width="150" valign="top" style="padding:10px 0;border-bottom:1px solid #eeece8;color:#546a78">${ar}<br><span style="font-size:11px;color:#9a968e">${en}</span></td><td valign="top" style="padding:10px 0;border-bottom:1px solid #eeece8;color:#252728;line-height:1.6">${v}</td></tr>`).join('')}</table></td></tr>
+    <tr><td align="center" style="padding:24px 26px 30px">
+      <a href="${SITE}/admin.html" dir="rtl" style="display:inline-block;background:#2b373e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;padding:15px 36px">فتح الطلب في لوحة الأدمن &larr;</a>
+      <p style="margin:14px 0 0;font-size:13px;color:#77736c">اضغطي «رد» للرد على العميل مباشرة · Reply to this email to answer the client.</p>
+    </td></tr>
+  </table>
+  <p style="margin:18px 0 0;text-align:center;font-size:12px;color:#77736c">SLAB Project Management · جزء من مجموعة أوكتري</p></td></tr>
+</table></td></tr></table></div>`;
 }
 
 module.exports = async (req, res) => {
