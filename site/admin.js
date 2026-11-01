@@ -210,7 +210,6 @@ async function renderApp() {
       <span class="admin-who">${AI.user}<span dir="ltr">${esc(session.email)}</span></span>
       <button type="button" class="admin-logout" data-act="logout">${AI.logout}<span>تسجيل الخروج</span></button>
     </header>
-    <nav class="admin-tabs" role="tablist">${TABS.map(([k, l]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${state.tab === k}">${AI[k]}<span>${l}</span></button>`).join('')}</nav>
     <main id="admin-main" class="admin-main"><p class="admin-hint">جارٍ التحميل…</p></main>
   </div></div>`;
   await loadTab();

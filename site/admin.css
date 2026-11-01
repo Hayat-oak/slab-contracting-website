@@ -130,7 +130,7 @@
 .admin-tabs { display: flex; gap: 10px; padding: 22px 0 18px; border-bottom: 1px solid var(--border); overflow-x: auto; }
 .admin-tabs button { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border: 1px solid var(--border); border-radius: 10px; background: #fff; color: var(--ink); font-size: 15px; white-space: nowrap; cursor: pointer; }
 .admin-tabs button[aria-selected="true"] { background: #55625c; border-color: #55625c; color: #fff; }
-.admin-main { padding-top: 26px; }
+.admin-main { padding-top: 30px; }
 .admin-pagehead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
 .admin-pagehead h2 { display: flex; align-items: center; gap: 10px; font-size: 32px; font-weight: 600; margin: 0; }
 .admin-pagehead h2 .ai { width: 30px; height: 30px; }
@@ -164,7 +164,8 @@
 @media (max-width: 900px) {
   .admin-layout { grid-template-columns: 1fr; }
   .admin-side { position: static; height: auto; padding: 18px; background: #2b373e; }
-  .admin-side-nav { display: none; }
+  .admin-side-nav { flex-direction: row; overflow-x: auto; scrollbar-width: none; gap: 4px; }
+  .admin-side-nav button { width: auto; white-space: nowrap; padding: 10px 14px; }
   .admin-who span { display: none; }
   .admin-search input { min-width: 0; width: 100%; }
 }
