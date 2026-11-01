@@ -109,7 +109,7 @@ function emailHtml(row, budget, answers = {}, photos = 0) {
     <tr><td style="padding:16px 22px 6px" dir="rtl"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px">${rows.map(([en, ar, v]) => `
       <tr><td width="150" valign="top" style="padding:10px 0;border-bottom:1px solid #eeece8;color:#546a78">${ar}<br><span style="font-size:11px;color:#9a968e">${en}</span></td><td valign="top" style="padding:10px 0;border-bottom:1px solid #eeece8;color:#252728;line-height:1.6">${v}</td></tr>`).join('')}</table></td></tr>
     <tr><td align="center" style="padding:24px 26px 30px">
-      <a href="${SITE}/admin.html" dir="rtl" style="display:inline-block;background:#2b373e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;padding:15px 36px">فتح الطلب في لوحة الأدمن &larr;</a>
+      <a href="${SITE}/admin.html" dir="rtl" style="display:inline-block;background:#2b373e;color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;padding:15px 36px">فتح الطلب في صفحة الموظفين &larr;</a>
       <p style="margin:14px 0 0;font-size:13px;color:#77736c">اضغطي «رد» للرد على العميل مباشرة · Reply to this email to answer the client.</p>
     </td></tr>
   </table>

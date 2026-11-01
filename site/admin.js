@@ -61,14 +61,14 @@ let LANG = 'ar';
 try { LANG = localStorage.getItem('slab-admin-lang') === 'en' ? 'en' : 'ar'; } catch {}
 const EN = {
   // shell, login
-  'لوحة الأدمن': 'Admin panel', 'دخول الأدمن': 'Admin sign-in', '→ العودة للموقع': '← Back to the website', 'البريد الإلكتروني': 'Email address',
+  'صفحة الموظفين': 'Staff page', 'دخول الموظفين': 'Staff sign-in', '→ العودة للموقع': '← Back to the website', 'البريد الإلكتروني': 'Email address',
   'إرسال رمز الدخول': 'Send sign-in code', 'عندي رمز وصلني بالإيميل': 'I already have a code', 'رمز الدخول': 'Sign-in code', 'دخول': 'Sign in',
   'تغيير البريد / إعادة الإرسال': 'Change email / resend', 'أرسلنا رمز الدخول إلى': 'We sent a sign-in code to',
   '. اكتبيه هنا. إذا ما وصل خلال دقيقة، شيّكي مجلد Junk.': '. Enter it here. If it does not arrive within a minute, check your Junk folder.',
   'يصلك رمز من 6 أرقام على بريدك. الدخول متاح فقط للإيميلات المضافة كمستخدمين.': 'You will receive a 6-digit code by email. Only addresses added as users can sign in.',
   'اكتبي بريدًا صحيحًا.': 'Enter a valid email address.', 'اكتبي بريدك أول.': 'Enter your email first.',
-  'هذا البريد غير مضاف كمستخدم في لوحة الأدمن.': 'This email is not an admin panel user.',
-  'لوحة الأدمن غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.': 'The admin panel is not set up yet: run supabase/admin_setup.sql in Supabase.',
+  'هذا البريد غير مضاف كمستخدم في صفحة الموظفين.': 'This email is not a staff page user.',
+  'صفحة الموظفين غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.': 'The staff page is not set up yet: run supabase/admin_setup.sql in Supabase.',
   'تعذّر إرسال إيميل الدخول. تأكدي من إعداد SMTP في Supabase (اسم المستخدم resend وكلمة المرور = مفتاح Resend).': 'The sign-in email could not be sent. Check the SMTP settings in Supabase (username resend, password = Resend API key).',
   'طلبت رموزًا كثيرة، انتظري دقيقة ثم حاولي مرة ثانية.': 'Too many codes requested. Wait a minute and try again.',
   'الرمز غير صحيح أو منتهي.': 'The code is wrong or has expired.', 'رابط الدخول غير صالح أو منتهي. اطلبي رمزًا جديدًا.': 'The sign-in link is invalid or expired. Request a new code.',
@@ -121,7 +121,7 @@ const EN = {
   'لاحقة (مثل +)': 'Suffix (e.g. +)', 'بيانات التواصل': 'Contact details', 'رقم الهاتف (للاتصال)': 'Phone (for calls)', 'رقم الهاتف (كما يظهر)': 'Phone (as displayed)',
   'بريد استلام الطلبات من النموذج يبقى info@slab.sa (إعداد على السيرفر).': 'Form enquiries are still delivered to info@slab.sa (a server setting).', 'تم حفظ الإعدادات': 'Settings saved',
   // users
-  'كل بريد هنا يقدر يدخل لوحة الأدمن برمز يصله على الإيميل.': 'Every address here can sign in to the admin panel with an emailed code.',
+  'كل بريد هنا يقدر يدخل صفحة الموظفين برمز يصله على الإيميل.': 'Every address here can sign in to the staff page with an emailed code.',
   'أنتِ': 'You', 'إزالة': 'Remove', 'إضافة مستخدم': 'Add user', 'إضافة': 'Add', 'تمت إضافة المستخدم': 'User added', 'تمت الإزالة': 'Removed'
 };
 // Strings built from a number, a name or a message.
@@ -134,7 +134,7 @@ const EN_PATTERNS = [
   [/^(.+?) · (.+)$/, (m, a, b) => `${T(a)} · ${b}`],
   [/^(.+?)(: .*)$/, (m, a, b) => (EN[a] ? EN[a] + b : m)],
   [/^تعذّر التحميل: (.*)$/, (m, a) => `Could not load: ${a}`], [/^تعذّر عرض الصور: (.*)$/, (m, a) => `Could not show photos: ${a}`],
-  [/^إزالة (.+) من لوحة الأدمن؟$/, (m, a) => `Remove ${a} from the admin panel?`], [/^الملف ليس صورة: (.+)$/, (m, a) => `Not an image: ${a}`]
+  [/^إزالة (.+) من صفحة الموظفين؟$/, (m, a) => `Remove ${a} from the staff page?`], [/^الملف ليس صورة: (.+)$/, (m, a) => `Not an image: ${a}`]
 ];
 function T(s) {
   if (LANG !== 'en' || !s) return s;
@@ -160,7 +160,7 @@ const ask = msg => confirm(T(msg));
 function applyLang() {
   document.documentElement.lang = LANG;
   document.documentElement.dir = LANG === 'en' ? 'ltr' : 'rtl';
-  document.title = LANG === 'en' ? 'Admin panel | SLAB' : 'لوحة الأدمن | SLAB';
+  document.title = LANG === 'en' ? 'Staff page | SLAB' : 'صفحة الموظفين | SLAB';
 }
 const langButton = () => `<button type="button" class="admin-lang" data-act="lang" data-raw>${LANG === 'en' ? 'العربية' : 'English'}</button>`;
 applyLang();
@@ -240,7 +240,7 @@ async function run(task, done) {
 function renderLogin(step = 'email', email = '') {
   $root.innerHTML = `<main class="admin-login">
   <div class="admin-login-top">${langButton()}<a class="admin-back" href="./">→ العودة للموقع</a></div>
-  <h1>دخول الأدمن</h1>
+  <h1>دخول الموظفين</h1>
   ${step === 'email' ? `<form id="login-email" novalidate>
     <label for="login-mail">البريد الإلكتروني</label>
     <input id="login-mail" type="email" dir="ltr" autocomplete="email" required value="${esc(email)}">
@@ -268,8 +268,8 @@ function renderLogin(step = 'email', email = '') {
         const mail = f.querySelector('input').value.trim().toLowerCase();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) throw new Error('اكتبي بريدًا صحيحًا.');
         const allowed = await fetch(`${SUPABASE_URL}/rest/v1/rpc/is_admin_email`, {method: 'POST', headers: {apikey: SUPABASE_KEY, 'Content-Type': 'application/json'}, body: JSON.stringify({p_email: mail})}).then(r => r.json()).catch(() => false);
-        if (allowed && allowed.code === 'PGRST202') throw new Error('لوحة الأدمن غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.');
-        if (allowed !== true) throw new Error('هذا البريد غير مضاف كمستخدم في لوحة الأدمن.');
+        if (allowed && allowed.code === 'PGRST202') throw new Error('صفحة الموظفين غير مفعّلة بعد: شغّلي ملف supabase/admin_setup.sql في Supabase.');
+        if (allowed !== true) throw new Error('هذا البريد غير مضاف كمستخدم في صفحة الموظفين.');
         // The email carries a 6-digit code (custom template) or, with Supabase's default template, a sign-in link back to this page.
         await auth(`otp?redirect_to=${encodeURIComponent(location.origin + location.pathname)}`, {email: mail, create_user: true});
         renderLogin('code', mail);
@@ -313,7 +313,7 @@ const TABS = [['enquiries', 'الطلبات'], ['projects', 'المشاريع و
 async function renderApp() {
   $root.innerHTML = `<div class="admin-layout">
   <aside class="admin-side">
-    <a class="admin-logo" href="./">${LOGO_MARK}<span><b>SLAB</b><small>لوحة الأدمن</small></span></a>
+    <a class="admin-logo" href="./">${LOGO_MARK}<span><b>SLAB</b><small>صفحة الموظفين</small></span></a>
     <nav class="admin-side-nav">${TABS.map(([k, l]) => `<button type="button" data-tab="${k}" aria-current="${state.tab === k}">${AI[k]}<span>${l}</span></button>`).join('')}</nav>
   </aside>
   <div class="admin-body-col">
@@ -547,7 +547,7 @@ function settingsView() {
 /* ---------- Users ---------- */
 function usersView() {
   return `<section><div class="admin-head"><h2>المستخدمين</h2></div>
-  <p class="admin-hint">كل بريد هنا يقدر يدخل لوحة الأدمن برمز يصله على الإيميل.</p>
+  <p class="admin-hint">كل بريد هنا يقدر يدخل صفحة الموظفين برمز يصله على الإيميل.</p>
   <div class="admin-card"><ul class="admin-list">${(state.data.users || []).map(u => `<li><span dir="ltr">${esc(u.email)}</span>
     <span class="admin-count">${u.added_by && u.added_by !== 'setup' ? 'أضافه ' + esc(u.added_by) : ''}</span>
     ${u.email === session.email ? '<span class="admin-tag">أنتِ</span>' : `<button type="button" class="admin-danger" data-act="user-delete" data-email="${esc(u.email)}">إزالة</button>`}</li>`).join('')}</ul></div>
@@ -625,7 +625,7 @@ $root.addEventListener('click', e => {
       redraw();
     }); break;
     case 'q-delete': if (ask('حذف السؤال؟ الإجابات السابقة تبقى محفوظة في الطلبات.')) run(async () => { await rest(`form_questions?id=eq.${id}`, {method: 'DELETE'}); d.questions = d.questions.filter(x => String(x.id) !== id); redraw(); }, 'تم حذف السؤال'); break;
-    case 'user-delete': if (ask(`إزالة ${t.dataset.email} من لوحة الأدمن؟`)) run(async () => { await rest(`site_admins?email=eq.${encodeURIComponent(t.dataset.email)}`, {method: 'DELETE'}); d.users = d.users.filter(u => u.email !== t.dataset.email); redraw(); }, 'تمت الإزالة'); break;
+    case 'user-delete': if (ask(`إزالة ${t.dataset.email} من صفحة الموظفين؟`)) run(async () => { await rest(`site_admins?email=eq.${encodeURIComponent(t.dataset.email)}`, {method: 'DELETE'}); d.users = d.users.filter(u => u.email !== t.dataset.email); redraw(); }, 'تمت الإزالة'); break;
   }
 });
 
