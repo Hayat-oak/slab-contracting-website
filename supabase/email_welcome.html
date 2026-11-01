@@ -1,7 +1,7 @@
 <!-- SLAB admin email (Supabase Auth → Email Templates). This file is "Confirm signup" (first sign-in); email_signin.html is "Magic Link" (every later sign-in). Same layout, only the heading and line differ.
      Design: client mock-up (2026-11-01). Built with tables + inline styles, no remote images (the logo and icon are drawn with
      table cells), so they show even when Outlook blocks downloaded pictures. New-sender emails can take a few minutes to arrive.
-     The button opens the admin page (same site), not a sign-in link. Contact details: info@slab.sa / 920066197. -->
+     No links: Microsoft 365 held/delayed versions with a button while it scanned the link. Contact details: info@slab.sa / 920066197. -->
 <div style="margin:0;padding:0;background:#e9e6e0">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e9e6e0;font-family:Tahoma,Arial,Helvetica,sans-serif">
 <tr><td align="center" style="padding:24px 10px">
@@ -59,11 +59,9 @@
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td dir="ltr" style="background:#e3e9df;border:2px solid #2f4a3d;border-radius:10px;padding:14px 46px;font-size:42px;letter-spacing:12px;font-weight:bold;color:#1d2a24;font-family:'Courier New',monospace">{{ .Token }}</td></tr></table>
   </td></tr>
 
-  <!-- Button: opens the admin page -->
+  <!-- Instruction bar in place of a button: no links at all, so Microsoft 365 does not hold the email to scan them -->
   <tr><td align="center" style="padding:26px 28px 6px">
-    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td style="background:#2b373e;border-radius:10px">
-      <a href="https://slab-contracting-website.vercel.app/admin.html" dir="rtl" style="display:inline-block;padding:16px 48px;color:#ffffff;font-size:18px;font-weight:bold;text-decoration:none">تسجيل الدخول إلى لوحة SLAB &nbsp;&larr;</a>
-    </td></tr></table>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td dir="rtl" style="background:#2b373e;border-radius:10px;padding:16px 40px;color:#ffffff;font-size:17px;font-weight:bold">اكتبي الرمز في صفحة دخول لوحة SLAB</td></tr></table>
     <p dir="rtl" style="margin:18px 0 0;font-size:14px;line-height:1.7;color:#55524c">في حال واجهت أي مشكلة في الدخول، يرجى التواصل مع فريق الدعم.</p>
     <p dir="ltr" style="margin:6px 0 0;font-size:12px;color:#8a867f">Your SLAB admin sign-in code: <b>{{ .Token }}</b> (15 minutes, single use).</p>
   </td></tr>
