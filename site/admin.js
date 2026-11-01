@@ -9,10 +9,25 @@ const PUBLIC_BASE = `${SUPABASE_URL}/storage/v1/object/public/site-assets/`;
 const HD = (slug, i) => `${PUBLIC_BASE}projects/hd/${slug}_${i}.webp`;
 const SESSION_KEY = 'slab-admin-session';
 
-// Built-in projects (site/app.js). Photos added here are shown after each project's own photos.
-const BUILT_IN = [['soulhittin', 'SOUL Hittin'], ['almughrizat', 'Almughrizat Building'], ['masharef', 'Masharef Building'], ['mkin30', 'Mkin 30'],
-  ['nirvana12', 'Nirvana 12'], ['ajlan11', 'Ajlan Riviera 12'], ['almajidiya116', 'Almajidiya 116'], ['almajidiya111', 'Al Majidiya Residence 111'],
-  ['jawhara8', 'Jawhara Al Narjis 8'], ['ajlan19', 'Ajlan Riviera 21'], ['almajidiya70', 'Almajidiya 70'], ['almajidiya130', 'Almajidiya 130'], ['ajlan37', 'Ajlan Riviera 37']];
+// Built-in projects (copy of site/app.js data). A cms_projects row with the same id overrides name, client,
+// units and sizes (or hides the project); photos added here are shown after the project's own photos.
+const AH = ['Aliyah Homes', 'عالية هوم'];
+const BUILT_IN = [
+  ['soulhittin', 'SOUL Hittin', 'سول حطين', ['OHG', 'OHG'], 9, ['132.26'], 6],
+  ['almughrizat', 'Almughrizat Building', 'مبنى المغرزات', AH, 25, ['50', '107'], 3],
+  ['masharef', 'Masharef Building', 'مبنى مشارف', AH, 14, ['117', '121', '160'], 3],
+  ['mkin30', 'Mkin 30', 'مكين 30', AH, 1, ['245'], 2],
+  ['nirvana12', 'Nirvana 12', 'نيرفانا 12', AH, 2, ['50', '145'], 3],
+  ['ajlan11', 'Ajlan Riviera 12', 'عجلان ريفيرا 12', AH, 1, ['92', '169'], 3],
+  ['almajidiya116', 'Almajidiya 116', 'المجيدية 116', AH, 4, ['77', '101', '128', '130'], 2],
+  ['almajidiya111', 'Al Majidiya Residence 111', 'المجيدية ريزيدنس 111', AH, 1, ['120'], 4],
+  ['jawhara8', 'Jawhara Al Narjis 8', 'جوهرة النرجس 8', AH, 1, ['50', '145'], 4],
+  ['ajlan19', 'Ajlan Riviera 21', 'عجلان ريفيرا 21', AH, 1, ['137'], 2],
+  ['almajidiya70', 'Almajidiya 70', 'المجيدية 70', AH, 1, ['90'], 3],
+  ['almajidiya130', 'Almajidiya 130', 'المجيدية 130', AH, 1, ['128'], 4],
+  ['ajlan37', 'Ajlan Riviera 37', 'عجلان ريفيرا 37', AH, 2, ['77', '101', '128', '130'], 2]
+].map(([id, name, name_ar, [client, client_ar], units, sizes, images]) => ({id, name, name_ar, client, client_ar, units, sizes, images, builtIn: true, published: true}));
+const BUILT_IN_IDS = BUILT_IN.map(p => p.id);
 
 // Page-section photos that can be replaced. Slot names match slotSrc() calls in site/app.js.
 const SLOTS = [
@@ -231,36 +246,65 @@ function exportExcel() {
 }
 
 /* ---------- Projects & photos ---------- */
+// Built-in projects merged with their saved edits, followed by projects added in the panel.
+function allProjects() {
+  const cms = state.data.cms || [];
+  const merged = BUILT_IN.map(b => { const o = cms.find(c => c.id === b.id); return o ? {...b, ...o, builtIn: true, images: b.images, override: true} : b; });
+  return [...merged, ...cms.filter(c => !BUILT_IN_IDS.includes(c.id))];
+}
 function projectsView() {
   const d = state.data;
-  const all = [...BUILT_IN.map(([id, name]) => ({id, name, builtIn: true})), ...(d.cms || [])];
+  const all = allProjects();
   const sel = state.project && all.find(p => p.id === state.project);
-  const photos = sel ? (d.photos || []).filter(p => p.project_id === sel.id) : [];
+  const added = id => (d.photos || []).filter(x => x.project_id === id);
+  const photoCount = p => (p.builtIn ? p.images : 0) + added(p.id).length;
   return `<section><div class="admin-head"><h2>المشاريع والصور</h2></div>
   <div class="admin-grid2">
-  <div class="admin-card"><h3>المشاريع</h3><ul class="admin-list">${all.map(p => `<li class="${state.project === p.id ? 'is-sel' : ''}">
-    <button type="button" class="admin-link-btn" data-act="pick-project" data-id="${esc(p.id)}">${esc(p.name)}${p.name_ar ? ` — ${esc(p.name_ar)}` : ''}</button>
-    <span class="admin-tag">${p.builtIn ? 'أساسي' : p.published ? 'منشور' : 'مخفي'}</span>
-    <span class="admin-count">${(d.photos || []).filter(x => x.project_id === p.id).length} صور مضافة</span></li>`).join('')}</ul></div>
-  <div class="admin-card"><h3>إضافة مشروع جديد</h3>
-  <form id="new-project" class="admin-form">
-    <label>الاسم (English)<input name="name" required maxlength="80"></label><label>الاسم (عربي)<input name="name_ar" required maxlength="80"></label>
-    <label>العميل (English)<input name="client" maxlength="80"></label><label>العميل (عربي)<input name="client_ar" maxlength="80"></label>
-    <label>المدينة (English)<input name="city" value="Riyadh" maxlength="60"></label><label>المدينة (عربي)<input name="city_ar" value="الرياض" maxlength="60"></label>
-    <label>النوع<select name="type">${Object.entries(SECTORS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
-    <label>عدد الوحدات<input name="units" type="number" min="0"></label>
-    <label class="span2">المساحات م² (افصلي بفاصلة)<input name="sizes" placeholder="120, 145"></label>
+  <div class="admin-card"><div class="admin-head"><h3>المشاريع (${all.length})</h3><button type="button" class="admin-btn" data-act="new-project">+ مشروع جديد</button></div>
+  <ul class="admin-list">${all.map(p => `<li class="${state.project === p.id ? 'is-sel' : ''}">
+    <button type="button" class="admin-project-pick" data-act="pick-project" data-id="${esc(p.id)}"><b>${esc(p.name_ar)}</b> <span dir="ltr">${esc(p.name)}</span></button>
+    <span class="admin-count">${photoCount(p)} صور</span>
+    <span class="admin-tag">${p.published === false ? 'مخفي' : p.builtIn ? 'أساسي' : 'مضاف'}</span></li>`).join('')}</ul></div>
+  <div class="admin-card" id="project-panel">${sel ? projectEditor(sel, added(sel.id)) : newProjectForm()}</div></div></section>`;
+}
+function projectFields(p = {}) {
+  return `<label>الاسم (عربي)<input name="name_ar" required maxlength="80" value="${esc(p.name_ar)}"></label><label>الاسم (English)<input name="name" required maxlength="80" value="${esc(p.name)}"></label>
+    <label>العميل (عربي)<input name="client_ar" maxlength="80" value="${esc(p.client_ar)}"></label><label>العميل (English)<input name="client" maxlength="80" value="${esc(p.client)}"></label>
+    ${p.builtIn ? '' : `<label>المدينة (عربي)<input name="city_ar" maxlength="60" value="${esc(p.city_ar || 'الرياض')}"></label><label>المدينة (English)<input name="city" maxlength="60" value="${esc(p.city || 'Riyadh')}"></label>
+    <label>النوع<select name="type">${Object.entries(SECTORS).map(([k, v]) => `<option value="${k}" ${p.type === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>`}
+    <label>عدد الوحدات<input name="units" type="number" min="0" value="${esc(p.units ?? '')}"></label>
+    <label class="span2">المساحات م² (افصلي بفاصلة)<input name="sizes" placeholder="120, 145" value="${esc((p.sizes || []).join(', '))}"></label>`;
+}
+function newProjectForm() {
+  return `<h3>إضافة مشروع جديد</h3><form id="new-project" class="admin-form">${projectFields()}
     <label class="span2">الصور<input name="files" type="file" accept="image/*" multiple required></label>
     <button class="admin-btn span2" type="submit">إضافة المشروع</button>
-    <p class="admin-hint span2">المشروع يظهر في الموقع بعد رفع صورة واحدة على الأقل. ارفعي صور الغرف الداخلية بجودة عالية.</p>
-  </form></div></div>
-  ${sel ? `<div class="admin-card"><div class="admin-head"><h3>صور: ${esc(sel.name)}</h3>
-    ${sel.builtIn ? '' : `<div class="admin-tools"><button type="button" class="admin-link-btn" data-act="toggle-publish" data-id="${esc(sel.id)}">${sel.published ? 'إخفاء من الموقع' : 'نشر في الموقع'}</button>
-    <button type="button" class="admin-danger" data-act="delete-project" data-id="${esc(sel.id)}">حذف المشروع</button></div>`}</div>
-    ${sel.builtIn ? '<p class="admin-hint">صور المشروع الأساسية ثابتة. الصور اللي تضيفينها هنا تظهر بعدها في معرض المشروع.</p>' : ''}
-    <div class="admin-thumbs">${photos.map(p => `<figure><img src="${esc(p.url)}" alt=""><button type="button" class="admin-danger" data-act="delete-photo" data-id="${p.id}">حذف</button></figure>`).join('') || '<p class="admin-hint">لا توجد صور مضافة.</p>'}</div>
-    <label class="admin-upload">إضافة صور<input type="file" accept="image/*" multiple data-act="add-photos" data-id="${esc(sel.id)}"></label></div>` : '<p class="admin-hint">اختاري مشروعًا من القائمة لإدارة صوره.</p>'}
-  </section>`;
+    <p class="admin-hint span2">ارفعي صور الغرف الداخلية بجودة عالية. أول صورة تكون صورة الغلاف.</p></form>`;
+}
+function projectEditor(p, added) {
+  const own = p.builtIn ? Array.from({length: p.images}, (_, i) => `${PUBLIC_BASE}projects/${p.id}_${i + 1}.webp`) : [];
+  return `<div class="admin-head"><h3>${esc(p.name_ar)} <small dir="ltr">${esc(p.name)}</small></h3>
+    <div class="admin-tools"><a class="admin-link-btn" href="./#/projects/${esc(p.id)}" target="_blank" rel="noopener">عرض في الموقع</a>
+    <button type="button" class="admin-link-btn" data-act="toggle-publish" data-id="${esc(p.id)}">${p.published === false ? 'إظهار في الموقع' : 'إخفاء من الموقع'}</button>
+    ${p.builtIn ? '' : `<button type="button" class="admin-danger" data-act="delete-project" data-id="${esc(p.id)}">حذف المشروع</button>`}</div></div>
+  <form id="edit-project" class="admin-form" data-id="${esc(p.id)}">${projectFields(p)}
+    <button class="admin-btn span2" type="submit">حفظ البيانات</button></form>
+  <h3 class="admin-sub">الصور (${own.length + added.length})</h3>
+  <div class="admin-thumbs">${own.map(u => `<figure><img src="${u}" alt="" loading="lazy"><span class="admin-tag">أصلية</span></figure>`).join('')}
+    ${added.map(ph => `<figure><img src="${esc(ph.url)}" alt="" loading="lazy"><button type="button" class="admin-danger" data-act="delete-photo" data-id="${ph.id}">حذف</button></figure>`).join('')}</div>
+  <label class="admin-upload">+ إضافة صور<input type="file" accept="image/*" multiple data-act="add-photos" data-id="${esc(p.id)}"></label>
+  ${p.builtIn ? '<p class="admin-hint">الصور الأصلية من ملف الشركة ثابتة. الصور اللي تضيفينها تظهر بعدها في معرض المشروع.</p>' : ''}`;
+}
+// Fields stored in cms_projects. For built-in projects the row only overrides text, units, sizes and visibility.
+const projectRow = p => ({name: p.name, name_ar: p.name_ar, client: p.client || '', client_ar: p.client_ar || '', units: p.units ?? null, sizes: p.sizes || [],
+  published: p.published !== false, ...(p.builtIn ? {} : {city: p.city, city_ar: p.city_ar, type: p.type})});
+const formProject = (v, builtIn) => ({name: v('name'), name_ar: v('name_ar'), client: v('client'), client_ar: v('client_ar'),
+  units: v('units') === '' ? null : Number(v('units')), sizes: v('sizes').split(/[,،]/).map(s => s.trim()).filter(Boolean),
+  ...(builtIn ? {} : {city: v('city') || 'Riyadh', city_ar: v('city_ar') || 'الرياض', type: v('type')})});
+async function saveProject(id, row) {
+  const [saved] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates,return=representation'}, body: {id, ...row}});
+  state.data.cms = state.data.cms.filter(c => c.id !== id).concat(saved);
+  redraw();
 }
 const slugify = s => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'project';
 
@@ -342,8 +386,14 @@ $root.addEventListener('click', e => {
     case 'delete-enq':
       if (confirm('حذف هذا الطلب نهائيًا؟')) run(async () => { await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); d.enquiries = d.enquiries.filter(x => x.id !== id); redraw(); }, 'تم حذف الطلب');
       break;
-    case 'pick-project': state.project = id; redraw(); break;
-    case 'toggle-publish': run(async () => { const p = d.cms.find(x => x.id === id); await rest(`cms_projects?id=eq.${encodeURIComponent(id)}`, {method: 'PATCH', body: {published: !p.published}}); p.published = !p.published; redraw(); }, 'تم الحفظ'); break;
+    case 'pick-project': case 'new-project':
+      state.project = t.dataset.act === 'pick-project' ? id : null; redraw();
+      document.getElementById('project-panel').scrollIntoView({behavior: 'smooth', block: 'start'});
+      break;
+    case 'toggle-publish': run(async () => {
+      const p = allProjects().find(x => x.id === id);
+      await saveProject(id, {...projectRow(p), published: p.published === false});
+    }, 'تم الحفظ'); break;
     case 'delete-project':
       if (confirm('حذف المشروع وكل صوره؟')) run(async () => {
         const urls = d.photos.filter(x => x.project_id === id).map(x => x.url);
@@ -405,7 +455,7 @@ $root.addEventListener('change', e => {
 
 $root.addEventListener('submit', e => {
   const f = e.target;
-  if (!['new-project', 'new-question', 'settings', 'new-user'].includes(f.id)) return;
+  if (!['new-project', 'edit-project', 'new-question', 'settings', 'new-user'].includes(f.id)) return;
   e.preventDefault();
   if (!f.reportValidity()) return;
   const v = name => (f.elements[name] ? f.elements[name].value.trim() : '');
@@ -415,7 +465,7 @@ $root.addEventListener('submit', e => {
   const done = () => { btn.disabled = false; };
   if (f.id === 'new-project') run(async () => {
     let id = slugify(v('name'));
-    while ([...BUILT_IN.map(b => b[0]), ...d.cms.map(p => p.id)].includes(id)) id = id.slice(0, 36) + '-' + Math.floor(Math.random() * 90 + 10);
+    while ([...BUILT_IN_IDS, ...d.cms.map(p => p.id)].includes(id)) id = id.slice(0, 36) + '-' + Math.floor(Math.random() * 90 + 10);
     const sizes = v('sizes').split(/[,،]/).map(s => s.trim()).filter(Boolean);
     const [p] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {id, name: v('name'), name_ar: v('name_ar'), client: v('client'), client_ar: v('client_ar'),
       city: v('city') || 'Riyadh', city_ar: v('city_ar') || 'الرياض', type: v('type'), units: v('units') === '' ? null : Number(v('units')), sizes, position: d.cms.length}});
@@ -429,6 +479,10 @@ $root.addEventListener('submit', e => {
     }
     state.project = id; redraw();
   }, 'تمت إضافة المشروع').finally(done);
+  if (f.id === 'edit-project') run(async () => {
+    const p = allProjects().find(x => x.id === f.dataset.id);
+    await saveProject(p.id, {...projectRow(p), ...formProject(v, p.builtIn)});
+  }, 'تم حفظ البيانات').finally(done);
   if (f.id === 'new-question') run(async () => {
     const kind = v('kind');
     const options = kind === 'select' ? v('options').split('\n').map(l => l.split('|').map(s => s.trim())).filter(([en]) => en).map(([en, ar]) => ({en, ar: ar || en})) : [];

@@ -1408,7 +1408,7 @@ async function loadCms() {
   const [settings, questions, extra, photos, images] = await Promise.all([
     get('site_settings?select=key,value'),
     get('form_questions?select=id,label_en,label_ar,kind,options,required&active=eq.true&order=position,id'),
-    get('cms_projects?select=*&published=eq.true&order=position,created_at'),
+    get('cms_projects?select=*&order=position,created_at'),
     get('project_photos?select=project_id,url&order=position,id'),
     get('image_overrides?select=slot,url')
   ]);
@@ -1422,7 +1422,14 @@ async function loadCms() {
   CMS.questions = Array.isArray(questions) ? questions : [];
   images.forEach(i => { CMS.images[i.slot] = i.url; });
   extra.forEach(p => {
-    if (projects.some(x => x.id === p.id)) return;
+    const own = projects.find(x => x.id === p.id);
+    if (own) {
+      // Edits to a built-in project: text, units and sizes, or hide it.
+      if (p.published === false) { projects.splice(projects.indexOf(own), 1); return; }
+      Object.assign(own, {name: p.name, ar: p.name_ar, client: p.client, clientAr: p.client_ar, units: p.units ?? own.units, sizes: p.sizes && p.sizes.length ? p.sizes : own.sizes});
+      return;
+    }
+    if (p.published === false) return;
     projects.push({id: p.id, name: p.name, ar: p.name_ar, client: p.client, clientAr: p.client_ar, city: p.city, cityAr: p.city_ar, type: p.type,
       units: p.units, sizes: p.sizes || [], images: 0, category: 'other', cms: true});
   });

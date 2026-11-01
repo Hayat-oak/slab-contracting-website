@@ -90,3 +90,11 @@
   .admin-detail dl { grid-template-columns: 1fr; }
   .admin-who { display: none; }
 }
+.admin-project-pick { background: none; border: 0; padding: 2px 0; cursor: pointer; text-align: start; color: var(--ink); font-size: 15px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
+.admin-project-pick span { color: var(--subtle); font-size: 13px; }
+.admin-project-pick:hover b { text-decoration: underline; text-underline-offset: 3px; }
+.admin-list li .admin-count { margin-inline-start: auto; }
+.admin-list li.is-sel { outline: 1px solid var(--accent); outline-offset: -1px; }
+.admin-sub { margin: 26px 0 12px; font-size: 17px; font-weight: 500; }
+.admin-head small { font-size: 14px; color: var(--subtle); font-weight: 400; }
+#project-panel { scroll-margin-top: 20px; }
