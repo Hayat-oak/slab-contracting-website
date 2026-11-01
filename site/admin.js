@@ -18,14 +18,14 @@ const BUILT_IN = [
   ['masharef', 'Masharef Building', 'مبنى مشارف', AH, 14, ['117', '121', '160'], 3],
   ['mkin30', 'Mkin 30', 'مكين 30', AH, 1, ['245'], 2],
   ['nirvana12', 'Nirvana 12', 'نيرفانا 12', AH, 2, ['50', '145'], 3],
-  ['ajlan11', 'Ajlan Riviera 12', 'العجلان ريفيرا 12', AH, 1, ['92', '169'], 3],
+  ['ajlan11', 'Al Ajlan Riviera 12', 'العجلان ريفيرا 12', AH, 1, ['92', '169'], 3],
   ['almajidiya116', 'Almajidiya 116', 'المجيدية 116', AH, 4, ['77', '101', '128', '130'], 2],
   ['almajidiya111', 'Al Majidiya Residence 111', 'المجيدية ريزيدنس 111', AH, 1, ['120'], 4],
   ['jawhara8', 'Jawhara Al Narjis 8', 'جوهرة النرجس 8', AH, 1, ['50', '145'], 4],
-  ['ajlan19', 'Ajlan Riviera 21', 'العجلان ريفيرا 21', AH, 1, ['137'], 2],
+  ['ajlan19', 'Al Ajlan Riviera 21', 'العجلان ريفيرا 21', AH, 1, ['137'], 2],
   ['almajidiya70', 'Almajidiya 70', 'المجيدية 70', AH, 1, ['90'], 3],
   ['almajidiya130', 'Almajidiya 130', 'المجيدية 130', AH, 1, ['128'], 4],
-  ['ajlan37', 'Ajlan Riviera 37', 'العجلان ريفيرا 37', AH, 2, ['77', '101', '128', '130'], 2]
+  ['ajlan37', 'Al Ajlan Riviera 37', 'العجلان ريفيرا 37', AH, 2, ['77', '101', '128', '130'], 2]
 ].map(([id, name, name_ar, [client, client_ar], units, sizes, images]) => ({id, name, name_ar, client, client_ar, units, sizes, images, builtIn: true, published: true}));
 const BUILT_IN_IDS = BUILT_IN.map(p => p.id);
 
@@ -97,7 +97,7 @@ const EN = {
   'حذف المشروع وكل صوره؟': 'Delete the project and all its photos?', 'حذف الصورة؟': 'Delete this photo?', 'تم حذف المشروع': 'Project deleted', 'تم حذف الصورة': 'Photo deleted',
   'تم رفع الصور': 'Photos uploaded', 'جارٍ رفع الصور…': 'Uploading photos…', 'تمت إضافة المشروع': 'Project added', 'تم حفظ البيانات': 'Details saved', 'تم الحفظ': 'Saved',
   'سول حطين': 'SOUL Hittin', 'مبنى المغرزات': 'Almughrizat Building', 'مبنى مشارف': 'Masharef Building', 'مكين 30': 'Mkin 30', 'نيرفانا 12': 'Nirvana 12',
-  'العجلان ريفيرا 12': 'Ajlan Riviera 12', 'العجلان ريفيرا 21': 'Ajlan Riviera 21', 'العجلان ريفيرا 37': 'Ajlan Riviera 37', 'المجيدية 116': 'Almajidiya 116',
+  'العجلان ريفيرا 12': 'Al Ajlan Riviera 12', 'العجلان ريفيرا 21': 'Al Ajlan Riviera 21', 'العجلان ريفيرا 37': 'Al Ajlan Riviera 37', 'المجيدية 116': 'Almajidiya 116',
   'المجيدية ريزيدنس 111': 'Al Majidiya Residence 111', 'جوهرة النرجس 8': 'Jawhara Al Narjis 8', 'المجيدية 70': 'Almajidiya 70', 'المجيدية 130': 'Almajidiya 130',
   // section photos
   'استبدلي أي صورة في الموقع. «استرجاع» يرجّع الصورة الأصلية.': 'Replace any photo on the site. "Restore" brings back the original.',
