@@ -166,7 +166,7 @@ function renderLogin(step = 'email', email = '') {
         renderApp();
       }
     } catch (err) {
-      msg.textContent = /rate limit|seconds/i.test(err.message) ? 'طلبت رموزًا كثيرة، انتظري دقيقة ثم حاولي مرة ثانية.' : /expired|invalid/i.test(err.message) ? 'الرمز غير صحيح أو منتهي.' : err.message;
+      msg.textContent = /error sending/i.test(err.message) ? 'تعذّر إرسال إيميل الدخول. تأكدي من إعداد SMTP في Supabase (اسم المستخدم resend وكلمة المرور = مفتاح Resend).' : /rate limit|seconds/i.test(err.message) ? 'طلبت رموزًا كثيرة، انتظري دقيقة ثم حاولي مرة ثانية.' : /expired|invalid/i.test(err.message) ? 'الرمز غير صحيح أو منتهي.' : err.message;
       btn.disabled = false;
     }
   });
