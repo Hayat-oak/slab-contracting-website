@@ -135,7 +135,7 @@ function renderLogin(step = 'email', email = '') {
     <button class="admin-btn" type="submit">إرسال رمز الدخول</button>
     <p class="admin-hint">يصلك رمز من 6 أرقام على بريدك. الدخول متاح فقط للإيميلات المضافة كمستخدمين.</p>
   </form>` : `<form id="login-code" novalidate>
-    <p class="admin-hint">أرسلنا إيميل الدخول إلى <b dir="ltr">${esc(email)}</b>. اكتبي الرمز اللي فيه، أو اضغطي رابط الدخول في الإيميل من نفس هذا المتصفح.</p>
+    <p class="admin-hint">أرسلنا رمز الدخول إلى <b dir="ltr">${esc(email)}</b>. اكتبيه هنا. إذا ما وصل خلال دقيقة، شيّكي مجلد Junk.</p>
     <label for="login-otp">رمز الدخول</label>
     <input id="login-otp" inputmode="numeric" autocomplete="one-time-code" dir="ltr" maxlength="10" required>
     <button class="admin-btn" type="submit">دخول</button>

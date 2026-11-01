@@ -1,28 +1,35 @@
 <!-- SLAB admin sign-in email (Supabase Auth → Email Templates → "Magic Link" and "Confirm signup").
-     Tables + inline styles for email clients. Needs custom SMTP on the free plan before Supabase accepts it. -->
+     Code only: no button, no links, no remote images. A sign-in email with a big button to another domain and
+     remote images was quarantined by Microsoft 365 as suspected phishing (2026-11-01), so the logo is drawn with
+     table cells and the visitor types the code on the admin page. Tables + inline styles for email clients. -->
 <div style="margin:0;padding:0;background:#eeeae4">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eeeae4;font-family:Arial,Helvetica,sans-serif">
 <tr><td align="center" style="padding:28px 12px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px">
-  <tr><td align="center" style="background:#2b373e;padding:30px 24px 26px">
-    <img src="https://slab-contracting-website.vercel.app/assets/email/slab-logo-white.png" width="150" alt="SLAB" style="display:block;border:0;width:150px;height:auto">
+  <tr><td align="center" style="background:#2b373e;padding:28px 24px 24px">
+    <table role="presentation" cellpadding="0" cellspacing="0" dir="ltr"><tr>
+      <td valign="middle" style="padding-right:12px">
+        <div style="width:54px;height:14px;background:#adbfca;margin-bottom:6px;font-size:0;line-height:0">&nbsp;</div>
+        <div style="width:54px;height:14px;background:#c7d6ca;font-size:0;line-height:0">&nbsp;</div></td>
+      <td valign="middle" style="color:#ffffff;font-size:34px;font-weight:bold;letter-spacing:3px;line-height:1">SLAB</td>
+    </tr></table>
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr>
       <td style="width:26px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td>
-      <td style="padding:0 12px;color:#c7d6ca;font-size:13px;letter-spacing:2px">PROJECT MANAGEMENT · لوحة الأدمن</td>
+      <td style="padding:0 12px;color:#c7d6ca;font-size:13px;letter-spacing:2px">PROJECT MANAGEMENT</td>
       <td style="width:26px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td></tr></table>
   </td></tr>
   <tr><td style="background:#f6f5f2;padding:22px">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #dedcd7">
       <tr><td align="center" style="padding:34px 28px 10px" dir="rtl">
-        <span style="display:inline-block;background:#e9eef1;color:#546a78;font-size:12px;font-weight:bold;letter-spacing:1px;padding:4px 10px">تسجيل الدخول · SIGN IN</span>
-        <h1 style="margin:18px 0 6px;font-size:28px;line-height:1.3;color:#252728;font-weight:bold">رمز دخول لوحة SLAB</h1>
-        <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="width:50px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td><td style="padding:0 6px;color:#546a78;font-size:12px">●</td><td style="width:50px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td></tr></table>
-        <p style="margin:18px 0 0;font-size:16px;line-height:1.7;color:#3d3e3a">اكتبي هذا الرمز في صفحة الدخول، أو اضغطي الزر تحت.</p>
+        <span style="display:inline-block;background:#e9eef1;color:#546a78;font-size:12px;font-weight:bold;letter-spacing:1px;padding:4px 10px">لوحة الأدمن · ADMIN</span>
+        <h1 style="margin:18px 0 6px;font-size:26px;line-height:1.3;color:#252728;font-weight:bold">رمز الدخول إلى لوحة SLAB</h1>
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="width:50px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td><td style="padding:0 6px;color:#546a78;font-size:12px">&#9679;</td><td style="width:50px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td></tr></table>
+        <p style="margin:18px 0 0;font-size:16px;line-height:1.7;color:#3d3e3a">اكتبي هذا الرمز في صفحة دخول الأدمن.</p>
       </td></tr>
       <tr><td align="center" style="padding:18px 28px 6px">
         <div dir="ltr" style="display:inline-block;background:#f6f5f2;border:1px solid #dedcd7;padding:16px 28px;font-size:34px;letter-spacing:10px;font-weight:bold;color:#2b373e;font-family:'Courier New',monospace">{{ .Token }}</div>
       </td></tr>
-      <tr><td style="padding:20px 28px 6px" dir="rtl">
+      <tr><td style="padding:20px 28px 30px" dir="rtl">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
           <td width="50%" style="background:#f3f5f2;border:1px solid #dfe6df;padding:14px 16px">
             <div style="font-size:11px;color:#77736c;letter-spacing:1px">الصلاحية</div>
@@ -32,13 +39,10 @@
             <div style="font-size:11px;color:#77736c;letter-spacing:1px">الاستخدام</div>
             <div style="font-size:16px;font-weight:bold;color:#252728;margin-top:4px">مرة واحدة</div></td>
         </tr></table>
-      </td></tr>
-      <tr><td align="center" style="padding:24px 28px 34px">
-        <a href="{{ .ConfirmationURL }}" dir="rtl" style="display:inline-block;background:#2b373e;color:#ffffff;text-decoration:none;font-size:17px;font-weight:bold;padding:16px 40px">الدخول إلى لوحة SLAB &larr;</a>
-        <p style="margin:18px 0 0;font-size:13px;line-height:1.6;color:#77736c" dir="ltr">Your SLAB admin sign-in code is <b>{{ .Token }}</b> — valid for 15 minutes, single use.</p>
+        <p style="margin:18px 0 0;font-size:13px;line-height:1.6;color:#77736c;text-align:center" dir="ltr">Your SLAB admin sign-in code: <b>{{ .Token }}</b> (15 minutes, single use).</p>
       </td></tr>
     </table>
-    <p style="margin:18px 0 0;text-align:center;font-size:12px;line-height:1.7;color:#77736c" dir="rtl">إذا ما طلبتي الدخول، تجاهلي هذا الإيميل ولن يتغيّر شيء في حسابك.<br>SLAB Project Management · جزء من مجموعة أوكتري</p>
+    <p style="margin:18px 0 0;text-align:center;font-size:12px;line-height:1.7;color:#77736c" dir="rtl">إذا ما طلبتي الدخول، تجاهلي هذا الإيميل.<br>SLAB Project Management · مجموعة أوكتري</p>
   </td></tr>
 </table>
 </td></tr></table>

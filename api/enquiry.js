@@ -91,7 +91,7 @@ function emailHtml(row, budget, answers = {}, photos = 0) {
   return `<div style="margin:0;padding:0;background:#eeeae4"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eeeae4;font-family:Arial,Helvetica,sans-serif"><tr><td align="center" style="padding:28px 12px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px">
   <tr><td align="center" style="background:#2b373e;padding:28px 24px 24px">
-    <img src="${SITE}/assets/email/slab-logo-white.png" width="140" alt="SLAB" style="display:block;border:0;width:140px;height:auto">
+    <table role="presentation" cellpadding="0" cellspacing="0" dir="ltr"><tr><td valign="middle" style="padding-right:12px"><div style="width:50px;height:13px;background:#adbfca;margin-bottom:6px;font-size:0;line-height:0">&nbsp;</div><div style="width:50px;height:13px;background:#c7d6ca;font-size:0;line-height:0">&nbsp;</div></td><td valign="middle" style="color:#ffffff;font-size:32px;font-weight:bold;letter-spacing:3px;line-height:1">SLAB</td></tr></table>
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:12px"><tr><td style="width:26px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td>
       <td style="padding:0 12px;color:#c7d6ca;font-size:13px;letter-spacing:2px">PROJECT ENQUIRY · طلب مشروع</td><td style="width:26px;border-top:2px solid #adbfca;font-size:0">&nbsp;</td></tr></table>
   </td></tr>
