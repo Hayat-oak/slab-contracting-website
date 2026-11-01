@@ -1,0 +1,81 @@
+<!-- SLAB admin email (Supabase Auth → Email Templates). This file is "Confirm signup" (first sign-in); email_signin.html is "Magic Link" (every later sign-in). Same layout, only the heading and line differ.
+     Design: client mock-up (2026-11-01). Built with tables + inline styles, no remote images: an earlier version with
+     remote images was held by Microsoft 365, so the logo and icon are drawn with table cells.
+     The button opens the admin page (same site), not a sign-in link. Contact details: info@slab.sa / 920066197. -->
+<div style="margin:0;padding:0;background:#e9e6e0">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e9e6e0;font-family:Tahoma,Arial,Helvetica,sans-serif">
+<tr><td align="center" style="padding:24px 10px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#f6f5f2">
+
+  <!-- Header: logo (drawn) | portal name -->
+  <tr><td style="background:#2b373e;padding:26px 28px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" dir="ltr"><tr>
+      <td valign="middle" width="50%">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td valign="middle" style="padding-right:12px">
+            <div style="width:58px;height:16px;background:#adbfca;margin-bottom:6px;font-size:0;line-height:0">&nbsp;</div>
+            <div style="width:58px;height:16px;background:#c7d6ca;font-size:0;line-height:0">&nbsp;</div></td>
+          <td valign="middle"><div style="color:#ffffff;font-size:34px;font-weight:bold;letter-spacing:2px;line-height:1">SLAB</div>
+            <div style="color:#c7d6ca;font-size:9px;letter-spacing:1.5px;margin-top:5px">PROJECT MANAGEMENT</div></td>
+        </tr></table></td>
+      <td valign="middle" width="1" style="border-left:1px solid #5b6a72;font-size:0">&nbsp;</td>
+      <td valign="middle" align="right" style="padding-left:18px">
+        <div dir="rtl" style="color:#ffffff;font-size:19px;font-weight:bold;line-height:1.3">لوحة إدارة المشاريع</div>
+        <div style="color:#d9dfe2;font-size:12px;margin-top:4px">Project Management Portal</div></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#c7d6ca;height:4px;font-size:0;line-height:0">&nbsp;</td></tr>
+
+  <!-- Body -->
+  <tr><td align="center" style="padding:34px 28px 8px" dir="rtl">
+    <!-- laptop icon, drawn -->
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td align="center" style="background:#e3e9df;padding:14px 26px">
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td style="border:3px solid #2b373e;border-radius:4px;padding:9px 14px 5px" dir="ltr">
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr valign="bottom">
+          <td style="padding:0 3px"><div style="width:5px;height:10px;background:#2b373e;font-size:0;line-height:0">&nbsp;</div></td>
+          <td style="padding:0 3px"><div style="width:5px;height:16px;background:#2b373e;font-size:0;line-height:0">&nbsp;</div></td>
+          <td style="padding:0 3px"><div style="width:5px;height:22px;background:#2b373e;font-size:0;line-height:0">&nbsp;</div></td>
+        </tr></table></td></tr>
+        <tr><td style="height:5px;background:#2b373e;font-size:0;line-height:0">&nbsp;</td></tr></table>
+    </td></tr></table>
+    <h1 style="margin:22px 0 0;font-size:28px;line-height:1.35;color:#252728;font-weight:bold">مرحباً بك في منصة SLAB</h1>
+    <div style="width:110px;height:3px;background:#a98467;margin:16px auto 0;font-size:0;line-height:0">&nbsp;</div>
+    <p style="margin:18px 0 0;font-size:17px;line-height:1.7;color:#3d3e3a">تم إنشاء حسابك على لوحة إدارة المشاريع.</p>
+  </td></tr>
+
+  <!-- Info card: validity | uses -->
+  <tr><td style="padding:22px 28px 6px" dir="rtl">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#efede8;border:1px solid #dedcd7;border-radius:12px"><tr>
+      <td width="50%" align="center" style="padding:16px 10px;border-left:1px solid #d3d0ca">
+        <div style="font-size:13px;color:#555;">صلاحية الرمز</div><div style="font-size:21px;font-weight:bold;color:#252728;margin-top:4px">15 دقيقة</div></td>
+      <td width="50%" align="center" style="padding:16px 10px">
+        <div style="font-size:13px;color:#555;">عدد مرات الاستخدام</div><div style="font-size:21px;font-weight:bold;color:#252728;margin-top:4px">مرة واحدة</div></td>
+    </tr></table>
+  </td></tr>
+
+  <!-- Code -->
+  <tr><td align="center" style="padding:22px 28px 4px" dir="rtl">
+    <div style="font-size:17px;color:#252728;margin-bottom:10px">رمز الدخول</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td dir="ltr" style="background:#e3e9df;border:2px solid #2f4a3d;border-radius:10px;padding:14px 46px;font-size:42px;letter-spacing:12px;font-weight:bold;color:#1d2a24;font-family:'Courier New',monospace">{{ .Token }}</td></tr></table>
+  </td></tr>
+
+  <!-- Button: opens the admin page -->
+  <tr><td align="center" style="padding:26px 28px 6px">
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto"><tr><td style="background:#2b373e;border-radius:10px">
+      <a href="https://slab-contracting-website.vercel.app/admin.html" dir="rtl" style="display:inline-block;padding:16px 48px;color:#ffffff;font-size:18px;font-weight:bold;text-decoration:none">تسجيل الدخول إلى لوحة SLAB &nbsp;&larr;</a>
+    </td></tr></table>
+    <p dir="rtl" style="margin:18px 0 0;font-size:14px;line-height:1.7;color:#55524c">في حال واجهت أي مشكلة في الدخول، يرجى التواصل مع فريق الدعم.</p>
+    <p dir="ltr" style="margin:6px 0 0;font-size:12px;color:#8a867f">Your SLAB admin sign-in code: <b>{{ .Token }}</b> (15 minutes, single use).</p>
+  </td></tr>
+
+  <!-- Footer -->
+  <tr><td style="padding-top:26px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#2b373e" dir="ltr"><tr>
+      <td style="padding:20px 24px;color:#ffffff;font-size:14px"><span style="color:#c7d6ca">&#9993;</span>&nbsp; info@slab.sa</td>
+      <td style="padding:20px 10px;color:#ffffff;font-size:14px;border-left:1px solid #5b6a72"><span style="color:#c7d6ca">&#9742;</span>&nbsp; 920066197</td>
+      <td align="right" style="padding:20px 24px;border-left:1px solid #5b6a72"><div style="color:#ffffff;font-size:20px;font-weight:bold;letter-spacing:1px">SLAB</div><div style="color:#d9dfe2;font-size:12px">Project Management</div></td>
+    </tr></table>
+  </td></tr>
+</table>
+</td></tr></table>
+</div>
