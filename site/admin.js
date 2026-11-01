@@ -418,6 +418,10 @@ function allProjects() {
   const merged = BUILT_IN.map(b => { const o = cms.find(c => c.id === b.id); return o ? {...b, ...o, builtIn: true, images: b.images, override: true} : b; });
   return [...merged, ...cms.filter(c => !BUILT_IN_IDS.includes(c.id))];
 }
+// Project name in the panel's language; in Arabic the English name follows in small type. Never auto-translated.
+const projectLabel = (p, small = 'span') => (LANG === 'en'
+  ? `<b data-raw dir="ltr">${esc(p.name)}</b>`
+  : `<b data-raw>${esc(p.name_ar)}</b> <${small} data-raw dir="ltr">${esc(p.name)}</${small}>`);
 function projectsView() {
   const d = state.data;
   const all = allProjects();
@@ -428,7 +432,7 @@ function projectsView() {
   <div class="admin-grid2">
   <div class="admin-card"><div class="admin-head"><h3>المشاريع (${all.length})</h3><button type="button" class="admin-btn" data-act="new-project">+ مشروع جديد</button></div>
   <ul class="admin-list">${all.map(p => `<li class="${state.project === p.id ? 'is-sel' : ''}">
-    <button type="button" class="admin-project-pick" data-act="pick-project" data-id="${esc(p.id)}"><b>${esc(p.name_ar)}</b> <span dir="ltr">${esc(p.name)}</span></button>
+    <button type="button" class="admin-project-pick" data-act="pick-project" data-id="${esc(p.id)}">${projectLabel(p)}</button>
     <span class="admin-count">${photoCount(p)} صور</span>
     <span class="admin-tag">${p.published === false ? 'مخفي' : p.builtIn ? 'أساسي' : 'مضاف'}</span></li>`).join('')}</ul></div>
   <div class="admin-card" id="project-panel">${sel ? projectEditor(sel, added(sel.id)) : newProjectForm()}</div></div></section>`;
@@ -449,7 +453,7 @@ function newProjectForm() {
 }
 function projectEditor(p, added) {
   const own = p.builtIn ? Array.from({length: p.images}, (_, i) => `${PUBLIC_BASE}projects/${p.id}_${i + 1}.webp`) : [];
-  return `<div class="admin-head"><h3>${esc(p.name_ar)} <small dir="ltr">${esc(p.name)}</small></h3>
+  return `<div class="admin-head"><h3>${projectLabel(p, 'small')}</h3>
     <div class="admin-tools"><a class="admin-link-btn" href="./#/projects/${esc(p.id)}" target="_blank" rel="noopener">عرض في الموقع</a>
     <button type="button" class="admin-link-btn" data-act="toggle-publish" data-id="${esc(p.id)}">${p.published === false ? 'إظهار في الموقع' : 'إخفاء من الموقع'}</button>
     ${p.builtIn ? '' : `<button type="button" class="admin-danger" data-act="delete-project" data-id="${esc(p.id)}">حذف المشروع</button>`}</div></div>
