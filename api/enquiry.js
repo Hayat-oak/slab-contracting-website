@@ -20,7 +20,17 @@ const BUDGETS = {lt500k: ['Under SAR 500,000', 'أقل من 500 ألف ريال'
 const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 
-function validate(body) {
+// Core-field settings from the admin panel (site_settings.form_fields): location, budget and description may be
+// optional or hidden. The database still requires a location and a 12+ character message, so empty optional
+// answers are stored as placeholders.
+async function readFieldSettings() {
+  const rows = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?select=value&key=eq.form_fields`, {headers: {apikey: SUPABASE_KEY}})
+    .then(r => (r.ok ? r.json() : [])).catch(() => []);
+  return (rows[0] && rows[0].value) || {};
+}
+const isRequired = (cfg, key) => !(cfg[key] && (cfg[key].hidden || cfg[key].required === false));
+
+function validate(body, cfg = {}) {
   const row = {
     full_name: str(body.full_name, 120), email: str(body.email, 160), phone: str(body.phone, 20),
     project_type: str(body.project_type, 40), project_location: str(body.project_location, 120),
@@ -30,8 +40,12 @@ function validate(body) {
   const budgetKey = str(body.budget, 20);
   const budget = BUDGETS[budgetKey] ? `${BUDGETS[budgetKey][0]} / ${BUDGETS[budgetKey][1]}` : '';
   const ok = row.full_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) && row.phone.replace(/\D/g, '').length >= 7
-    && row.project_location && row.message.length >= 12 && row.consent && row.services.length > 0 && !!budget;
-  return {ok, row, budget, budgetKey, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : ''};
+    && (row.project_location || !isRequired(cfg, 'project-location'))
+    && (row.message.length >= 12 || (!row.message && !isRequired(cfg, 'message')))
+    && row.consent && row.services.length > 0 && (!!budget || !isRequired(cfg, 'budget'));
+  if (!row.project_location) row.project_location = '—';
+  if (!row.message) row.message = 'No description provided.';
+  return {ok, row, budget, budgetKey: budget ? budgetKey : null, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : '—'};
 }
 
 // Extra questions from the admin panel. Answers are checked against the live list and stored with their wording,
@@ -82,7 +96,7 @@ module.exports = async (req, res) => {
   if (!body || typeof body !== 'object') return res.status(400).json({ok: false, error: 'bad_request'});
   if (body.bot_field) return res.status(200).json({ok: true}); // honeypot: pretend success, store nothing
 
-  const {ok, row, budget, budgetKey, budgetEn} = validate(body);
+  const {ok, row, budget, budgetKey, budgetEn} = validate(body, await readFieldSettings());
   const answers = ok ? await readAnswers(body.answers) : null;
   if (!ok || !answers) return res.status(400).json({ok: false, error: 'invalid'});
 

@@ -87,7 +87,8 @@ let PHONE_DISPLAY = '9200 66197';
 const CMS = {
   stats: [{n: 125, suffix: '+'}, {n: 3, suffix: ''}, {n: 4, suffix: ''}, {n: 7, suffix: ''}],
   questions: [],   // extra enquiry-form questions (form_questions)
-  images: {}       // section photo replacements (image_overrides), by slot name
+  images: {},      // section photo replacements (image_overrides), by slot name
+  fields: {}       // core form field labels / optional / hidden (site_settings.form_fields)
 };
 const slotSrc = (slot, fallback) => CMS.images[slot] || fallback;
 
@@ -638,8 +639,13 @@ function process() {
 </main>`;
 }
 
-function field(id, label, input, hint = '') {
-  return `<div class="field ${id === 'project-location' || id === 'message' ? 'full' : ''}"><label for="${id}">${label} <span aria-hidden="true">*</span></label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
+// Core form fields can be relabelled in the admin panel; location, budget and description can also be made optional or hidden.
+const fieldCfg = key => CMS.fields[key] || {};
+const flabel = (key, phrase) => (isAR() ? fieldCfg(key).label_ar : fieldCfg(key).label_en) || t(phrase);
+const fshown = key => !fieldCfg(key).hidden;
+const freq = key => fieldCfg(key).required !== false;
+function field(id, label, input, hint = '', req = true) {
+  return `<div class="field ${id === 'project-location' || id === 'message' ? 'full' : ''}"><label for="${id}">${label}${req ? ' <span aria-hidden="true">*</span>' : ''}</label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
 }
 
 // Extra question added in the admin panel (form_questions). Select answers are sent as the option index.
@@ -671,20 +677,20 @@ function contact() {
   <input type="hidden" name="language" value="${state.language}">
   <p class="visually-hidden" aria-hidden="true"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
   <div class="form-alert" id="form-summary" role="alert" hidden></div>
-  ${field('full-name', t('fullName'), `<input id="full-name" name="full-name" required autocomplete="name" minlength="2" maxlength="120" aria-describedby="full-name-error">`)}
-  ${field('email', t('email'), `<input id="email" name="email" type="email" required autocomplete="email" maxlength="160" dir="ltr" aria-describedby="email-error">`)}
-  ${field('phone', t('phoneField'), `<input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="20" dir="ltr" aria-describedby="phone-error">`)}
-  ${field('project-type', t('sector'), `<select id="project-type" name="project-type" required aria-describedby="project-type-error"><option value="">${t('choose')}</option>${sectors.map(x => `<option value="${x}">${t(x)}</option>`).join('')}</select>`)}
+  ${field('full-name', flabel('full-name', 'fullName'), `<input id="full-name" name="full-name" required autocomplete="name" minlength="2" maxlength="120" aria-describedby="full-name-error">`)}
+  ${field('email', flabel('email', 'email'), `<input id="email" name="email" type="email" required autocomplete="email" maxlength="160" dir="ltr" aria-describedby="email-error">`)}
+  ${field('phone', flabel('phone', 'phoneField'), `<input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="20" dir="ltr" aria-describedby="phone-error">`)}
+  ${field('project-type', flabel('project-type', 'sector'), `<select id="project-type" name="project-type" required aria-describedby="project-type-error"><option value="">${t('choose')}</option>${sectors.map(x => `<option value="${x}">${t(x)}</option>`).join('')}</select>`)}
   <fieldset class="field full service-picker" id="services-field" aria-describedby="services-hint services-error">
-    <legend>${t('servicesNeeded')} <span aria-hidden="true">*</span></legend>
+    <legend>${flabel('services', 'servicesNeeded')} <span aria-hidden="true">*</span></legend>
     <small class="hint" id="services-hint">${t('servicesHint')}</small>
     <div class="chips">${SERVICE_KEYS.map((key, i) => `<label class="chip"><input type="checkbox" name="services" value="${key}"><span>${ICON_CHECK}${t('service' + (i + 1))}</span></label>`).join('')}</div>
     <small class="error" id="services-error" hidden></small>
   </fieldset>
-  ${field('project-location', t('projectLocation'), `<input id="project-location" name="project-location" required maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`)}
-  ${field('budget', t('budget'), `<select id="budget" name="budget" required aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`)}
+  ${fshown('project-location') ? field('project-location', flabel('project-location', 'projectLocation'), `<input id="project-location" name="project-location"${freq('project-location') ? ' required' : ''} maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`, '', freq('project-location')) : ''}
+  ${fshown('budget') ? field('budget', flabel('budget', 'budget'), `<select id="budget" name="budget"${freq('budget') ? ' required' : ''} aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`, '', freq('budget')) : ''}
   ${CMS.questions.map(questionField).join('')}
-  ${field('message', t('message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
+  ${fshown('message') ? field('message', flabel('message', 'message'), `<textarea id="message" name="message"${freq('message') ? ' required' : ''} minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'), freq('message')) : ''}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
   <div id="form-feedback" class="form-message" role="status" aria-live="polite" hidden></div>
@@ -1159,7 +1165,7 @@ function validateField(el) {
   if (el.required && !v) msg = el.type === 'checkbox' ? t('errConsent') : el.name === 'budget' ? t('errBudget') : t('errRequired');
   else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = t('errEmail');
   else if (el.type === 'tel' && !/^\+?[\d\s()-]{8,20}$/.test(v) || (el.type === 'tel' && (v.match(/\d/g) || []).length < 8)) msg = t('errPhone');
-  else if (el.name === 'message' && v.length < 12) msg = t('errShort');
+  else if (el.name === 'message' && v && v.length < 12) msg = t('errShort');
   else if (el.name === 'full-name' && v.length < 2) msg = t('errRequired');
   const err = document.getElementById(el.id + '-error');
   el.setAttribute('aria-invalid', String(!!msg));
@@ -1413,6 +1419,8 @@ async function loadCms() {
     get('image_overrides?select=slot,url')
   ]);
   const setting = key => (settings.find(s => s.key === key) || {}).value;
+  const fields = setting('form_fields');
+  if (fields && typeof fields === 'object') CMS.fields = fields;
   const stats = setting('stats');
   if (Array.isArray(stats) && stats.length === 4 && stats.every(s => Number.isFinite(+s.n))) CMS.stats = stats.map(s => ({n: +s.n, suffix: String(s.suffix || '').slice(0, 3)}));
   const c = setting('contact') || {};

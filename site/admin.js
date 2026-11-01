@@ -191,7 +191,7 @@ async function loadTab() {
     if (state.tab === 'enquiries') d.enquiries = await rest('project_enquiries?select=*&order=created_at.desc');
     if (state.tab === 'projects') [d.cms, d.photos] = await Promise.all([rest('cms_projects?select=*&order=position,created_at'), rest('project_photos?select=*&order=position,id')]);
     if (state.tab === 'images') d.images = await rest('image_overrides?select=*');
-    if (state.tab === 'questions') d.questions = await rest('form_questions?select=*&order=position,id');
+    if (state.tab === 'questions') [d.questions, d.settings] = await Promise.all([rest('form_questions?select=*&order=position,id'), rest('site_settings?select=*')]);
     if (state.tab === 'settings') d.settings = await rest('site_settings?select=*');
     if (state.tab === 'users') d.users = await rest('site_admins?select=*&order=created_at');
     main.innerHTML = VIEWS[state.tab]();
@@ -320,10 +320,30 @@ function imagesView() {
 }
 
 /* ---------- Form questions ---------- */
+// The form's own fields, in page order. `flex`: can be made optional or hidden (the others are always required).
+const CORE_FIELDS = [
+  ['full-name', 'الاسم الكامل', 'Full name'], ['email', 'البريد الإلكتروني', 'Email address'], ['phone', 'رقم الجوال', 'Phone number'],
+  ['project-type', 'قطاع المشروع', 'Project sector'], ['services', 'الخدمات المطلوبة', 'Services required'],
+  ['project-location', 'موقع المشروع (المدينة)', 'Project location (city)', true], ['budget', 'الميزانية التقديرية', 'Estimated budget', true],
+  ['message', 'وصف المشروع', 'Project description', true]
+];
+function coreFieldsForm() {
+  const cfg = ((state.data.settings || []).find(s => s.key === 'form_fields') || {}).value || {};
+  return `<form id="core-fields" class="admin-card"><h3>الأسئلة الأساسية في النموذج</h3>
+  <p class="admin-hint">هذي الأسئلة الموجودة في نموذج «ابدأ مشروعك» بنفس ترتيبها. تقدرين تغيّرين نصّها، وتجعلين الموقع والميزانية والوصف اختيارية أو تخفينها.</p>
+  <ol class="admin-qs">${CORE_FIELDS.map(([key, ar, en, flex]) => { const c = cfg[key] || {}; return `<li><div class="admin-core">
+    <label>العربي<input name="${key}-ar" maxlength="120" value="${esc(c.label_ar || ar)}"></label>
+    <label>English<input name="${key}-en" dir="ltr" maxlength="120" value="${esc(c.label_en || en)}"></label></div>
+    <div class="admin-tools">${flex ? `<label class="check"><input type="checkbox" name="${key}-req" ${c.required === false ? '' : 'checked'}> إجباري</label>
+      <label class="check"><input type="checkbox" name="${key}-hide" ${c.hidden ? 'checked' : ''}> مخفي</label>` : '<span class="admin-tag">إجباري دائمًا</span>'}</div></li>`; }).join('')}</ol>
+  <button class="admin-btn" type="submit">حفظ الأسئلة الأساسية</button></form>`;
+}
 function questionsView() {
   const qs = state.data.questions || [];
   return `<section><div class="admin-head"><h2>أسئلة نموذج التواصل</h2></div>
-  <p class="admin-hint">الأسئلة النشطة تظهر في نموذج «ابدأ مشروعك» بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.</p>
+  ${coreFieldsForm()}
+  <h3 class="admin-sub">أسئلة إضافية</h3>
+  <p class="admin-hint">الأسئلة الإضافية النشطة تظهر في النموذج بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.</p>
   <div class="admin-card">${qs.length ? `<ol class="admin-qs">${qs.map((q, i) => `<li class="${q.active ? '' : 'is-off'}">
     <div><b>${esc(q.label_ar)}</b> <span dir="ltr">${esc(q.label_en)}</span><br><small>${KINDS[q.kind]}${q.required ? ' · إجباري' : ' · اختياري'}${q.kind === 'select' ? ' · ' + (q.options || []).map(o => esc(o.ar)).join(' / ') : ''}</small></div>
     <div class="admin-tools"><button type="button" data-act="q-move" data-id="${q.id}" data-dir="-1" ${i ? '' : 'disabled'} aria-label="لأعلى">↑</button><button type="button" data-act="q-move" data-id="${q.id}" data-dir="1" ${i < qs.length - 1 ? '' : 'disabled'} aria-label="لأسفل">↓</button>
@@ -455,7 +475,7 @@ $root.addEventListener('change', e => {
 
 $root.addEventListener('submit', e => {
   const f = e.target;
-  if (!['new-project', 'edit-project', 'new-question', 'settings', 'new-user'].includes(f.id)) return;
+  if (!['new-project', 'edit-project', 'core-fields', 'new-question', 'settings', 'new-user'].includes(f.id)) return;
   e.preventDefault();
   if (!f.reportValidity()) return;
   const v = name => (f.elements[name] ? f.elements[name].value.trim() : '');
@@ -479,6 +499,12 @@ $root.addEventListener('submit', e => {
     }
     state.project = id; redraw();
   }, 'تمت إضافة المشروع').finally(done);
+  if (f.id === 'core-fields') run(async () => {
+    const value = Object.fromEntries(CORE_FIELDS.map(([key, , , flex]) => [key, {label_ar: v(key + '-ar'), label_en: v(key + '-en'),
+      ...(flex ? {required: f.elements[key + '-req'].checked, hidden: f.elements[key + '-hide'].checked} : {})}]));
+    await rest('site_settings', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates'}, body: {key: 'form_fields', value, updated_at: new Date().toISOString()}});
+    d.settings = (d.settings || []).filter(s => s.key !== 'form_fields').concat({key: 'form_fields', value});
+  }, 'تم حفظ الأسئلة الأساسية').finally(done);
   if (f.id === 'edit-project') run(async () => {
     const p = allProjects().find(x => x.id === f.dataset.id);
     await saveProject(p.id, {...projectRow(p), ...formProject(v, p.builtIn)});
