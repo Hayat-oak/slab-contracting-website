@@ -1,6 +1,6 @@
 'use strict';
 /*
- * SLAB Contracting — public marketing website (vanilla JS, hash routing).
+ * SLAB Project Management — public marketing website (vanilla JS, hash routing).
  * Content source of truth: references/SLAB_PROFILE_2026.pdf (page numbers noted in `source`).
  * Anything not in the profile is marked "UNVERIFIED" in a comment and listed in QA_REPORT.md.
  */
@@ -94,14 +94,14 @@ const slotSrc = (slot, fallback) => CMS.images[slot] || fallback;
 const phrases = {
  en: {
  home:'Home', projects:'Projects', services:'Services', about:'About', process:'Our Process', contact:'Contact', privacy:'Privacy', start:'Start a Project', back:'Projects', explore:'Explore Our Projects',
- skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Contracting — home', closeMenu:'Close navigation menu',
- heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', footerAbout:'Delivering exceptional spaces through integrated contracting and innovative solutions.', footerCity:'Riyadh, Saudi Arabia', techEyebrow:'Smarter projects, stronger outcomes', techIntro:'Integrated tools and data-driven processes to deliver greater visibility, efficiency and control across every stage of our projects.', ourSectors:'Our Sectors', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in Madinah.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in Jeddah.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
+ skip:'Skip to content', language:'العربية', languageLabel:'Switch to Arabic', brandLabel:'SLAB Project Management — home', closeMenu:'Close navigation menu',
+ heroTop:'SAUDI CONSTRUCTION · DESIGN · FIT-OUT', heroA:'Design', heroB:'Build', heroC:'Deliver', heroS:'Build with greater control.', heroSlide:'Show project photo', heroNow:'Featured', pauseVideo:'Pause background video', playVideo:'Play background video', navProjects:'Projects', searchLabel:'Search', footerAbout:'Delivering exceptional spaces through integrated project management and innovative solutions.', footerCity:'Riyadh, Saudi Arabia', techEyebrow:'Smarter projects, stronger outcomes', techIntro:'Integrated tools and data-driven processes to deliver greater visibility, efficiency and control across every stage of our projects.', ourSectors:'Our Sectors', impactEyebrow:'Our Impact', impactTitle:'Building\nReal Value', impactDesc:'From homes to hospitality and commercial spaces, our work creates lasting value across the Kingdom.', cityRiyadh:'Riyadh', cityRiyadhD:'Home to our completed residential design and fit-out portfolio.', cityMadinah:'Madinah', cityMadinahD:'Active project experience in Madinah.', cityJeddah:'Jeddah', cityJeddahD:'Active project experience in Jeddah.', footerTagline:'Crafting spaces for a better tomorrow.', closeSearch:'Close search', searchPlaceholder:'Search projects, services and pages…', searchEmpty:'No results found.', searchGroupProjects:'Projects', searchGroupServices:'Services', searchGroupProcess:'Our Process', searchGroupPages:'Pages',
  ourServices:'Our Services', servicesSub:'Integrated construction and fit-out solutions, from concept to completion.', viewAll:'View All',
  service1:'Fit-Out & Execution', service1desc:'End-to-end site delivery supported by planning and quality control.',
  service2:'Design', service2desc:'Technical coordination and design development before execution.',
  service3:'Interior Fit-Out', service3desc:'Refined interiors designed for how spaces are used.',
  service4:'Project & Contract Management', service4desc:'Clear control of scope, resources, costs and schedules.',
- creating:'Crafting Meaningful Spaces', aboutHome:'SLAB Contracting is a Saudi construction and fit-out company, part of Oaktree Group. We bring design coordination, procurement, site execution, quality control and handover together in one integrated delivery process.',
+ creating:'Crafting Meaningful Spaces', aboutHome:'SLAB Project Management is a Saudi company specialising in managing small projects, part of Oaktree Group. We bring design coordination, procurement, site execution, quality control and handover together in one integrated delivery process.',
  aboutSlab:'About SLAB', featured:'Featured Projects', featuredSub:'Real spaces. Delivered with purpose and precision.',
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
  projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', other:'Other Projects', adminLogin:'Admin login', showing:'projects shown', filterLabel:'Filter projects by client',
@@ -119,7 +119,7 @@ const phrases = {
  serviceLong3:'Deliver functional, refined interior environments aligned with the operational and design requirements of each asset.',
  serviceLong4:'Coordinate scope, contractors, schedules, procurement, resources, reporting, and contractual requirements.',
  sectors:'Sectors We Serve', sectorsSub:'Solutions shaped for a range of environments and operational needs.', hospitality:'Hospitality', hospitalityDesc:'Hotels, serviced residences and guest-facing spaces.', residentialDesc:'Apartments, villas, compounds and renovation programs.', commercial:'Commercial', commercialDesc:'Offices, towers, mixed-use environments and commercial fit-out.', institutional:'Government & Institutional', institutionalDesc:'Projects requiring governance, accountability and documented controls.',
- aboutHero:'About SLAB', aboutHeroSub:'SAUDI CONTRACTING · INTEGRATED DELIVERY', ourStory:'Our Story', storyCopy:'SLAB Contracting is a Saudi construction and fit-out company, part of Oaktree Group. We work with residential, hospitality, commercial and institutional clients through design support, procurement, construction and interior fit-out.',
+ aboutHero:'About SLAB', aboutHeroSub:'SAUDI PROJECT MANAGEMENT · INTEGRATED DELIVERY', ourStory:'Our Story', storyCopy:'SLAB Project Management is a Saudi company specialising in managing small projects, part of Oaktree Group. We work with residential, hospitality, commercial and institutional clients through design support, procurement, construction and interior fit-out.',
  storyCopy2:'Our role spans early project definition, technical coordination, execution, quality control and handover — with a structured focus on scope, cost, schedule and quality.',
  storyTitle:'Design & Build and Fit-Out Expertise', aboutNav:'On this page',
  delivery:'Integrated Delivery', deliveryDesc:'Design coordination, construction, fit-out and handover through one framework.', control:'Structured Control', controlDesc:'Oversight of scope, schedule, procurement, cost, quality and site progress.',ksa:'KSA Coverage',ksaDesc:'Project experience across Riyadh, Madinah and Jeddah.',
@@ -160,12 +160,12 @@ const phrases = {
  },
  ar: {
  home:'الرئيسية',projects:'المشاريع',services:'خدماتنا',about:'من نحن',process:'مراحل العمل',contact:'تواصل معنا',privacy:'الخصوصية',start:'ابدأ مشروعك',back:'المشاريع',explore:'استكشف مشاريعنا',
- skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب للمقاولات — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
- heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',footerAbout:'نقدّم مساحات استثنائية من خلال مقاولات متكاملة وحلول مبتكرة.',footerCity:'الرياض، المملكة العربية السعودية',techEyebrow:'مشاريع أذكى، نتائج أقوى',techIntro:'أدوات متكاملة وعمليات قائمة على البيانات لتحقيق وضوح وكفاءة وتحكم أكبر في كل مرحلة من مراحل مشاريعنا.',ourSectors:'قطاعاتنا',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة في المدينة المنورة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة في جدة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
+ skip:'انتقل إلى المحتوى',language:'English',languageLabel:'التبديل إلى الإنجليزية',brandLabel:'سلاب لإدارة المشاريع — الرئيسية',closeMenu:'إغلاق قائمة التنقل',
+ heroTop:'الإنشاءات · التصميم · التشطيبات',heroA:'نصمم',heroB:'ننفذ',heroC:'نسلّم',heroS:'تنفيذ بتحكم أكبر.',heroSlide:'عرض صورة المشروع',heroNow:'مشروع مختار',pauseVideo:'إيقاف الفيديو',playVideo:'تشغيل الفيديو',navProjects:'مشاريعنا',searchLabel:'بحث',footerAbout:'نقدّم مساحات استثنائية من خلال إدارة متكاملة للمشاريع وحلول مبتكرة.',footerCity:'الرياض، المملكة العربية السعودية',techEyebrow:'مشاريع أذكى، نتائج أقوى',techIntro:'أدوات متكاملة وعمليات قائمة على البيانات لتحقيق وضوح وكفاءة وتحكم أكبر في كل مرحلة من مراحل مشاريعنا.',ourSectors:'قطاعاتنا',impactEyebrow:'أثرنا',impactTitle:'نبني\nقيمة حقيقية',impactDesc:'من المساكن إلى مشاريع الضيافة والمساحات التجارية، نصنع قيمة تدوم في أنحاء المملكة.',cityRiyadh:'الرياض',cityRiyadhD:'مقر مشاريعنا السكنية المنجزة في التصميم والتشطيبات.',cityMadinah:'المدينة المنورة',cityMadinahD:'خبرة في مشاريع قائمة في المدينة المنورة.',cityJeddah:'جدة',cityJeddahD:'خبرة في مشاريع قائمة في جدة.',footerTagline:'نصنع مساحات لغدٍ أفضل.',closeSearch:'إغلاق البحث',searchPlaceholder:'ابحث في المشاريع والخدمات والصفحات…',searchEmpty:'لا توجد نتائج.',searchGroupProjects:'المشاريع',searchGroupServices:'الخدمات',searchGroupProcess:'مراحل العمل',searchGroupPages:'الصفحات',
  ourServices:'خدماتنا',servicesSub:'حلول متكاملة للإنشاءات والتشطيبات، من الفكرة إلى التسليم.',viewAll:'عرض الكل',
  service1:'التشطيبات والتنفيذ',service1desc:'تنفيذ متكامل مع التخطيط والإشراف وضبط الجودة.',service2:'التصميم',service2desc:'تنسيق التصميم والمتطلبات الفنية قبل التنفيذ.',
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
- creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب للمقاولات شركة سعودية متخصصة في الإنشاءات والتشطيبات، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
+ creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
  projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عالية هوم',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الأدمن',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
  projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
@@ -180,7 +180,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  serviceLong1:'تنفيذ متكامل للمشاريع بدعم من التخطيط وإدارة الموقع وضبط الجودة والتنسيق مع الأطراف المعنية.',serviceLong2:'تنسيق تطوير التصاميم والمتطلبات الفنية ومراجعة الجهات المعنية والموافقات قبل التنفيذ.',
  serviceLong3:'تنفيذ بيئات داخلية عملية ومدروسة تتماشى مع المتطلبات التشغيلية والتصميمية لكل مشروع.',serviceLong4:'تنسيق النطاق والمقاولين والجداول والمشتريات والموارد والتقارير ومتطلبات العقود.',
  sectors:'القطاعات التي نخدمها',sectorsSub:'حلول تلائم أنواعًا مختلفة من المشاريع والمتطلبات التشغيلية.',hospitality:'الضيافة',hospitalityDesc:'الفنادق والشقق المخدومة والمساحات المخصصة للضيوف.',residentialDesc:'الشقق والفلل والمجمعات السكنية وبرامج التجديد.',commercial:'التجاري',commercialDesc:'المكاتب والأبراج والمشاريع متعددة الاستخدام والتشطيبات التجارية.',institutional:'الحكومي والمؤسسي',institutionalDesc:'مشاريع تتطلب الحوكمة والمساءلة والالتزام والتوثيق.',
- aboutHero:'من نحن',aboutHeroSub:'مقاولات سعودية · تنفيذ متكامل',ourStory:'قصتنا',storyCopy:'سلاب للمقاولات شركة سعودية متخصصة في الإنشاءات والتشطيبات، وهي جزء من مجموعة أوكتري. نخدم المشاريع السكنية والضيافة والتجارية والمؤسسية عبر دعم التصميم والمشتريات والإنشاءات والتشطيبات الداخلية.',storyCopy2:'يشمل دورنا تعريف المشروع وتنسيق الجوانب الفنية والتنفيذ وضبط الجودة والتسليم، مع تركيز منظم على النطاق والتكلفة والجدول والجودة.',
+ aboutHero:'من نحن',aboutHeroSub:'إدارة مشاريع سعودية · تنفيذ متكامل',ourStory:'قصتنا',storyCopy:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة، وهي جزء من مجموعة أوكتري. نخدم المشاريع السكنية والضيافة والتجارية والمؤسسية عبر دعم التصميم والمشتريات والإنشاءات والتشطيبات الداخلية.',storyCopy2:'يشمل دورنا تعريف المشروع وتنسيق الجوانب الفنية والتنفيذ وضبط الجودة والتسليم، مع تركيز منظم على النطاق والتكلفة والجدول والجودة.',
  storyTitle:'خبرة في التصميم والبناء والتشطيبات',aboutNav:'في هذه الصفحة',
  delivery:'تنفيذ متكامل',deliveryDesc:'تنسيق التصميم والإنشاءات والتشطيبات والتسليم ضمن إطار واحد.',control:'رقابة منظمة',controlDesc:'متابعة نطاق الأعمال والجدول والمشتريات والتكلفة والجودة والموقع.',ksa:'انتشار داخل المملكة',ksaDesc:'خبرة في مشاريع بالرياض والمدينة المنورة وجدة.',
  ourApproach:'نهجنا',principles:'مبادئنا في التنفيذ',principlesSub:'الدقة. التحكم. القيمة.',principlesLead:'لا يُقاس نجاح الإنشاء بالإنجاز وحده، بل بجودة التنفيذ ومستوى التحكم طوال مراحل المشروع والأداء طويل الأجل للأصل المنجز.',precision:'الدقة',precisionDesc:'التنفيذ وفق المعايير والتصاميم المنسقة والمتطلبات المعتمدة.',controlPrinciple:'التحكم',controlPrincipleDesc:'الوضوح في متابعة تقدم الأعمال والموارد والمشتريات والتكاليف والجودة.',value:'القيمة',valueDesc:'اتخاذ قرارات تراعي الجاهزية التشغيلية والمتانة والأداء طويل الأجل.',
@@ -213,20 +213,20 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
 
 const metaDescriptions = {
   en: {
-    home: 'SLAB Contracting — Saudi construction, design and fit-out company, part of Oaktree Group. Integrated project delivery from first brief to handover.',
-    projects: 'Residential design, furniture and fit-out projects delivered by SLAB Contracting in Riyadh.',
+    home: 'SLAB Project Management — a Saudi company specialising in managing small projects, part of Oaktree Group. Integrated project delivery from first brief to handover.',
+    projects: 'Residential design, furniture and fit-out projects delivered by SLAB Project Management in Riyadh.',
     services: 'Fit-out & execution, design, interior fit-out, and project & contract management for hospitality, residential, commercial and institutional clients.',
-    about: 'SLAB Contracting is a Saudi construction and fit-out company, part of Oaktree Group. Precision, control and value in every project.',
+    about: 'SLAB Project Management is a Saudi company specialising in managing small projects, part of Oaktree Group. Precision, control and value in every project.',
     process: 'The SLAB delivery process: Understand, Design, Approve, Plan, Execute, Control, Deliver.',
-    contact: 'Start a project with SLAB Contracting. Tell us about your project and our team will review your enquiry.'
+    contact: 'Start a project with SLAB Project Management. Tell us about your project and our team will review your enquiry.'
   },
   ar: {
-    home: 'سلاب للمقاولات — شركة سعودية للإنشاءات والتصميم والتشطيبات، جزء من مجموعة أوكتري. تنفيذ متكامل من الفكرة إلى التسليم.',
-    projects: 'مشاريع تصميم وأثاث وتشطيبات سكنية نفذتها سلاب للمقاولات في الرياض.',
+    home: 'سلاب لإدارة المشاريع — شركة سعودية متخصصة في إدارة المشاريع الصغيرة، جزء من مجموعة أوكتري. تنفيذ متكامل من الفكرة إلى التسليم.',
+    projects: 'مشاريع تصميم وأثاث وتشطيبات سكنية نفذتها سلاب لإدارة المشاريع في الرياض.',
     services: 'التشطيبات والتنفيذ، التصميم، التشطيبات الداخلية، وإدارة المشاريع والعقود لقطاعات الضيافة والسكني والتجاري والمؤسسي.',
-    about: 'سلاب للمقاولات شركة سعودية للإنشاءات والتشطيبات، جزء من مجموعة أوكتري. الدقة والتحكم والقيمة في كل مشروع.',
+    about: 'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة، جزء من مجموعة أوكتري. الدقة والتحكم والقيمة في كل مشروع.',
     process: 'مراحل التنفيذ لدى سلاب: الفهم، التصميم، الاعتماد، التخطيط، التنفيذ، الرقابة، التسليم.',
-    contact: 'ابدأ مشروعك مع سلاب للمقاولات. شاركنا تفاصيل مشروعك ليتواصل معك فريقنا.'
+    contact: 'ابدأ مشروعك مع سلاب لإدارة المشاريع. شاركنا تفاصيل مشروعك ليتواصل معك فريقنا.'
   }
 };
 
@@ -364,7 +364,7 @@ function footer() {
     <a href="mailto:${EMAIL}">${ICON.mail}<span dir="ltr">${EMAIL}</span></a>
     <a class="footer-cta" href="#/contact"><span>${t('start')}</span>${ICON.arrow}</a></div>
 </div>
-<div class="footer-bottom"><span>© 2026 SLAB Contracting. ${t('rights')}</span><span class="footer-legal">${SOCIAL.map(s => `<a class="footer-social" href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}">${s.icon}</a>`).join('')}<a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a><span class="footer-sep" aria-hidden="true"></span><a class="admin-link" href="admin.html">${ICON.lock}<span>${t('adminLogin')}</span></a></span></div></footer>`;
+<div class="footer-bottom"><span>© 2026 SLAB Project Management. ${t('rights')}</span><span class="footer-legal">${SOCIAL.map(s => `<a class="footer-social" href="${s.href}" target="_blank" rel="noopener noreferrer" aria-label="${s.label}">${s.icon}</a>`).join('')}<a class="footer-social" href="mailto:${EMAIL}" aria-label="${t('email')}">${ICON.mail}</a><span class="footer-sep" aria-hidden="true"></span><a href="#/privacy">${t('privacy')}</a><span class="footer-sep" aria-hidden="true"></span><a class="admin-link" href="admin.html">${ICON.lock}<span>${t('adminLogin')}</span></a></span></div></footer>`;
 }
 
 function projectCard(p, extra = '') {
@@ -664,7 +664,7 @@ function contact() {
     <li><a class="contact-point" href="tel:${PHONE}">${ICON.phone}<div><small>${t('phone')}</small><strong dir="ltr">${PHONE_DISPLAY}</strong></div></a></li>
     <li><a class="contact-point" href="mailto:${EMAIL}">${ICON.mail}<div><small>${t('email')}</small><strong dir="ltr">${EMAIL}</strong></div></a></li>
     <li class="contact-point">${ICON.pin}<div><small>${t('locationOffice')}</small><strong>${t('activeIn')}</strong></div></li>
-    <li class="contact-point">${ICON.group}<div><small>SLAB Contracting</small><strong>${t('part')}</strong></div></li>
+    <li class="contact-point">${ICON.group}<div><small>SLAB Project Management</small><strong>${t('part')}</strong></div></li>
   </ul></div>
 <div class="form-wrap" data-reveal>
 <form class="contact-form" id="lead-form" name="slab-project-enquiry" novalidate>
@@ -731,7 +731,7 @@ function updateMeta(r) {
   root.dir = isAR() ? 'rtl' : 'ltr';
   const p = r.page === 'projects' && r.id ? projects.find(x => x.id === r.id) : null;
   const titleKey = {home: null, projects: 'projects', services: 'services', about: 'about', process: 'process', contact: 'contact', privacy: 'privacyTitle'}[r.page];
-  const brand = isAR() ? 'سلاب للمقاولات' : 'SLAB Contracting';
+  const brand = isAR() ? 'سلاب لإدارة المشاريع' : 'SLAB Project Management';
   document.title = r.page === 'home' ? `${brand} | ${isAR() ? 'نصمم · ننفذ · نسلّم' : 'Design · Build · Deliver'}`
     : `${p ? pname(p) : (titleKey ? t(titleKey) : '404')} | ${brand}`;
   const desc = p ? plead(p) : (metaDescriptions[state.language][r.page] || metaDescriptions[state.language].home);
