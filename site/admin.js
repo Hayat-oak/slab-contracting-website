@@ -16,7 +16,7 @@ const BUILT_IN = [
   ['soulhittin', 'SOUL Hittin', 'سول حطين', ['OHG', 'OHG'], 9, ['132.26'], 6],
   ['almughrizat', 'Almughrizat Building', 'مبنى المغرزات', AH, 25, ['50', '107'], 3],
   ['masharef', 'Masharef Building', 'مبنى مشارف', AH, 14, ['117', '121', '160'], 3],
-  ['mkin30', 'Mkin 30', 'مكين 30', AH, 1, ['245'], 2],
+  ['mkin30', 'Makeen 30', 'مكين 30', AH, 1, ['245'], 2],
   ['nirvana12', 'Nirvana 12', 'نيرفانا 12', AH, 2, ['50', '145'], 3],
   ['ajlan11', 'Al Ajlan Riviera 12', 'العجلان ريفيرا 12', AH, 1, ['92', '169'], 3],
   ['almajidiya116', 'Almajidiya 116', 'المجيدية 116', AH, 4, ['77', '101', '128', '130'], 2],
@@ -96,7 +96,7 @@ const EN = {
   'الصور الأصلية من ملف الشركة ثابتة. الصور اللي تضيفينها تظهر بعدها في معرض المشروع.': 'Original photos from the company profile are fixed. Photos you add appear after them in the gallery.',
   'حذف المشروع وكل صوره؟': 'Delete the project and all its photos?', 'حذف الصورة؟': 'Delete this photo?', 'تم حذف المشروع': 'Project deleted', 'تم حذف الصورة': 'Photo deleted',
   'تم رفع الصور': 'Photos uploaded', 'جارٍ رفع الصور…': 'Uploading photos…', 'تمت إضافة المشروع': 'Project added', 'تم حفظ البيانات': 'Details saved', 'تم الحفظ': 'Saved',
-  'سول حطين': 'SOUL Hittin', 'مبنى المغرزات': 'Almughrizat Building', 'مبنى مشارف': 'Masharef Building', 'مكين 30': 'Mkin 30', 'نيرفانا 12': 'Nirvana 12',
+  'سول حطين': 'SOUL Hittin', 'مبنى المغرزات': 'Almughrizat Building', 'مبنى مشارف': 'Masharef Building', 'مكين 30': 'Makeen 30', 'نيرفانا 12': 'Nirvana 12',
   'العجلان ريفيرا 12': 'Al Ajlan Riviera 12', 'العجلان ريفيرا 21': 'Al Ajlan Riviera 21', 'العجلان ريفيرا 37': 'Al Ajlan Riviera 37', 'المجيدية 116': 'Almajidiya 116',
   'المجيدية ريزيدنس 111': 'Al Majidiya Residence 111', 'جوهرة النرجس 8': 'Jawhara Al Narjis 8', 'المجيدية 70': 'Almajidiya 70', 'المجيدية 130': 'Almajidiya 130',
   // section photos

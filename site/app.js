@@ -33,7 +33,7 @@ const projects = [
   {id:'soulhittin', name:'SOUL Hittin', ar:'سول حطين', client:'OHG', clientAr:'OHG', units:9, sizes:['132.26'], images:6, category:'soul', source:26},
   {id:'almughrizat', name:'Almughrizat Building', ar:'مبنى المغرزات', client:'Aliyah Homes', clientAr:'عالية هوم', units:25, sizes:['50','107'], images:3, category:'aliyah', source:13},
   {id:'masharef', name:'Masharef Building', ar:'مبنى مشارف', client:'Aliyah Homes', clientAr:'عالية هوم', units:14, sizes:['117','121','160'], images:3, category:'aliyah', source:14},
-  {id:'mkin30', name:'Mkin 30', ar:'مكين 30', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['245'], images:2, category:'aliyah', source:16},
+  {id:'mkin30', name:'Makeen 30', ar:'مكين 30', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['245'], images:2, category:'aliyah', source:16},
   {id:'nirvana12', name:'Nirvana 12', ar:'نيرفانا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:2, sizes:['50','145'], images:3, category:'aliyah', source:15},
   {id:'ajlan11', name:'Al Ajlan Riviera 12', ar:'العجلان ريفيرا 12', client:'Aliyah Homes', clientAr:'عالية هوم', units:1, sizes:['92','169'], images:3, category:'aliyah', source:17},
   {id:'almajidiya116', name:'Almajidiya 116', ar:'المجيدية 116', client:'Aliyah Homes', clientAr:'عالية هوم', units:4, sizes:['77','101','128','130'], images:2, category:'aliyah', source:19},
