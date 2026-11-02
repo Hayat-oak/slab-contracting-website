@@ -361,8 +361,8 @@ async function renderApp() {
   const mine = state.data.users.find(u => u.email === session.email);
   state.me = {email: session.email, name: '', ...mine, role: (mine && mine.role) || 'admin'};
   if (!allowed(state.tab)) state.tab = 'home';
-  // Top bar: the name in the panel's language (the Arabic panel shows the email until an Arabic name is saved).
-  const who = (LANG === 'en' ? state.me.name || state.me.name_ar : state.me.name_ar) || session.email;
+  // Top bar: the name in the panel's language, or the email until that name is saved.
+  const who = (LANG === 'en' ? state.me.name : state.me.name_ar) || session.email;
   $root.innerHTML = `<div class="admin-layout">
   <aside class="admin-side">
     <a class="admin-logo" href="./">${LOGO_MARK}<span><b>SLAB</b><small>صفحة الموظفين</small></span></a>
@@ -503,10 +503,9 @@ function homeView() {
   const donut = all.length ? `<div class="dash-donut-wrap"><ul class="dash-legend">${slices.map(([k, v]) => `<li><i style="background:${SECTOR_COLORS[k]}"></i><span>${SECTORS[k] || 'أخرى'}</span><b dir="ltr">${Math.round(v / all.length * 100)}% (${v})</b></li>`).join('')}</ul>
     <svg class="dash-donut" viewBox="0 0 200 200" role="img" aria-label="توزيع القطاعات">${arcs}<circle class="dash-hole" cx="100" cy="100" r="46"/><text class="dash-total" x="100" y="96">${all.length}</text><text class="dash-total-label" x="100" y="120">طلبات</text></svg></div>` : empty;
 
-  // First name in the panel's language. The Arabic panel never shows an English name: without an Arabic name it
-  // greets without one ("مرحبًا بك"); the English panel falls back to the email's first part.
+  // First name in the panel's language; until a name in that language is saved, both languages greet without one.
   const me = state.me;
-  const first = ((LANG === 'en' ? me.name || me.name_ar || session.email.split('@')[0] : me.name_ar || '') || '').trim().split(/\s+/)[0];
+  const first = ((LANG === 'en' ? me.name : me.name_ar) || '').trim().split(/\s+/)[0];
   const quick = [
     canEdit() && `<button type="button" data-act="new-enq">${AI.plus}<span>${L('إضافة طلب', 'Add enquiry')}</span></button>`,
     `<button type="button" data-act="export">${AI.download}<span>تصدير Excel</span></button>`,
