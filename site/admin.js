@@ -485,17 +485,15 @@ function homeView() {
     <div class="dash-plot">${ticks.map(t => `<i style="bottom:${t / axis * 100}%"></i>`).join('')}
     ${bars.map(([c, v]) => `<div class="dash-bar" title="${esc(c)}: ${v} طلبات"><span style="height:${v / axis * 100}%"><b>${v}</b></span><small>${esc(c)}</small></div>`).join('')}</div></div>` : empty;
 
-  // Sector donut: one ring segment per sector, a 2-unit gap between segments, labels on segments of 8% or more.
+  // Sector donut: one ring segment per sector with a 2-unit gap between segments; the percentages are in the legend.
   const known = Object.keys(SECTORS).map(k => [k, all.filter(e => e.project_type === k).length]);
   const other = all.length - known.reduce((s, x) => s + x[1], 0);
   const slices = [...known, ...(other ? [['other', other]] : [])];
   const R = 70, C = 2 * Math.PI * R, shown = slices.filter(s => s[1]);
   let acc = 0;
   const arcs = shown.map(([k, v]) => {
-    const len = v / all.length * C, gap = shown.length > 1 ? 2 : 0, mid = (acc + len / 2) / C * 2 * Math.PI - Math.PI / 2;
-    const pct = Math.round(v / all.length * 100), name = SECTORS[k] || 'أخرى';
-    const seg = `<circle cx="100" cy="100" r="${R}" stroke="${SECTOR_COLORS[k]}" stroke-dasharray="${Math.max(len - gap, .5)} ${C}" stroke-dashoffset="${-acc}" transform="rotate(-90 100 100)"><title>${name}: ${v} طلبات</title></circle>`
-      + (pct >= 8 ? `<text x="${100 + R * Math.cos(mid)}" y="${100 + R * Math.sin(mid)}">${pct}%</text>` : '');
+    const len = v / all.length * C, gap = shown.length > 1 ? 2 : 0, name = SECTORS[k] || 'أخرى';
+    const seg = `<circle cx="100" cy="100" r="${R}" stroke="${SECTOR_COLORS[k]}" stroke-dasharray="${Math.max(len - gap, .5)} ${C}" stroke-dashoffset="${-acc}" transform="rotate(-90 100 100)"><title>${name}: ${v} طلبات</title></circle>`;
     acc += len;
     return seg;
   }).join('');
