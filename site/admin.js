@@ -722,8 +722,19 @@ const formProject = (v, builtIn) => ({name: v('name'), name_ar: v('name_ar'), cl
   units: v('units') === '' ? null : Number(v('units')), sizes: v('sizes').split(/[,،]/).map(s => s.trim()).filter(Boolean),
   status: v('status') || null, progress: v('progress') === '' ? null : Math.max(0, Math.min(100, Math.round(Number(v('progress'))))),
   ...(builtIn ? {} : {city: v('city') || 'Riyadh', city_ar: v('city_ar') || 'الرياض', type: v('type')})});
+// Saves a row; until supabase/staff_v2.sql has run, the newer columns are left out so older features keep working.
+async function postCompat(table, body, newer, prefer = 'return=representation') {
+  try { return await rest(table, {method: 'POST', headers: {Prefer: prefer}, body}); } catch (e) {
+    if (!/schema cache|does not exist/i.test(e.message)) throw e;
+    const old = {...body};
+    newer.forEach(k => delete old[k]);
+    const out = await rest(table, {method: 'POST', headers: {Prefer: prefer}, body: old});
+    toast(L('تم الحفظ بدون الخانات الجديدة (الحالة، النسبة، الاسم، الدور) لأن قاعدة البيانات تحتاج تحديث: supabase/staff_v2.sql.', 'Saved without the new fields (status, completion, name, role): the database needs supabase/staff_v2.sql.'), true);
+    return out;
+  }
+}
 async function saveProject(id, row) {
-  const [saved] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates,return=representation'}, body: {id, ...row}});
+  const [saved] = await postCompat('cms_projects', {id, ...row}, ['status', 'progress'], 'resolution=merge-duplicates,return=representation');
   state.data.cms = state.data.cms.filter(c => c.id !== id).concat(saved);
   redraw();
 }
@@ -944,6 +955,9 @@ $root.addEventListener('click', e => {
     case 'core-required': case 'core-hide': run(async () => {
       const cfg = formCfg(), c = {...(cfg[id] || {})};
       if (t.dataset.act === 'core-hide') c.hidden = !c.hidden; else c.required = !coreRequired(id, c);
+      // Until supabase/staff_v2.sql has run, the database still requires these answers: changing them would lose enquiries.
+      if (state.logReady === false && !['project-location', 'budget', 'attachments'].includes(id))
+        throw new Error(L('قاعدة البيانات تحتاج تحديث: شغّلي ملف supabase/staff_v2.sql في Supabase ← SQL Editor.', 'The database needs updating: run supabase/staff_v2.sql in Supabase → SQL Editor.'));
       const next = {...cfg, [id]: c};
       if (!['email', 'phone'].some(k => !(next[k] || {}).hidden && coreRequired(k, next[k] || {})))
         throw new Error(L('لازم يبقى البريد أو الجوال ظاهر وإلزامي، عشان الفريق يقدر يتواصل مع العميل.', 'Email or phone must stay shown and required so the team can reach the client.'));
@@ -1041,7 +1055,7 @@ $root.addEventListener('submit', e => {
   if (f.id === 'new-project') run(async () => {
     let id = slugify(v('name'));
     while ([...BUILT_IN_IDS, ...d.cms.map(p => p.id)].includes(id)) id = id.slice(0, 36) + '-' + Math.floor(Math.random() * 90 + 10);
-    const [p] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {id, ...formProject(v, false), position: d.cms.length}});
+    const [p] = await postCompat('cms_projects', {id, ...formProject(v, false), position: d.cms.length}, ['status', 'progress']);
     d.cms.push(p);
     toast('جارٍ رفع الصور…');
     const files = Array.from(f.elements.files.files);
@@ -1089,7 +1103,7 @@ $root.addEventListener('submit', e => {
     await saveSetting('stats', [0, 1, 2, 3].map(i => ({n: Number(v('n' + i)), suffix: v('s' + i)})));
   }, 'تم حفظ الإعدادات').finally(done);
   if (f.id === 'new-user') run(async () => {
-    const [u] = await rest('site_admins', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {email: v('email').toLowerCase(), name: v('name'), role: v('role'), added_by: session.email}});
+    const [u] = await postCompat('site_admins', {email: v('email').toLowerCase(), name: v('name'), role: v('role'), added_by: session.email}, ['name', 'role']);
     d.users.push(u); state.addUser = false; redraw();
   }, 'تمت إضافة المستخدم').finally(done);
   if (f.id === 'user-edit-form') run(async () => {
