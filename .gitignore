@@ -9,4 +9,3 @@ Thumbs.db
 .env
 .env.*
 .vercel/
-node_modules/

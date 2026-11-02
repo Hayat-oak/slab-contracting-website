@@ -1,8 +1,0 @@
-{
-  "name": "slab-contracting-website",
-  "private": true,
-  "description": "SLAB website: static site in site/, Vercel functions in api/",
-  "dependencies": {
-    "@anthropic-ai/sdk": "1.3.0"
-  }
-}
