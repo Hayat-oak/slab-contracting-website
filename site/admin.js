@@ -756,14 +756,14 @@ function imagesView() {
 }
 
 /* ---------- Form questions ---------- */
-// The form's own fields, in page order: [key, Arabic, English, answer type, flexible]. Flexible fields can be made
-// optional or hidden (the others are always required). Photos are optional by default.
+// The form's own fields, in page order: [key, Arabic, English, answer type]. Each can be made optional or hidden;
+// photos are optional by default. Email or phone must stay shown and required so the team can reply.
 const CORE_FIELDS = [
   ['full-name', 'الاسم الكامل', 'Full name', 'text'], ['email', 'البريد الإلكتروني', 'Email address', 'email'], ['phone', 'رقم الجوال', 'Phone number', 'number'],
   ['project-type', 'قطاع المشروع', 'Project sector', 'select'], ['services', 'الخدمات المطلوبة', 'Services required', 'multi'],
-  ['project-location', 'موقع المشروع (المدينة)', 'Project location (city)', 'text', true], ['budget', 'الميزانية التقديرية', 'Estimated budget', 'select', true],
-  ['message', 'وصف المشروع', 'Project description', 'textarea'], ['attachments', 'صور المشروع', 'Project photos', 'photos', true]
-];
+  ['project-location', 'موقع المشروع (المدينة)', 'Project location (city)', 'text'], ['budget', 'الميزانية التقديرية', 'Estimated budget', 'select'],
+  ['message', 'وصف المشروع', 'Project description', 'textarea'], ['attachments', 'صور المشروع', 'Project photos', 'photos']
+].map(f => [...f, true]);
 const TYPE_LABEL = {text: ['نص', 'Text'], textarea: ['نص طويل', 'Long text'], number: ['رقم', 'Number'], email: ['بريد إلكتروني', 'Email'], select: ['اختيار من قائمة', 'Choice list'], multi: ['اختيار متعدد', 'Multiple choice'], photos: ['صور', 'Photos']};
 const coreRequired = (key, c) => (key === 'attachments' ? c.required === true : c.required !== false);
 const formCfg = () => ((state.data.settings || []).find(s => s.key === 'form_fields') || {}).value || {};
@@ -961,7 +961,10 @@ $root.addEventListener('click', e => {
     case 'core-required': case 'core-hide': run(async () => {
       const cfg = formCfg(), c = {...(cfg[id] || {})};
       if (t.dataset.act === 'core-hide') c.hidden = !c.hidden; else c.required = !coreRequired(id, c);
-      await saveFormFields({...cfg, [id]: c}); state.menu = null; redraw();
+      const next = {...cfg, [id]: c};
+      if (!['email', 'phone'].some(k => !(next[k] || {}).hidden && coreRequired(k, next[k] || {})))
+        throw new Error(L('لازم يبقى البريد أو الجوال ظاهر وإلزامي، عشان الفريق يقدر يتواصل مع العميل.', 'Email or phone must stay shown and required so the team can reach the client.'));
+      await saveFormFields(next); state.menu = null; redraw();
     }, 'تم الحفظ'); break;
     case 'q-toggle': case 'q-required': run(async () => {
       const q = d.questions.find(x => String(x.id) === id); const field = t.dataset.act === 'q-toggle' ? 'active' : 'required';

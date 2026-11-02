@@ -644,11 +644,11 @@ function process() {
 </main>`;
 }
 
-// Core form fields can be relabelled in the admin panel; location, budget and photos can also be made optional or hidden.
+// Core form fields can be relabelled, made optional or hidden on the staff page (Form questions).
 const fieldCfg = key => CMS.fields[key] || {};
 const flabel = (key, phrase) => (isAR() ? fieldCfg(key).label_ar : fieldCfg(key).label_en) || t(phrase);
 const fshown = key => !fieldCfg(key).hidden;
-// Photos are optional unless the admin makes them required; the other flexible fields are required by default.
+// Photos are optional unless staff make them required; the other fields are required by default.
 const freq = key => (key === 'attachments' ? fieldCfg(key).required === true : fieldCfg(key).required !== false);
 const MAX_PHOTOS = 6;
 function field(id, label, input, hint = '', req = true) {
@@ -684,20 +684,20 @@ function contact() {
   <input type="hidden" name="language" value="${state.language}">
   <p class="visually-hidden" aria-hidden="true"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
   <div class="form-alert" id="form-summary" role="alert" hidden></div>
-  ${field('full-name', flabel('full-name', 'fullName'), `<input id="full-name" name="full-name" required autocomplete="name" minlength="2" maxlength="120" aria-describedby="full-name-error">`)}
-  ${field('email', flabel('email', 'email'), `<input id="email" name="email" type="email" required autocomplete="email" maxlength="160" dir="ltr" aria-describedby="email-error">`)}
-  ${field('phone', flabel('phone', 'phoneField'), `<input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" maxlength="20" dir="ltr" aria-describedby="phone-error">`)}
-  ${field('project-type', flabel('project-type', 'sector'), `<select id="project-type" name="project-type" required aria-describedby="project-type-error"><option value="">${t('choose')}</option>${sectors.map(x => `<option value="${x}">${t(x)}</option>`).join('')}</select>`)}
-  <fieldset class="field full service-picker" id="services-field" aria-describedby="services-hint services-error">
-    <legend>${flabel('services', 'servicesNeeded')} <span aria-hidden="true">*</span></legend>
+  ${fshown('full-name') ? field('full-name', flabel('full-name', 'fullName'), `<input id="full-name" name="full-name"${freq('full-name') ? ' required' : ''} autocomplete="name" minlength="2" maxlength="120" aria-describedby="full-name-error">`, '', freq('full-name')) : ''}
+  ${fshown('email') ? field('email', flabel('email', 'email'), `<input id="email" name="email" type="email"${freq('email') ? ' required' : ''} autocomplete="email" maxlength="160" dir="ltr" aria-describedby="email-error">`, '', freq('email')) : ''}
+  ${fshown('phone') ? field('phone', flabel('phone', 'phoneField'), `<input id="phone" name="phone" type="tel"${freq('phone') ? ' required' : ''} autocomplete="tel" inputmode="tel" maxlength="20" dir="ltr" aria-describedby="phone-error">`, '', freq('phone')) : ''}
+  ${fshown('project-type') ? field('project-type', flabel('project-type', 'sector'), `<select id="project-type" name="project-type"${freq('project-type') ? ' required' : ''} aria-describedby="project-type-error"><option value="">${t('choose')}</option>${sectors.map(x => `<option value="${x}">${t(x)}</option>`).join('')}</select>`, '', freq('project-type')) : ''}
+  ${fshown('services') ? `<fieldset class="field full service-picker" id="services-field" aria-describedby="services-hint services-error">
+    <legend>${flabel('services', 'servicesNeeded')}${freq('services') ? ' <span aria-hidden="true">*</span>' : ''}</legend>
     <small class="hint" id="services-hint">${t('servicesHint')}</small>
     <div class="chips">${SERVICE_KEYS.map((key, i) => `<label class="chip"><input type="checkbox" name="services" value="${key}"><span>${ICON_CHECK}${t('service' + (i + 1))}</span></label>`).join('')}</div>
     <small class="error" id="services-error" hidden></small>
-  </fieldset>
+  </fieldset>` : ''}
   ${fshown('project-location') ? field('project-location', flabel('project-location', 'projectLocation'), `<input id="project-location" name="project-location"${freq('project-location') ? ' required' : ''} maxlength="120" autocomplete="address-level2" aria-describedby="project-location-error">`, '', freq('project-location')) : ''}
   ${fshown('budget') ? field('budget', flabel('budget', 'budget'), `<select id="budget" name="budget"${freq('budget') ? ' required' : ''} aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`, '', freq('budget')) : ''}
   ${CMS.questions.map(questionField).join('')}
-  ${field('message', flabel('message', 'message'), `<textarea id="message" name="message" required minlength="12" maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'))}
+  ${fshown('message') ? field('message', flabel('message', 'message'), `<textarea id="message" name="message"${freq('message') ? ' required minlength="12"' : ''} maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'), freq('message')) : ''}
   ${fshown('attachments') ? field('attachments', flabel('attachments', 'attachmentsLabel'), `<div class="file-pick"><input id="attachments" name="attachments" type="file" accept="image/*" multiple${freq('attachments') ? ' required' : ''} aria-describedby="attachments-hint attachments-error"><label for="attachments" class="file-btn" aria-hidden="true">${ICON.expand}${t('choosePhotos')}</label><span class="file-names" id="attachments-names">${t('noPhotos')}</span></div>`, t('attachmentsHint'), freq('attachments')) : ''}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
@@ -1171,10 +1171,10 @@ function validateField(el) {
   const v = (el.type === 'checkbox' ? (el.checked ? 'yes' : '') : el.value).trim();
   let msg = '';
   if (el.required && !v) msg = el.type === 'checkbox' ? t('errConsent') : el.name === 'budget' ? t('errBudget') : t('errRequired');
-  else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = t('errEmail');
-  else if (el.type === 'tel' && !/^\+?[\d\s()-]{8,20}$/.test(v) || (el.type === 'tel' && (v.match(/\d/g) || []).length < 8)) msg = t('errPhone');
-  else if (el.name === 'message' && v && v.length < 12) msg = t('errShort');
-  else if (el.name === 'full-name' && v.length < 2) msg = t('errRequired');
+  else if (el.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = t('errEmail');
+  else if (el.type === 'tel' && v && (!/^\+?[\d\s()-]{8,20}$/.test(v) || (v.match(/\d/g) || []).length < 8)) msg = t('errPhone');
+  else if (el.name === 'message' && v && el.required && v.length < 12) msg = t('errShort');
+  else if (el.name === 'full-name' && v && v.length < 2) msg = t('errRequired');
   const err = document.getElementById(el.id + '-error');
   el.setAttribute('aria-invalid', String(!!msg));
   el.closest('.field').classList.toggle('invalid', !!msg);
@@ -1182,11 +1182,12 @@ function validateField(el) {
   return !msg;
 }
 
-// Services multi-select: at least one must be ticked.
+// Services multi-select: at least one must be ticked (unless staff made the question optional or hid it).
 const selectedServices = form => Array.from(form.querySelectorAll('input[name="services"]:checked')).map(c => c.value);
 function validateServices(form) {
   const set = document.getElementById('services-field');
-  const ok = selectedServices(form).length > 0;
+  if (!set) return true;
+  const ok = selectedServices(form).length > 0 || !freq('services');
   const err = document.getElementById('services-error');
   set.setAttribute('aria-invalid', String(!ok));
   set.classList.toggle('invalid', !ok);

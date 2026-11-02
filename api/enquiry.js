@@ -43,10 +43,18 @@ function validate(body, cfg = {}) {
   const attachments = (Array.isArray(body.attachments) ? body.attachments : [])
     .filter(p => typeof p === 'string' && /^enquiries\/[A-Za-z0-9-]{8,60}\/\d{1,2}\.[a-z]{2,4}$/.test(p)).slice(0, 6);
   const budget = BUDGETS[budgetKey] ? `${BUDGETS[budgetKey][0]} / ${BUDGETS[budgetKey][1]}` : '';
-  const ok = row.full_name.length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) && row.phone.replace(/\D/g, '').length >= 7
-    && (row.project_location || !isRequired(cfg, 'project-location'))
-    && row.message.length >= 12
-    && row.consent && row.services.length > 0 && (!!budget || !isRequired(cfg, 'budget'))
+  // Every question can be made optional or hidden on the staff page: an answer is checked when given, and required
+  // only when the question is. An email or a phone number is always needed so SLAB can reply.
+  const need = key => isRequired(cfg, key);
+  const ok = (row.full_name ? row.full_name.length >= 2 : !need('full-name'))
+    && (row.email ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email) : !need('email'))
+    && (row.phone ? row.phone.replace(/\D/g, '').length >= 7 : !need('phone'))
+    && !!(row.email || row.phone)
+    && (row.project_type ? !!SECTORS[row.project_type] : !need('project-type'))
+    && (row.services.length > 0 || !need('services'))
+    && (row.project_location || !need('project-location'))
+    && (row.message ? row.message.length >= (need('message') ? 12 : 1) : !need('message'))
+    && row.consent && (!!budget || !need('budget'))
     && (attachments.length > 0 || !(cfg.attachments && cfg.attachments.required === true && !cfg.attachments.hidden));
   if (!row.project_location) row.project_location = '—';
   return {ok, row, attachments, budget, budgetKey: budget ? budgetKey : null, budgetEn: BUDGETS[budgetKey] ? BUDGETS[budgetKey][0] : '—'};
@@ -70,7 +78,7 @@ async function readAnswers(raw) {
 }
 
 function emailHtml(row, budget, answers = {}, photos = 0) {
-  const sector = SECTORS[row.project_type] || [row.project_type, row.project_type];
+  const sector = SECTORS[row.project_type] || ['—', '—'];
   const services = row.services.map(k => (SERVICES[k] ? `${SERVICES[k][0]} / ${SERVICES[k][1]}` : k)).join('<br>');
   const tel = row.phone.replace(/[^\d+]/g, '');
   const rows = [
@@ -134,10 +142,12 @@ module.exports = async (req, res) => {
     headers: {'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, Prefer: 'return=minimal'},
     body: JSON.stringify(data)
   }).catch(() => null);
-  let db = await insert({...row, budget: budgetKey, answers, attachments});
+  // Unanswered optional questions are stored as empty (null), not as blank text.
+  const stored = {...row, full_name: row.full_name || null, email: row.email || null, phone: row.phone || null, project_type: row.project_type || null};
+  let db = await insert({...stored, budget: budgetKey, answers, attachments});
   if (db && db.status === 400) {
     const extra = Object.values(answers).map(a => `${a.question_en}: ${a.answer}`).join('\n');
-    db = await insert({...row, message: `${row.message}\n\n[Estimated budget: ${budgetEn}]${extra ? '\n' + extra : ''}`});
+    db = await insert({...stored, message: `${row.message}\n\n[Estimated budget: ${budgetEn}]${extra ? '\n' + extra : ''}`});
   }
   if (!db || !db.ok) return res.status(502).json({ok: false, error: 'store_failed'});
 
@@ -148,7 +158,7 @@ module.exports = async (req, res) => {
     const mail = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Authorization: `Bearer ${process.env.RESEND_API_KEY}`},
-      body: JSON.stringify({from: FROM, to: [TO], reply_to: row.email, subject: `New enquiry — ${row.full_name}${city}`, html: emailHtml(row, budget, answers, attachments.length)})
+      body: JSON.stringify({from: FROM, to: [TO], ...(row.email ? {reply_to: row.email} : {}), subject: `New enquiry — ${row.full_name || row.phone || row.email}${city}`, html: emailHtml(row, budget, answers, attachments.length)})
     }).catch(() => null);
     emailed = !!(mail && mail.ok);
     if (!emailed) console.error('Resend failed', mail && mail.status, mail && await mail.text().catch(() => ''));

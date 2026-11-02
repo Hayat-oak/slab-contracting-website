@@ -138,4 +138,45 @@ insert into public.enquiry_activity (enquiry_id, kind, body, actor, created_at)
   select e.id, 'created', coalesce(e.source, 'website'), null, e.created_at from public.project_enquiries e
   where not exists (select 1 from public.enquiry_activity a where a.enquiry_id = e.id and a.kind = 'created');
 
+-- 6) Every form question can be optional or hidden (staff page → Form questions) ---------------------------
+-- Replace the original per-field checks with ones that allow unanswered questions. Kept: consent, an email or a
+-- phone number (so SLAB can reply), valid formats and lengths when an answer is given.
+do $$
+declare c record;
+begin
+  for c in select conname from pg_constraint
+           where conrelid = 'public.project_enquiries'::regclass and contype = 'c'
+             and conname <> 'project_enquiries_attachments_check'
+             and pg_get_constraintdef(oid) !~ '\m(status|budget|source)\M'
+  loop
+    execute format('alter table public.project_enquiries drop constraint %I', c.conname);
+  end loop;
+end $$;
+alter table public.project_enquiries alter column full_name drop not null;
+alter table public.project_enquiries alter column email drop not null;
+alter table public.project_enquiries alter column phone drop not null;
+alter table public.project_enquiries alter column project_type drop not null;
+alter table public.project_enquiries alter column project_location drop not null;
+alter table public.project_enquiries alter column message drop not null;
+alter table public.project_enquiries add constraint enquiry_consent check (consent);
+alter table public.project_enquiries add constraint enquiry_reachable check (coalesce(email, '') <> '' or coalesce(phone, '') <> '');
+alter table public.project_enquiries add constraint enquiry_email check (email is null or email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$');
+alter table public.project_enquiries add constraint enquiry_type check (project_type is null or project_type in ('residential', 'hospitality', 'commercial', 'institutional'));
+alter table public.project_enquiries add constraint enquiry_lengths check (
+  char_length(coalesce(full_name, '')) <= 120 and char_length(coalesce(email, '')) <= 160 and char_length(coalesce(phone, '')) <= 20
+  and char_length(coalesce(project_location, '')) <= 120 and char_length(coalesce(message, '')) <= 3000);
+-- Website visitors may only add an enquiry (consented, new, from the website); staff use staff_insert_enquiries.
+do $$
+declare p record;
+begin
+  for p in select policyname from pg_policies
+           where schemaname = 'public' and tablename = 'project_enquiries' and cmd = 'INSERT' and policyname <> 'staff_insert_enquiries'
+  loop
+    execute format('drop policy %I on public.project_enquiries', p.policyname);
+  end loop;
+end $$;
+create policy public_insert_enquiries on public.project_enquiries for insert to anon, authenticated
+  with check (consent and source = 'website' and status = 'new');
+grant insert on table public.project_enquiries to anon;
+
 notify pgrst, 'reload schema';
