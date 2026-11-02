@@ -241,7 +241,11 @@ function toast(msg, bad = false) {
   setTimeout(() => el.remove(), 4200);
 }
 async function run(task, done) {
-  try { await task(); if (done) toast(done); } catch (e) { toast(e.message || String(e), true); }
+  try { await task(); if (done) toast(done); } catch (e) {
+    const m = e.message || String(e);
+    // A column or table from supabase/staff_v2.sql is missing: the database update has not been run yet.
+    toast(/schema cache|does not exist|PGRST20[45]/i.test(m) ? L('قاعدة البيانات تحتاج تحديث: شغّلي ملف supabase/staff_v2.sql في Supabase ← SQL Editor.', 'The database needs updating: run supabase/staff_v2.sql in Supabase → SQL Editor.') : m, true);
+  }
 }
 
 /* ---------- Login ---------- */
