@@ -49,7 +49,7 @@ const STAT_LABELS = ['الوحدات المسلّمة أو قيد التنفيذ
 
 const $root = document.getElementById('admin');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
-const state = {tab: 'enquiries', data: {}, filter: {q: '', status: ''}, open: null, project: null, addQ: false, signed: {}};
+const state = {tab: 'home', data: {}, filter: {q: '', status: ''}, open: null, project: null, addQ: false, signed: {}};
 let session = null;
 try { session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch { session = null; }
 
@@ -76,6 +76,12 @@ const EN = {
   'تسجيل الخروج': 'Sign out', 'الطلبات الجديدة': 'New enquiries', 'جارٍ التحميل…': 'Loading…',
   'الطلبات': 'Enquiries', 'المشاريع والصور': 'Projects & photos', 'صور الأقسام': 'Section photos', 'أسئلة النموذج': 'Form questions',
   'الأرقام والإعدادات': 'Numbers & settings', 'المستخدمين': 'Users',
+  // dashboard
+  'الصفحة الرئيسية': 'Home', 'لوحة التحكم': 'Dashboard', 'نظرة عامة على أداء المنصة والطلبات': 'An overview of the website and its enquiries',
+  'إجمالي الطلبات': 'Total enquiries', 'طلبات جديدة': 'New enquiries', 'المدن النشطة': 'Active cities', 'الطلبات حسب المدينة': 'Enquiries by city',
+  'توزيع القطاعات': 'Enquiries by sector', 'طلبات': 'enquiries', 'أحدث الطلبات': 'Latest enquiries', 'إجراءات سريعة': 'Quick actions',
+  'عرض الطلبات': 'View enquiries', 'إدارة الصور': 'Manage photos', 'أخرى': 'Other', 'غير محدد': 'Not specified',
+  'مكة': 'Makkah', 'الدمام': 'Dammam', 'الخبر': 'Al Khobar', 'عرعر': 'Arar', 'أبها': 'Abha', 'تبوك': 'Tabuk', 'لا توجد بيانات بعد.': 'No data yet.',
   // enquiries
   'بحث بالاسم أو الجوال أو البريد…': 'Search by name, mobile or email…', 'كل الحالات': 'All statuses', 'تصدير Excel': 'Export to Excel',
   'التاريخ': 'Date', 'الاسم': 'Name', 'الجوال': 'Mobile', 'القطاع': 'Sector', 'المدينة': 'City', 'الميزانية': 'Budget', 'الحالة': 'Status', 'الإجراءات': 'Actions',
@@ -127,6 +133,8 @@ const EN = {
 // Strings built from a number, a name or a message.
 const EN_PATTERNS = [
   [/^(\d+) من (\d+) طلبات$/, (m, a, b) => `${a} of ${b} enquiries`],
+  [/^لديك (\d+) طلبات جديدة$/, (m, a) => `You have ${a} new ${a === '1' ? 'enquiry' : 'enquiries'}`],
+  [/^(.+?): (\d+) طلبات$/, (m, a, b) => `${T(a)}: ${b} ${b === '1' ? 'enquiry' : 'enquiries'}`],
   [/^(\d+) صور$/, (m, a) => `${a} ${a === '1' ? 'photo' : 'photos'}`],
   [/^المشاريع \((\d+)\)$/, (m, a) => `Projects (${a})`], [/^الصور \((\d+)\)$/, (m, a) => `Photos (${a})`],
   [/^أضافه (.+)$/, (m, a) => `Added by ${a}`],
@@ -306,10 +314,17 @@ const AI = Object.fromEntries(Object.entries({
   coins: '<ellipse cx="9" cy="7" rx="5" ry="2.5"/><path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7M10 16.8c.9.5 2.4.7 4 .7 2.8 0 5-1.1 5-2.5v-4c0-1-1.2-1.9-3-2.3M4 11v4c0 1.4 2.2 2.5 5 2.5"/>',
   status: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8M6 8v8M18 8v8M8 18h8"/>',
   open: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
-  dots: '<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>'
+  dots: '<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>',
+  home: '<path d="M4 11 12 4l8 7M6 9.5V20h4.5v-5h3v5H18V9.5"/>',
+  plus: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/>',
+  pie: '<path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>',
+  bars: '<path d="M5 20V12M9.5 20V6M14 20v-9M18.5 20V4"/>',
+  bolt: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>',
+  arrow: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  userplus: '<circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M18.5 8v6M15.5 11h6"/>'
 }).map(([k, d]) => [k, `<svg class="ai" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`]));
 const LOGO_MARK = '<svg class="admin-mark" viewBox="0 0 60 44" aria-hidden="true"><path d="M2 14 22 2h36v14L38 24H2z" fill="#adbfca"/><path d="M2 38 22 26h36v10L38 42H2z" fill="#c7d6ca"/></svg>';
-const TABS = [['enquiries', 'الطلبات'], ['projects', 'المشاريع والصور'], ['images', 'صور الأقسام'], ['questions', 'أسئلة النموذج'], ['settings', 'الأرقام والإعدادات'], ['users', 'المستخدمين']];
+const TABS = [['home', 'الصفحة الرئيسية'], ['enquiries', 'الطلبات'], ['projects', 'المشاريع والصور'], ['images', 'صور الأقسام'], ['questions', 'أسئلة النموذج'], ['settings', 'الأرقام والإعدادات'], ['users', 'المستخدمين']];
 async function renderApp() {
   $root.innerHTML = `<div class="admin-layout">
   <aside class="admin-side">
@@ -319,6 +334,7 @@ async function renderApp() {
   <div class="admin-body-col">
     <header class="admin-topbar">
       <button type="button" class="admin-bell" data-act="bell" aria-label="الطلبات الجديدة">${AI.bell}<i id="admin-bell-dot" hidden></i></button>
+      <button type="button" class="admin-newpill" data-act="bell" id="admin-newpill" hidden></button>
       <span class="admin-who">${AI.user}<span dir="ltr">${esc(session.email)}</span></span>
       ${langButton()}
       <button type="button" class="admin-logout" data-act="logout">${AI.logout}<span>تسجيل الخروج</span></button>
@@ -332,7 +348,7 @@ async function loadTab() {
   document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute(b.getAttribute('role') === 'tab' ? 'aria-selected' : 'aria-current', String(b.dataset.tab === state.tab)));
   try {
     const d = state.data;
-    if (state.tab === 'enquiries' || !d.enquiries) d.enquiries = await rest('project_enquiries?select=*&order=created_at.desc');
+    if (state.tab === 'enquiries' || state.tab === 'home' || !d.enquiries) d.enquiries = await rest('project_enquiries?select=*&order=created_at.desc');
     if (state.tab === 'projects') [d.cms, d.photos] = await Promise.all([rest('cms_projects?select=*&order=position,created_at'), rest('project_photos?select=*&order=position,id')]);
     if (state.tab === 'images') d.images = await rest('image_overrides?select=*');
     if (state.tab === 'questions') [d.questions, d.settings] = await Promise.all([rest('form_questions?select=*&order=position,id'), rest('site_settings?select=*')]);
@@ -348,7 +364,80 @@ async function loadTab() {
 // Dot on the bell while any enquiry is still "new".
 function updateBell() {
   const dot = document.getElementById('admin-bell-dot');
-  if (dot) dot.hidden = !(state.data.enquiries || []).some(e => e.status === 'new');
+  const pill = document.getElementById('admin-newpill');
+  const fresh = (state.data.enquiries || []).filter(e => e.status === 'new').length;
+  if (dot) dot.hidden = !fresh;
+  if (pill) { pill.hidden = !fresh; pill.innerHTML = `${AI.enquiries}<span>لديك ${fresh} طلبات جديدة</span>`; }
+}
+
+/* ---------- Home (dashboard) ---------- */
+// Fixed colour per sector (validated for colour-blind separation); "other" covers unknown types in old rows.
+const SECTOR_COLORS = {residential: '#007d63', hospitality: '#c9873a', commercial: '#4a80c4', institutional: '#8f9a35', other: '#8a8780'};
+const HILLS = '<svg class="dash-deco" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V40l34-20 30 18 26-12 40 22 34-26 36 20v18z"/></svg>';
+const SKYLINE = '<svg class="dash-deco" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V44h14V30h10v14h8V18h12v42h6V36h10V24h8v36h8V40h12V12h10v48h6V32h12v28h8V46h14V28h10v32z"/></svg>';
+// The city is typed freely in either language; common spellings are counted as one city (shown in Arabic).
+const CITY_ALIASES = {riyadh: 'الرياض', 'الرياض': 'الرياض', jeddah: 'جدة', jedda: 'جدة', 'جدة': 'جدة', 'جده': 'جدة', madinah: 'المدينة المنورة', medina: 'المدينة المنورة',
+  'المدينة': 'المدينة المنورة', 'المدينة المنورة': 'المدينة المنورة', makkah: 'مكة', mecca: 'مكة', 'مكة': 'مكة', 'مكة المكرمة': 'مكة', dammam: 'الدمام', 'الدمام': 'الدمام',
+  khobar: 'الخبر', 'al khobar': 'الخبر', 'الخبر': 'الخبر', arar: 'عرعر', 'عرعر': 'عرعر', abha: 'أبها', 'أبها': 'أبها', tabuk: 'تبوك', 'تبوك': 'تبوك'};
+const cityName = s => { const c = (s || '').trim(); return CITY_ALIASES[c.toLowerCase()] || c || 'غير محدد'; };
+function tally(list, key) {
+  const m = new Map();
+  list.forEach(e => { const k = key(e); m.set(k, (m.get(k) || 0) + 1); });
+  return [...m].sort((a, b) => b[1] - a[1]);
+}
+function homeView() {
+  const all = state.data.enquiries || [];
+  const status = s => all.filter(e => e.status === s).length;
+  const cities = tally(all, e => cityName(e.project_location));
+  const stat = (icon, tone, label, value, deco) => `<div class="dash-card dash-stat"><span class="dash-stat-icon ${tone}">${AI[icon]}</span><div><span>${label}</span><b>${value}</b></div>${deco}</div>`;
+  const empty = '<p class="admin-hint">لا توجد بيانات بعد.</p>';
+
+  // Enquiries by city: top five, the rest folded into "other".
+  const bars = cities.slice(0, 5);
+  if (cities.length > 5) bars.push(['أخرى', cities.slice(5).reduce((s, c) => s + c[1], 0)]);
+  const top = Math.max(1, ...bars.map(b => b[1]));
+  const step = Math.ceil(top / 5);
+  const axis = step * Math.ceil(top / step);
+  const ticks = Array.from({length: axis / step + 1}, (_, i) => i * step);
+  const cityChart = all.length ? `<div class="dash-bars"><div class="dash-yaxis" aria-hidden="true">${ticks.slice().reverse().map(t => `<span>${t}</span>`).join('')}</div>
+    <div class="dash-plot">${ticks.map(t => `<i style="bottom:${t / axis * 100}%"></i>`).join('')}
+    ${bars.map(([c, v]) => `<div class="dash-bar" title="${esc(c)}: ${v} طلبات"><span style="height:${v / axis * 100}%"><b>${v}</b></span><small>${esc(c)}</small></div>`).join('')}</div></div>` : empty;
+
+  // Sector donut: one ring segment per sector, a 2-unit gap between segments, labels on segments of 8% or more.
+  const known = Object.keys(SECTORS).map(k => [k, all.filter(e => e.project_type === k).length]);
+  const other = all.length - known.reduce((s, x) => s + x[1], 0);
+  const slices = [...known, ...(other ? [['other', other]] : [])];
+  const R = 70, C = 2 * Math.PI * R, shown = slices.filter(s => s[1]);
+  let acc = 0;
+  const arcs = shown.map(([k, v]) => {
+    const len = v / all.length * C, gap = shown.length > 1 ? 2 : 0, mid = (acc + len / 2) / C * 2 * Math.PI - Math.PI / 2;
+    const pct = Math.round(v / all.length * 100), name = SECTORS[k] || 'أخرى';
+    const seg = `<circle cx="100" cy="100" r="${R}" stroke="${SECTOR_COLORS[k]}" stroke-dasharray="${Math.max(len - gap, .5)} ${C}" stroke-dashoffset="${-acc}" transform="rotate(-90 100 100)"><title>${name}: ${v} طلبات</title></circle>`
+      + (pct >= 8 ? `<text x="${100 + R * Math.cos(mid)}" y="${100 + R * Math.sin(mid)}">${pct}%</text>` : '');
+    acc += len;
+    return seg;
+  }).join('');
+  const donut = all.length ? `<div class="dash-donut-wrap"><ul class="dash-legend">${slices.map(([k, v]) => `<li><i style="background:${SECTOR_COLORS[k]}"></i><span>${SECTORS[k] || 'أخرى'}</span><b dir="ltr">${Math.round(v / all.length * 100)}% (${v})</b></li>`).join('')}</ul>
+    <svg class="dash-donut" viewBox="0 0 200 200" role="img" aria-label="توزيع القطاعات">${arcs}<circle class="dash-hole" cx="100" cy="100" r="46"/><text class="dash-total" x="100" y="96">${all.length}</text><text class="dash-total-label" x="100" y="120">طلبات</text></svg></div>` : empty;
+
+  const latest = all.slice(0, 5);
+  return `<section class="dash"><div class="admin-pagehead"><div><h2>${AI.images}لوحة التحكم</h2><small>نظرة عامة على أداء المنصة والطلبات</small></div></div>
+  <div class="dash-stats">
+    ${stat('layers', 'warm', 'إجمالي الطلبات', all.length, HILLS)}${stat('plus', 'warm', 'طلبات جديدة', status('new'), HILLS)}
+    ${stat('phone', 'sage', 'تم التواصل', status('contacted'), HILLS)}${stat('pin', 'sage', 'المدن النشطة', cities.filter(c => c[0] !== 'غير محدد').length, SKYLINE)}</div>
+  <div class="dash-row">
+    <div class="dash-card"><h3>${AI.pie}توزيع القطاعات</h3>${donut}</div>
+    <div class="dash-card"><h3>${AI.bars}الطلبات حسب المدينة</h3>${cityChart}</div></div>
+  <div class="dash-row dash-row-b">
+    <div class="dash-card"><h3>${AI.calendar}أحدث الطلبات</h3>
+      ${latest.length ? `<div class="admin-table-wrap"><table class="admin-table dash-latest"><thead><tr><th><span>${AI.user}الاسم</span></th><th><span>${AI.pin}المدينة</span></th><th><span>${AI.layers}القطاع</span></th><th><span>${AI.status}الحالة</span></th><th><span>${AI.calendar}التاريخ</span></th></tr></thead><tbody>
+      ${latest.map(e => `<tr><td><button type="button" class="dash-open" data-act="open-enq" data-id="${e.id}">${esc(e.full_name)}</button></td><td>${esc(e.project_location)}</td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td>
+        <td><span class="dash-pill s-${esc(e.status)}">${STATUS[e.status] || esc(e.status)}</span></td><td>${fmtDate(e.created_at)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="admin-hint">لا توجد طلبات.</p>'}</div>
+    <div class="dash-card"><h3>${AI.bolt}إجراءات سريعة</h3><div class="dash-quick">
+      <button type="button" class="is-primary" data-tab="enquiries">${AI.enquiries}<span>عرض الطلبات</span>${AI.arrow}</button>
+      <button type="button" data-tab="users">${AI.userplus}<span>إضافة مستخدم</span></button>
+      <button type="button" data-act="export">${AI.download}<span>تصدير Excel</span></button>
+      <button type="button" data-tab="images">${AI.projects}<span>إدارة الصور</span></button></div></div></div></section>`;
 }
 
 /* ---------- Enquiries ---------- */
@@ -556,7 +645,7 @@ function usersView() {
     <button class="admin-btn span2" type="submit">إضافة</button></form></section>`;
 }
 
-const VIEWS = {enquiries: enquiriesView, projects: projectsView, images: imagesView, questions: questionsView, settings: settingsView, users: usersView};
+const VIEWS = {home: homeView, enquiries: enquiriesView, projects: projectsView, images: imagesView, questions: questionsView, settings: settingsView, users: usersView};
 const redraw = () => { const m = document.getElementById('admin-main'); if (m) m.innerHTML = VIEWS[state.tab](); };
 
 /* ---------- Events ---------- */
@@ -585,6 +674,7 @@ $root.addEventListener('click', e => {
       renderLogin('code', mail); break;
     }
     case 'export': exportExcel(); break;
+    case 'open-enq': state.tab = 'enquiries'; state.filter = {q: '', status: ''}; state.open = id; loadTab().then(() => loadPhotos(d.enquiries.find(x => x.id === id))); break;
     case 'toggle-enq': state.open = state.open === id ? null : id; redraw(); if (state.open) loadPhotos(d.enquiries.find(x => x.id === id)); break;
     case 'q-add-open': case 'q-add-close':
       state.addQ = t.dataset.act === 'q-add-open'; redraw();

@@ -177,3 +177,82 @@
 [dir="ltr"] .admin-logo { justify-content: flex-start; }
 [dir="ltr"] .admin-logo small { text-align: left; }
 [dir="ltr"] .admin-status { padding: 9px 22px 9px 40px !important; background-position: right 14px center !important; }
+
+/* ---------- Home dashboard (client mock-up): stat cards, sector donut, city bars, latest enquiries, quick actions ---------- */
+.admin-newpill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border: 0; border-radius: 10px; background: #ece8e1; color: var(--ink); font-size: 14px; font-weight: 500; cursor: pointer; }
+.admin-newpill:hover { background: #e2ddd4; }
+.admin-newpill .ai { width: 18px; height: 18px; }
+.admin-topbar { justify-content: flex-start; }
+.admin-topbar .admin-who { margin-inline-start: auto; }
+.admin-bell i { background: #c4553f; }
+.dash { gap: 20px !important; }
+.dash .admin-pagehead { margin-bottom: 4px; }
+.dash-card { position: relative; overflow: hidden; background: #fbfaf8; border: 1px solid #e6e3dd; border-radius: 16px; padding: 22px 24px; box-shadow: 0 6px 20px rgba(43, 55, 62, .05); min-width: 0; }
+.dash-card h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 18px; font-size: 19px; font-weight: 600; }
+.dash-card h3 .ai { width: 24px; height: 24px; }
+.dash-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.dash-stat { display: flex; align-items: center; gap: 18px; min-height: 104px; }
+.dash-stat > div { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; }
+.dash-stat > div span { font-size: 16px; font-weight: 500; }
+.dash-stat b { font-size: 34px; font-weight: 600; line-height: 1; font-family: 'Jost', var(--font); }
+.dash-stat-icon { position: relative; z-index: 1; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 12px; flex: none; }
+.dash-stat-icon .ai { width: 28px; height: 28px; }
+.dash-stat-icon.warm { background: #efe6da; }
+.dash-stat-icon.sage { background: #dfe9df; }
+.dash-deco { position: absolute; inset-inline-end: 0; bottom: 0; width: 46%; height: 52%; fill: #ebe7e0; opacity: .8; }
+.dash-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.dash-row-b { grid-template-columns: minmax(0, 2.2fr) minmax(260px, 1fr); }
+
+.dash-donut-wrap { display: flex; align-items: center; gap: 28px; }
+.dash-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+.dash-legend li { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 10px; background: #f3f1ec; font-size: 15px; }
+.dash-legend i { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+.dash-legend b { margin-inline-start: auto; font-weight: 500; color: var(--muted); }
+.dash-donut { width: min(230px, 46%); flex: none; }
+.dash-donut circle { fill: none; stroke-width: 54; transition: opacity .2s; }
+.dash-donut circle:not(.dash-hole):hover { opacity: .82; }
+.dash-donut .dash-hole { fill: #fbfaf8; stroke: none; }
+.dash-donut text { fill: #fff; font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.dash-donut .dash-total { fill: var(--ink); font-size: 30px; font-family: 'Jost', var(--font); }
+.dash-donut .dash-total-label { fill: var(--muted); font-size: 14px; font-weight: 400; }
+
+.dash-bars { display: flex; gap: 12px; height: 236px; padding: 26px 0 30px; }
+.dash-yaxis { display: flex; flex-direction: column; justify-content: space-between; font-size: 13px; color: var(--muted); margin-block: -8px; }
+.dash-plot { position: relative; flex: 1; display: flex; align-items: flex-end; justify-content: space-around; gap: 16px; padding-inline: 12px; border-bottom: 1px solid #cfcac2; }
+.dash-plot > i { position: absolute; inset-inline: 0; height: 0; border-top: 1px solid #ece9e3; }
+.dash-bar { position: relative; z-index: 1; flex: 1; max-width: 130px; height: 100%; display: flex; align-items: flex-end; }
+.dash-bar span { position: relative; width: 100%; min-height: 2px; background: #2f5552; border-radius: 4px 4px 0 0; transition: background .2s; }
+.dash-bar:hover span { background: #1f3b3c; }
+.dash-bar b { position: absolute; bottom: 100%; inset-inline: 0; padding-bottom: 6px; text-align: center; font-size: 15px; font-weight: 600; }
+.dash-bar small { position: absolute; top: 100%; inset-inline: -10px; padding-top: 9px; text-align: center; font-size: 14px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.dash-latest td { padding: 13px 14px; font-size: 14px; }
+.dash-open { background: none; border: 0; padding: 0; color: var(--ink); cursor: pointer; font-size: 15px; text-align: start; }
+.dash-open:hover { text-decoration: underline; text-underline-offset: 3px; }
+.dash-pill { display: inline-block; min-width: 92px; padding: 6px 16px; border-radius: 999px; background: #efe6da; font-size: 13px; font-weight: 500; text-align: center; white-space: nowrap; }
+.dash-pill.s-contacted { background: #dfe9df; }
+.dash-pill.s-closed { background: #e4e7e9; }
+.dash-quick { display: flex; flex-direction: column; gap: 12px; }
+.dash-quick button { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border: 1px solid #e6e3dd; border-radius: 10px; background: #f1efea; color: var(--ink); font-size: 15px; cursor: pointer; text-align: start; transition: background .2s; }
+.dash-quick button:hover { background: #e8e4dc; }
+.dash-quick button.is-primary { background: #1f3b3c; border-color: #1f3b3c; color: #fff; }
+.dash-quick button.is-primary:hover { background: #152a2b; }
+.dash-quick button .ai:last-child:not(:first-child) { margin-inline-start: auto; }
+[dir="ltr"] .dash-quick .is-primary .ai:last-child { transform: scaleX(-1); }
+.dash button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 1200px) {
+  .dash-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dash-row, .dash-row-b { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .dash-stats { grid-template-columns: minmax(0, 1fr); }
+  .dash-donut-wrap { flex-direction: column-reverse; }
+  .dash-donut { width: 210px; }
+  .dash-legend { width: 100%; }
+  .admin-newpill span { display: none; }
+}
+@media (max-width: 900px) {
+  .admin-topbar { flex-wrap: wrap; gap: 12px; }
+  .admin-who { padding-inline: 0; border: 0; }
+}
