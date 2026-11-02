@@ -180,4 +180,22 @@ create policy public_insert_enquiries on public.project_enquiries for insert to 
   with check (consent and source = 'website' and status = 'new');
 grant insert on table public.project_enquiries to anon;
 
+-- 7) Completion 100% for the 13 projects from the company profile (confirmed by SLAB, 2026-11-02) -----------------
+-- A cms_projects row with a built-in id only overrides that project; names, clients, units and sizes are the website's own.
+insert into public.cms_projects (id, name, name_ar, client, client_ar, units, sizes, published, progress) values
+  ('soulhittin', 'SOUL Hittin', 'سول حطين', 'OHG', 'OHG', 9, '{132.26}', true, 100),
+  ('almughrizat', 'Almughrizat Building', 'مبنى المغرزات', 'Aliyah Homes', 'عالية هوم', 25, '{50,107}', true, 100),
+  ('masharef', 'Masharef Building', 'مبنى مشارف', 'Aliyah Homes', 'عالية هوم', 14, '{117,121,160}', true, 100),
+  ('mkin30', 'Makeen 30', 'مكين 30', 'Aliyah Homes', 'عالية هوم', 1, '{245}', true, 100),
+  ('nirvana12', 'Nirvana 12', 'نيرفانا 12', 'Aliyah Homes', 'عالية هوم', 2, '{50,145}', true, 100),
+  ('ajlan11', 'Al Ajlan Riviera 12', 'العجلان ريفيرا 12', 'Aliyah Homes', 'عالية هوم', 1, '{92,169}', true, 100),
+  ('almajidiya116', 'Almajidiya 116', 'المجيدية 116', 'Aliyah Homes', 'عالية هوم', 4, '{77,101,128,130}', true, 100),
+  ('almajidiya111', 'Al Majidiya Residence 111', 'المجيدية ريزيدنس 111', 'Aliyah Homes', 'عالية هوم', 1, '{120}', true, 100),
+  ('jawhara8', 'Jawhara Al Narjis 8', 'جوهرة النرجس 8', 'Aliyah Homes', 'عالية هوم', 1, '{50,145}', true, 100),
+  ('ajlan19', 'Al Ajlan Riviera 21', 'العجلان ريفيرا 21', 'Aliyah Homes', 'عالية هوم', 1, '{137}', true, 100),
+  ('almajidiya70', 'Almajidiya 70', 'المجيدية 70', 'Aliyah Homes', 'عالية هوم', 1, '{90}', true, 100),
+  ('almajidiya130', 'Almajidiya 130', 'المجيدية 130', 'Aliyah Homes', 'عالية هوم', 1, '{128}', true, 100),
+  ('ajlan37', 'Al Ajlan Riviera 37', 'العجلان ريفيرا 37', 'Aliyah Homes', 'عالية هوم', 2, '{77,101,128,130}', true, 100)
+on conflict (id) do update set progress = 100;
+
 notify pgrst, 'reload schema';
