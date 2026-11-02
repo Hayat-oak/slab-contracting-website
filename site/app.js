@@ -107,6 +107,7 @@ const phrases = {
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
  projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', other:'Other Projects', adminLogin:'Staff login', showing:'projects shown', filterLabel:'Filter projects by client',
  projectTitle:'Residential Fit-Out', type:'Type', budget:'Estimated budget', budgetChoose:'Select a range', budget_lt500k:'Under SAR 500,000', budget_500k1m:'SAR 500,000 – 1 million', budget_1m3m:'SAR 1 – 3 million', budget_gt3m:'Over SAR 3 million', budget_tbd:'Not decided yet', errBudget:'Please select an estimated budget.', projectTypeTag:'Residential',
+ projStatus:'Project status', pst_active:'In progress', pst_finished:'Completed', pst_promo:'Promotion',
  location:'Location', client:'Client', units:'Number of units', size:'Apartment size', scope:'Scope of work', riyadh:'Riyadh, Saudi Arabia', riyadhShort:'Riyadh', residential:'Residential', projScope:'Design, Furniture & Fit-Out',
  scopeItems:'Design|Furniture|Fit-Out',
  gallery:'Gallery', overview:'Overview', nextProject:'Next Project', prevProject:'Previous Project', similarProjects:'More Projects', projectTabs:'Project sections',
@@ -170,6 +171,7 @@ const phrases = {
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
  projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عالية هوم',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الموظفين',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
  projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
+ projStatus:'حالة المشروع', pst_active:'قيد التنفيذ', pst_finished:'منتهي', pst_promo:'عرض ترويجي',
  location:'الموقع',client:'العميل',units:'عدد الوحدات',size:'مساحات الشقق',scope:'نطاق العمل',riyadh:'الرياض، المملكة العربية السعودية',riyadhShort:'الرياض',residential:'سكني',projScope:'التصميم والأثاث والتشطيبات',
  scopeItems:'التصميم|الأثاث|التشطيبات',
  gallery:'الصور',overview:'نبذة',nextProject:'المشروع التالي',prevProject:'المشروع السابق',similarProjects:'مشاريع أخرى',projectTabs:'أقسام المشروع',
@@ -252,6 +254,8 @@ const pclient = p => isAR() ? p.clientAr : p.client;
 // Projects added in the admin panel carry their own city and type; built-in ones are Riyadh / residential fit-out.
 const pcity = p => p.city ? (isAR() ? p.cityAr : p.city) : t('riyadhShort');
 const ptype = p => t(p.type || 'residential');
+// Status and completion are set by staff in the staff page (not from the company profile); shown only when set.
+const pstatus = p => [p.status ? t('pst_' + p.status) : '', p.progress != null ? `${p.progress}%` : ''].filter(Boolean).join(' · ');
 const plead = p => p.cms
   ? (isAR() ? `مشروع ${ptype(p)} في ${pcity(p)}${pclient(p) ? ` لصالح ${pclient(p)}` : ''}.` : `${ptype(p)} project in ${pcity(p)}${pclient(p) ? ` for ${pclient(p)}` : ''}.`)
   : t('projectLead')(p);
@@ -371,7 +375,7 @@ function footer() {
 function projectCard(p, extra = '') {
   return `<article class="project-card ${extra}" data-reveal>
   <a href="${href('projects/' + p.id)}" data-cursor="diag">
-    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${ptype(p)}`)}<span class="card-tag">${ptype(p)}</span></div>
+    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${ptype(p)}`)}<span class="card-tag">${ptype(p)}${p.status ? ` · ${t('pst_' + p.status)}` : ''}</span></div>
     <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${[pcity(p), pclient(p), p.units ? units(p) : ''].filter(Boolean).join(' · ')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
   </a></article>`;
 }
@@ -555,6 +559,7 @@ function detail(p) {
   const meta = p.cms
     ? [[t('location'), pcity(p)], [t('client'), pclient(p)], [t('type'), ptype(p)], [t('units'), p.units], [t('size'), p.sizes.length ? sizes(p) : '']].filter(([, v]) => v !== '' && v != null)
     : [[t('location'), t('riyadh')], [t('client'), pclient(p)], [t('type'), t('projectTitle')], [t('units'), p.units], [t('size'), sizes(p)], [t('scope'), t('projScope')]];
+  if (pstatus(p)) meta.push([t('projStatus'), `${pstatus(p)}${p.progress != null ? `<span class="meta-progress" aria-hidden="true"><i style="width:${p.progress}%"></i></span>` : ''}`]);
   return `<main class="page" id="main-content" tabindex="-1"><div class="container">
 <div class="project-detail-head">
   <div>
@@ -1476,6 +1481,10 @@ async function loadCms() {
   if (c.phone) { PHONE = String(c.phone).replace(/[^\d+]/g, ''); PHONE_DISPLAY = c.phone_display || c.phone; }
   if (c.email) EMAIL = c.email;
   SOCIAL.forEach(s => { const url = c[s.label.toLowerCase()]; if (/^https:\/\//.test(url || '')) s.href = url; });
+  // WhatsApp number from the staff page (local 05… or international), shown as a footer icon.
+  const wa = String(c.whatsapp || '').replace(/\D/g, '').replace(/^0(5\d{8})$/, '966$1');
+  if (/^\d{9,15}$/.test(wa) && !SOCIAL.some(s => s.label === 'WhatsApp')) SOCIAL.push({label: 'WhatsApp', href: `https://wa.me/${wa}`,
+    icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8.5 8.5 0 1 1 8 18.8z"/><path d="M9 8.5c0 3.3 3 6.5 6.5 6.5l1-1.7-2-1-1 1c-1-.4-2.3-1.7-2.7-2.7l1-1-1-2z"/></svg>'});
   CMS.questions = Array.isArray(questions) ? questions : [];
   images.forEach(i => { CMS.images[i.slot] = i.url; });
   extra.forEach(p => {
@@ -1483,12 +1492,13 @@ async function loadCms() {
     if (own) {
       // Edits to a built-in project: text, units and sizes, or hide it.
       if (p.published === false) { projects.splice(projects.indexOf(own), 1); return; }
-      Object.assign(own, {name: p.name, ar: p.name_ar, client: p.client, clientAr: p.client_ar, units: p.units ?? own.units, sizes: p.sizes && p.sizes.length ? p.sizes : own.sizes});
+      Object.assign(own, {name: p.name, ar: p.name_ar, client: p.client, clientAr: p.client_ar, units: p.units ?? own.units, sizes: p.sizes && p.sizes.length ? p.sizes : own.sizes,
+        status: p.status || null, progress: p.progress ?? null});
       return;
     }
     if (p.published === false) return;
     projects.push({id: p.id, name: p.name, ar: p.name_ar, client: p.client, clientAr: p.client_ar, city: p.city, cityAr: p.city_ar, type: p.type,
-      units: p.units, sizes: p.sizes || [], images: 0, category: 'other', cms: true});
+      units: p.units, sizes: p.sizes || [], images: 0, category: 'other', cms: true, status: p.status || null, progress: p.progress ?? null});
   });
   photos.forEach(ph => {
     const p = projects.find(x => x.id === ph.project_id);

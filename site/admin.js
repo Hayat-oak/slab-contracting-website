@@ -294,8 +294,11 @@ function renderLogin(step = 'email', email = '') {
 }
 
 /* ---------- App shell ---------- */
-// Line icons (24px grid, stroke = currentColor) for the menu, tabs and table headers.
+// Text written in both languages (newer screens). Arabic strings without an English pair are translated through EN.
+const L = (ar, en) => (LANG === 'en' ? en : ar);
+// Line icons (24px grid, stroke = currentColor).
 const AI = Object.fromEntries(Object.entries({
+  home: '<path d="M4 11 12 4l8 7M6 9.5V20h4.5v-5h3v5H18V9.5"/>',
   enquiries: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/>',
   projects: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-5 4 4 3-3 4 4"/>',
   images: '<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
@@ -311,41 +314,68 @@ const AI = Object.fromEntries(Object.entries({
   phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
   layers: '<path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/>',
   pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
-  coins: '<ellipse cx="9" cy="7" rx="5" ry="2.5"/><path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7M10 16.8c.9.5 2.4.7 4 .7 2.8 0 5-1.1 5-2.5v-4c0-1-1.2-1.9-3-2.3M4 11v4c0 1.4 2.2 2.5 5 2.5"/>',
   status: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8M6 8v8M18 8v8M8 18h8"/>',
-  open: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
   dots: '<circle cx="12" cy="5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/>',
-  home: '<path d="M4 11 12 4l8 7M6 9.5V20h4.5v-5h3v5H18V9.5"/>',
   plus: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/>',
+  add: '<path d="M12 5v14M5 12h14"/>',
   pie: '<path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>',
   bars: '<path d="M5 20V12M9.5 20V6M14 20v-9M18.5 20V4"/>',
   bolt: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  filter: '<path d="M4 5h16l-6 7.5V19l-4 1v-7.5z"/>',
+  sort: '<path d="M8 4v16M4 8l4-4 4 4M16 20V4M12 16l4 4 4-4"/>',
+  chevron: '<path d="m15 6-6 6 6 6"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  note: '<path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5M9 9h6M9 12.5h4"/>',
+  refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 6l2.6 1.5M17.2 16.5l2.6 1.5M4.2 18l2.6-1.5M17.2 7.5 19.8 6M2.5 12h3M18.5 12h3"/>',
+  whatsapp: '<path d="M4 20l1.3-4A8.5 8.5 0 1 1 8 18.8z"/><path d="M9 8.5c0 3.3 3 6.5 6.5 6.5l1-1.7-2-1-1 1c-1-.4-2.3-1.7-2.7-2.7l1-1-1-2z"/>',
+  clip: '<path d="M8 12.5 14.5 6a3 3 0 0 1 4.2 4.2l-8 8A4.6 4.6 0 0 1 4 11.7L11 4.7"/>',
+  log: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',
   arrow: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
-  userplus: '<circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M18.5 8v6M15.5 11h6"/>'
+  open: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>'
 }).map(([k, d]) => [k, `<svg class="ai" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`]));
-const LOGO_MARK = '<svg class="admin-mark" viewBox="0 0 60 44" aria-hidden="true"><path d="M2 14 22 2h36v14L38 24H2z" fill="#adbfca"/><path d="M2 38 22 26h36v10L38 42H2z" fill="#c7d6ca"/></svg>';
+const LOGO_MARK = '<svg class="admin-mark" viewBox="0 0 60 44" aria-hidden="true"><path d="M2 14 22 2h36v14L38 24H2z" fill="#c9d8cf"/><path d="M2 38 22 26h36v10L38 42H2z" fill="#e8efe9"/></svg>';
 const TABS = [['home', 'الصفحة الرئيسية'], ['enquiries', 'الطلبات'], ['projects', 'المشاريع والصور'], ['images', 'صور الأقسام'], ['questions', 'أسئلة النموذج'], ['settings', 'الأرقام والإعدادات'], ['users', 'المستخدمين']];
+// Roles are enforced by the database (supabase/staff_v2.sql); the panel only hides what a role cannot use.
+const ROLES = {admin: ['مدير النظام', 'System manager'], projects: ['إدارة مشاريع', 'Project management'], finance: ['مالية', 'Finance']};
+const ACCESS = {admin: TABS.map(t => t[0]), projects: ['home', 'enquiries', 'projects', 'images'], finance: ['home', 'enquiries']};
+const role = () => (state.me && ACCESS[state.me.role] ? state.me.role : 'finance');
+const can = (...roles) => roles.includes(role());
+const canEdit = () => can('admin', 'projects');
+const allowed = tab => ACCESS[role()].includes(tab);
+const PAGE = 10;
+Object.assign(state, {filter: {q: '', status: '', sector: ''}, page: 1, sel: [], enqTab: 'info', projTab: 'all', imgGroup: null, setTab: 'contact', editRow: null, menu: null, bell: false, bellTab: 'all', bellAll: false, activity: [], log: {}, newEnq: false, addUser: false, editContact: false});
+
 async function renderApp() {
+  try { state.data.users = await rest('site_admins?select=*&order=created_at'); } catch { state.data.users = []; }
+  const mine = state.data.users.find(u => u.email === session.email);
+  state.me = {email: session.email, name: '', ...mine, role: (mine && mine.role) || 'admin'};
+  if (!allowed(state.tab)) state.tab = 'home';
+  const who = state.me.name || session.email;
   $root.innerHTML = `<div class="admin-layout">
   <aside class="admin-side">
     <a class="admin-logo" href="./">${LOGO_MARK}<span><b>SLAB</b><small>صفحة الموظفين</small></span></a>
-    <nav class="admin-side-nav">${TABS.map(([k, l]) => `<button type="button" data-tab="${k}" aria-current="${state.tab === k}">${AI[k]}<span>${l}</span></button>`).join('')}</nav>
+    <nav class="admin-side-nav">${TABS.filter(([k]) => allowed(k)).map(([k, l]) => `<button type="button" data-tab="${k}" aria-current="${state.tab === k}">${AI[k]}<span>${l}</span></button>`).join('')}</nav>
   </aside>
   <div class="admin-body-col">
     <header class="admin-topbar">
-      <button type="button" class="admin-bell" data-act="bell" aria-label="الطلبات الجديدة">${AI.bell}<i id="admin-bell-dot" hidden></i></button>
-      <button type="button" class="admin-newpill" data-act="bell" id="admin-newpill" hidden></button>
-      <span class="admin-who">${AI.user}<span dir="ltr">${esc(session.email)}</span></span>
+      <div class="admin-bell-wrap" id="admin-bell-wrap"></div>
+      <span class="admin-who">${AI.user}<span ${state.me.name ? 'data-raw' : 'dir="ltr"'}>${esc(who)}</span></span>
       ${langButton()}
       <button type="button" class="admin-logout" data-act="logout">${AI.logout}<span>تسجيل الخروج</span></button>
     </header>
     <main id="admin-main" class="admin-main"><p class="admin-hint">جارٍ التحميل…</p></main>
   </div></div>`;
   await loadTab();
+  loadActivity();
 }
 async function loadTab() {
   const main = document.getElementById('admin-main');
-  document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute(b.getAttribute('role') === 'tab' ? 'aria-selected' : 'aria-current', String(b.dataset.tab === state.tab)));
+  document.querySelectorAll('.admin-side-nav [data-tab]').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === state.tab)));
   try {
     const d = state.data;
     if (state.tab === 'enquiries' || state.tab === 'home' || !d.enquiries) d.enquiries = await rest('project_enquiries?select=*&order=created_at.desc');
@@ -354,20 +384,65 @@ async function loadTab() {
     if (state.tab === 'questions') [d.questions, d.settings] = await Promise.all([rest('form_questions?select=*&order=position,id'), rest('site_settings?select=*')]);
     if (state.tab === 'settings') d.settings = await rest('site_settings?select=*');
     if (state.tab === 'users') d.users = await rest('site_admins?select=*&order=created_at');
-    updateBell();
     main.innerHTML = VIEWS[state.tab]();
+    renderBell();
   } catch (e) {
     main.innerHTML = `<p class="admin-msg">تعذّر التحميل: ${esc(e.message)}</p>
       <p class="admin-hint">إذا كانت هذه أول مرة، تأكدي أن ملف <code>supabase/admin_setup.sql</code> تم تشغيله في Supabase، وأن بريدك مضاف في جدول المستخدمين.</p>`;
   }
 }
-// Dot on the bell while any enquiry is still "new".
-function updateBell() {
-  const dot = document.getElementById('admin-bell-dot');
-  const pill = document.getElementById('admin-newpill');
-  const fresh = (state.data.enquiries || []).filter(e => e.status === 'new').length;
-  if (dot) dot.hidden = !fresh;
-  if (pill) { pill.hidden = !fresh; pill.innerHTML = `${AI.enquiries}<span>لديك ${fresh} طلبات جديدة</span>`; }
+
+/* ---------- Notifications (bell) ---------- */
+// Built from the activity log (new enquiries, status changes, notes by others). Read state is kept per person in
+// this browser; which kinds to show is chosen in Settings → Notifications.
+const NOTIFY_KEY = 'slab-admin-notify', seenKey = () => 'slab-admin-seen:' + session.email;
+const prefs = () => { try { return {created: true, status: true, note: true, ...JSON.parse(localStorage.getItem(NOTIFY_KEY) || '{}')}; } catch { return {created: true, status: true, note: true}; } };
+const lastSeen = () => { try { return localStorage.getItem(seenKey()) || ''; } catch { return ''; } };
+async function loadActivity() {
+  try { state.activity = await rest('enquiry_activity?select=*&order=created_at.desc&limit=60'); state.logReady = true; }
+  catch { // Before supabase/staff_v2.sql runs: new enquiries only.
+    state.activity = (state.data.enquiries || []).slice(0, 30).map(e => ({id: 'c' + e.id, enquiry_id: e.id, kind: 'created', body: 'website', actor: null, created_at: e.created_at}));
+    state.logReady = false;
+  }
+  renderBell();
+}
+const notifications = () => { const p = prefs(); return state.activity.filter(a => a.actor !== session.email && p[a.kind]); };
+const staffName = email => { const u = (state.data.users || []).find(x => x.email === email); return (u && u.name) || email || L('الموقع', 'Website'); };
+const enquiryOf = id => (state.data.enquiries || []).find(e => e.id === id);
+const refOf = e => refNo(e);
+function refNo(e) {
+  if (!e) return '—';
+  if (e.ref) return '#' + String(e.ref).padStart(3, '0');
+  const asc = (state.data.enquiries || []).slice().sort((a, b) => a.created_at.localeCompare(b.created_at));
+  return '#' + String(asc.indexOf(e) + 1).padStart(3, '0');
+}
+function ago(s) {
+  const sec = Math.round((new Date(s) - Date.now()) / 1000);
+  const rtf = new Intl.RelativeTimeFormat(LANG === 'en' ? 'en' : 'ar', {numeric: 'auto'});
+  for (const [unit, n] of [['day', 86400], ['hour', 3600], ['minute', 60]]) if (Math.abs(sec) >= n) return rtf.format(Math.round(sec / n), unit);
+  return L('الآن', 'just now');
+}
+function noteText(a) {
+  const e = enquiryOf(a.enquiry_id);
+  const name = e ? e.full_name : '';
+  const refOf = x => '⁦' + refNo(x) + '⁩'; // isolated so "#006" keeps its order inside Arabic text
+  if (a.kind === 'created') return [L('طلب جديد', 'New enquiry'), a.body === 'staff' ? L(`أضاف ${staffName(a.actor)} طلبًا لـ ${name}`, `${staffName(a.actor)} added an enquiry for ${name}`) : L(`تم استلام طلب جديد من ${name}`, `New enquiry received from ${name}`), 'enquiries'];
+  if (a.kind === 'status') { const to = (a.body || '').split('>')[1]; return [L('تحديث حالة طلب', 'Enquiry status updated'), L(`تم تغيير حالة ${refOf(e)} إلى ${STATUS[to] || to}`, `${refOf(e)} changed to ${T(STATUS[to] || to)}`), 'refresh']; }
+  return [L('ملاحظة جديدة', 'New note'), L(`${staffName(a.actor)} أضاف ملاحظة على ${refOf(e)}`, `${staffName(a.actor)} added a note on ${refOf(e)}`), 'note'];
+}
+function renderBell() {
+  const wrap = document.getElementById('admin-bell-wrap');
+  if (!wrap) return;
+  const all = notifications(), seen = lastSeen();
+  const unread = all.filter(a => a.created_at > seen);
+  const list = (state.bellTab === 'unread' ? unread : all).slice(0, state.bellAll ? 60 : 5);
+  wrap.innerHTML = `<button type="button" class="admin-bell" data-act="bell" aria-expanded="${state.bell}" aria-label="${L('الإشعارات', 'Notifications')}${unread.length ? ` (${unread.length})` : ''}">${AI.bell}${unread.length ? `<i>${unread.length > 9 ? '9+' : unread.length}</i>` : ''}</button>
+  ${state.bell ? `<div class="admin-notify" role="dialog" aria-label="${L('الإشعارات', 'Notifications')}">
+    <h3>${L('الإشعارات', 'Notifications')}</h3>
+    <div class="admin-seg" role="tablist"><button type="button" role="tab" data-act="bell-tab" data-tab-id="all" aria-selected="${state.bellTab === 'all'}">${L('الكل', 'All')} (${all.length})</button><button type="button" role="tab" data-act="bell-tab" data-tab-id="unread" aria-selected="${state.bellTab === 'unread'}">${L('غير مقروءة', 'Unread')} (${unread.length})</button></div>
+    <ul>${list.map(a => { const [title, body, icon] = noteText(a); return `<li class="${a.created_at > seen ? 'is-unread' : ''}"><button type="button" data-act="open-enq" data-id="${a.enquiry_id}"><span class="admin-notify-icon">${AI[icon]}</span><span><b>${title}</b><span>${esc(body)}</span><small>${ago(a.created_at)}</small></span></button></li>`; }).join('') || `<li class="admin-hint">${L('لا توجد إشعارات.', 'No notifications.')}</li>`}</ul>
+    <div class="admin-notify-foot">${unread.length ? `<button type="button" data-act="bell-read">${L('تحديد الكل كمقروء', 'Mark all as read')}</button>` : '<span></span>'}
+      ${!state.bellAll && (state.bellTab === 'unread' ? unread : all).length > 5 ? `<button type="button" data-act="bell-all">${L('عرض جميع الإشعارات', 'View all notifications')} ${AI.arrow}</button>` : ''}</div></div>` : ''}`;
 }
 
 /* ---------- Home (dashboard) ---------- */
@@ -385,11 +460,12 @@ function tally(list, key) {
   list.forEach(e => { const k = key(e); m.set(k, (m.get(k) || 0) + 1); });
   return [...m].sort((a, b) => b[1] - a[1]);
 }
+const pill = s => `<span class="dash-pill s-${esc(s)}">${STATUS[s] || esc(s)}</span>`;
 function homeView() {
   const all = state.data.enquiries || [];
   const status = s => all.filter(e => e.status === s).length;
   const cities = tally(all, e => cityName(e.project_location));
-  const stat = (icon, tone, label, value, deco) => `<div class="dash-card dash-stat"><span class="dash-stat-icon ${tone}">${AI[icon]}</span><div><span>${label}</span><b>${value}</b></div>${deco}</div>`;
+  const stat = (icon, tone, label, value, deco) => `<div class="dash-card dash-stat ${tone === 'dark' ? 'is-dark' : ''}"><span class="dash-stat-icon ${tone}">${AI[icon]}</span><div><span>${label}</span><b>${value}</b></div>${deco}</div>`;
   const empty = '<p class="admin-hint">لا توجد بيانات بعد.</p>';
 
   // Enquiries by city: top five, the rest folded into "other".
@@ -420,66 +496,144 @@ function homeView() {
   const donut = all.length ? `<div class="dash-donut-wrap"><ul class="dash-legend">${slices.map(([k, v]) => `<li><i style="background:${SECTOR_COLORS[k]}"></i><span>${SECTORS[k] || 'أخرى'}</span><b dir="ltr">${Math.round(v / all.length * 100)}% (${v})</b></li>`).join('')}</ul>
     <svg class="dash-donut" viewBox="0 0 200 200" role="img" aria-label="توزيع القطاعات">${arcs}<circle class="dash-hole" cx="100" cy="100" r="46"/><text class="dash-total" x="100" y="96">${all.length}</text><text class="dash-total-label" x="100" y="120">طلبات</text></svg></div>` : empty;
 
-  const latest = all.slice(0, 5);
-  return `<section class="dash"><div class="admin-pagehead"><div><h2>${AI.images}لوحة التحكم</h2><small>نظرة عامة على أداء المنصة والطلبات</small></div></div>
+  const first = (state.me.name || session.email.split('@')[0]).split(/\s+/)[0];
+  const quick = [
+    canEdit() && `<button type="button" data-act="new-enq">${AI.plus}<span>${L('إضافة طلب', 'Add enquiry')}</span></button>`,
+    `<button type="button" data-act="export">${AI.download}<span>تصدير Excel</span></button>`,
+    canEdit() ? `<button type="button" data-tab="images">${AI.projects}<span>${L('إدارة الصور', 'Manage photos')}</span></button>` : `<button type="button" data-tab="enquiries">${AI.enquiries}<span>${L('عرض الطلبات', 'View enquiries')}</span></button>`
+  ].filter(Boolean).join('');
+  return `<section class="dash">
+  <div class="dash-hero"><div><h2>${AI.home}<span>${L('مرحبًا،', 'Welcome,')} <span data-raw>${esc(first)}</span></span></h2><p>${L('نظرة عامة على أداء المشاريع والطلبات', 'An overview of projects and enquiries')}</p></div></div>
   <div class="dash-stats">
-    ${stat('layers', 'warm', 'إجمالي الطلبات', all.length, HILLS)}${stat('plus', 'warm', 'طلبات جديدة', status('new'), HILLS)}
+    ${stat('layers', 'dark', 'إجمالي الطلبات', all.length, HILLS)}${stat('plus', 'warm', 'طلبات جديدة', status('new'), HILLS)}
     ${stat('phone', 'sage', 'تم التواصل', status('contacted'), HILLS)}${stat('pin', 'sage', 'المدن النشطة', cities.filter(c => c[0] !== 'غير محدد').length, SKYLINE)}</div>
   <div class="dash-row">
     <div class="dash-card"><h3>${AI.pie}توزيع القطاعات</h3>${donut}</div>
     <div class="dash-card"><h3>${AI.bars}الطلبات حسب المدينة</h3>${cityChart}</div></div>
   <div class="dash-row dash-row-b">
     <div class="dash-card"><h3>${AI.calendar}أحدث الطلبات</h3>
-      ${latest.length ? `<div class="admin-table-wrap"><table class="admin-table dash-latest"><thead><tr><th><span>${AI.user}الاسم</span></th><th><span>${AI.pin}المدينة</span></th><th><span>${AI.layers}القطاع</span></th><th><span>${AI.status}الحالة</span></th><th><span>${AI.calendar}التاريخ</span></th></tr></thead><tbody>
-      ${latest.map(e => `<tr><td><button type="button" class="dash-open" data-act="open-enq" data-id="${e.id}">${esc(e.full_name)}</button></td><td>${esc(e.project_location)}</td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td>
-        <td><span class="dash-pill s-${esc(e.status)}">${STATUS[e.status] || esc(e.status)}</span></td><td>${fmtDate(e.created_at)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="admin-hint">لا توجد طلبات.</p>'}</div>
-    <div class="dash-card"><h3>${AI.bolt}إجراءات سريعة</h3><div class="dash-quick">
-      <button type="button" class="is-primary" data-tab="enquiries">${AI.enquiries}<span>عرض الطلبات</span>${AI.arrow}</button>
-      <button type="button" data-tab="users">${AI.userplus}<span>إضافة مستخدم</span></button>
-      <button type="button" data-act="export">${AI.download}<span>تصدير Excel</span></button>
-      <button type="button" data-tab="images">${AI.projects}<span>إدارة الصور</span></button></div></div></div></section>`;
+      ${all.length ? `<div class="admin-table-wrap"><table class="admin-table dash-latest"><thead><tr><th>الاسم</th><th>القطاع</th><th>المدينة</th><th>الحالة</th><th>${L('تاريخ الطلب', 'Date')}</th></tr></thead><tbody>
+      ${all.slice(0, 5).map(e => `<tr><td><button type="button" class="dash-open" data-act="open-enq" data-id="${e.id}">${esc(e.full_name)}</button></td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td><td>${esc(e.project_location)}</td><td>${pill(e.status)}</td><td>${fmtDay(e.created_at)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="admin-hint">لا توجد طلبات.</p>'}</div>
+    <div class="dash-card"><h3>${AI.bolt}إجراءات سريعة</h3><div class="dash-quick">${quick}</div></div></div></section>`;
 }
 
 /* ---------- Enquiries ---------- */
 function filteredEnquiries() {
   const q = state.filter.q.trim().toLowerCase();
-  return (state.data.enquiries || []).filter(e => (!state.filter.status || e.status === state.filter.status)
-    && (!q || [e.full_name, e.email, e.phone, e.project_location, e.message].join(' ').toLowerCase().includes(q)));
+  return (state.data.enquiries || []).filter(e => (!state.filter.status || e.status === state.filter.status) && (!state.filter.sector || e.project_type === state.filter.sector)
+    && (!q || [e.full_name, e.email, e.phone, e.project_location, e.message, refOf(e)].join(' ').toLowerCase().includes(q)));
 }
 const fmtDate = s => new Date(s).toLocaleString(LANG === 'en' ? 'en-GB' : 'ar-SA-u-nu-latn', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'});
+const fmtDay = s => new Date(s).toLocaleDateString('en-CA');
+const statusSelect = (e, cls = '') => (canEdit()
+  ? `<select class="admin-status s-${esc(e.status)} ${cls}" data-act="status" data-id="${e.id}" aria-label="الحالة">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${e.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>`
+  : pill(e.status));
 function enquiriesView() {
-  const list = filteredEnquiries();
-  const th = (icon, label) => `<th><span>${AI[icon]}${label}</span></th>`;
+  const e = state.open && enquiryOf(state.open);
+  if (e) return enquiryDetail(e);
+  const all = state.data.enquiries || [], list = filteredEnquiries();
+  const pages = Math.max(1, Math.ceil(list.length / PAGE));
+  state.page = Math.min(state.page, pages);
+  const rows = list.slice((state.page - 1) * PAGE, state.page * PAGE);
+  state.sel = state.sel.filter(id => all.some(x => x.id === id));
+  const allOnPage = rows.length && rows.every(r => state.sel.includes(r.id));
+  const th = (icon, label) => `<th><span>${icon ? AI[icon] : ''}${label}</span></th>`;
   return `<section><div class="admin-pagehead">
-    <div><h2>${AI.enquiries}الطلبات</h2><small>${list.length} من ${(state.data.enquiries || []).length} طلبات</small></div>
-    <div class="admin-tools">
-      <label class="admin-search">${AI.search}<input type="search" id="enq-search" placeholder="بحث بالاسم أو الجوال أو البريد…" value="${esc(state.filter.q)}"></label>
-      <select id="enq-status" aria-label="الحالة"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${state.filter.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
-      <button type="button" class="admin-btn admin-export" data-act="export">${AI.download}<span>تصدير Excel</span></button></div></div>
-  ${list.length ? `<div class="admin-table-wrap"><table class="admin-table"><thead><tr>${th('calendar', 'التاريخ')}${th('user', 'الاسم')}${th('phone', 'الجوال')}${th('layers', 'القطاع')}${th('pin', 'المدينة')}${th('coins', 'الميزانية')}${th('status', 'الحالة')}<th>الإجراءات</th></tr></thead><tbody>
-  ${list.map(e => `<tr class="${state.open === e.id ? 'is-open' : ''}"><td>${fmtDate(e.created_at)}</td><td>${esc(e.full_name)}</td><td dir="ltr"><a href="tel:${esc(e.phone)}">${esc(e.phone)}</a></td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td>
-    <td>${esc(e.project_location)}</td><td>${BUDGETS[e.budget] || '—'}</td>
-    <td><select class="admin-status s-${esc(e.status)}" data-act="status" data-id="${e.id}" aria-label="الحالة">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${e.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
-    <td class="admin-actions"><button type="button" class="admin-icon-btn" data-act="toggle-enq" data-id="${e.id}" aria-label="${state.open === e.id ? 'إخفاء التفاصيل' : 'التفاصيل'}" title="التفاصيل">${AI.open}</button>
-      <span class="admin-menu-wrap"><button type="button" class="admin-icon-btn" data-act="enq-menu" data-id="${e.id}" aria-label="المزيد" aria-expanded="${state.menu === e.id}">${AI.dots}</button>
-      ${state.menu === e.id ? `<span class="admin-menu" role="menu"><a role="menuitem" href="mailto:${esc(e.email)}">مراسلة العميل</a><a role="menuitem" href="tel:${esc(e.phone)}">اتصال</a><button type="button" role="menuitem" class="danger" data-act="delete-enq" data-id="${e.id}">حذف الطلب</button></span>` : ''}</span></td></tr>
-    ${state.open === e.id ? `<tr class="admin-detail"><td colspan="8"><dl>
-      <dt>البريد</dt><dd dir="ltr"><a href="mailto:${esc(e.email)}">${esc(e.email)}</a></dd>
-      <dt>الخدمات</dt><dd>${(e.services || []).map(s => SERVICES[s] || esc(s)).join('، ')}</dd>
-      ${Object.values(e.answers || {}).map(a => `<dt>${esc(a.question_ar)}</dt><dd>${esc(a.answer)}</dd>`).join('')}
-      ${(e.attachments || []).length ? `<dt>صور المشروع</dt><dd><div class="admin-thumbs">${e.attachments.map(p => state.signed[p] ? `<a href="${esc(state.signed[p])}" target="_blank" rel="noopener"><img src="${esc(state.signed[p])}" alt=""></a>` : '<span class="admin-hint">جارٍ التحميل…</span>').join('')}</div></dd>` : ''}
-      <dt>الرسالة</dt><dd class="pre">${esc(e.message)}</dd><dt>لغة النموذج</dt><dd>${e.language === 'ar' ? 'العربية' : 'English'}</dd></dl></td></tr>` : ''}`).join('')}
-  </tbody></table></div>` : '<p class="admin-hint">لا توجد طلبات.</p>'}</section>`;
+    <div><h2>${AI.enquiries}الطلبات</h2><small>${L('إدارة ومتابعة جميع الطلبات', 'Manage and follow up every enquiry')}</small></div>
+    ${canEdit() ? `<button type="button" class="admin-btn admin-primary" data-act="new-enq">${AI.add}<span>${L('طلب جديد', 'New enquiry')}</span></button>` : ''}</div>
+  ${state.newEnq ? newEnquiryForm() : ''}
+  <div class="admin-toolbar">
+    <label class="admin-search">${AI.search}<input type="search" id="enq-search" placeholder="${L('بحث بالاسم أو رقم الطلب…', 'Search by name or enquiry number…')}" value="${esc(state.filter.q)}"></label>
+    <select id="enq-sector" aria-label="القطاع"><option value="">${L('كل القطاعات', 'All sectors')}</option>${Object.entries(SECTORS).map(([k, v]) => `<option value="${k}" ${state.filter.sector === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+    <select id="enq-status" aria-label="الحالة"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${state.filter.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+    <button type="button" class="admin-icon-btn admin-boxed" data-act="filter-reset" title="${L('مسح الفلاتر', 'Clear filters')}" aria-label="${L('مسح الفلاتر', 'Clear filters')}">${AI.filter}</button>
+    <button type="button" class="admin-btn admin-ghost" data-act="export">${AI.download}<span>تصدير Excel</span></button>
+  </div>
+  ${state.sel.length ? `<div class="admin-bulk"><b>${L(`${state.sel.length} محدد`, `${state.sel.length} selected`)}</b>
+    ${canEdit() ? `<select id="bulk-status" aria-label="${L('تغيير الحالة', 'Change status')}"><option value="">${L('تغيير الحالة…', 'Change status…')}</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>` : ''}
+    <button type="button" class="admin-link-btn" data-act="export-sel">${L('تصدير المحدد', 'Export selected')}</button>
+    ${can('admin') ? `<button type="button" class="admin-danger" data-act="bulk-delete">${L('حذف المحدد', 'Delete selected')}</button>` : ''}
+    <button type="button" class="admin-link-btn" data-act="sel-clear">${L('إلغاء التحديد', 'Clear selection')}</button></div>` : ''}
+  ${list.length ? `<div class="admin-table-wrap"><table class="admin-table admin-enq"><thead><tr>
+    <th class="admin-check"><input type="checkbox" data-act="sel-page" ${allOnPage ? 'checked' : ''} aria-label="${L('تحديد الصفحة', 'Select page')}"></th>
+    ${th('', '#')}${th('user', 'الاسم')}${th('phone', 'الجوال')}${th('layers', 'القطاع')}${th('pin', 'المدينة')}${th('status', 'الحالة')}${th('calendar', L('تاريخ الطلب', 'Date'))}<th><span class="visually-hidden">الإجراءات</span></th></tr></thead><tbody>
+  ${rows.map(e => `<tr>
+    <td class="admin-check"><input type="checkbox" data-act="sel" data-id="${e.id}" ${state.sel.includes(e.id) ? 'checked' : ''} aria-label="${esc(e.full_name)}"></td>
+    <td class="admin-ref" dir="ltr">${refOf(e).slice(1)}</td>
+    <td><button type="button" class="dash-open" data-act="open-enq" data-id="${e.id}">${esc(e.full_name)}</button></td>
+    <td dir="ltr"><a href="tel:${esc(e.phone)}">${esc(e.phone)}</a></td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td><td>${esc(e.project_location)}</td>
+    <td>${statusSelect(e)}</td><td>${fmtDay(e.created_at)}</td>
+    <td class="admin-actions"><span class="admin-menu-wrap"><button type="button" class="admin-icon-btn" data-act="menu" data-id="${e.id}" aria-label="المزيد" aria-expanded="${state.menu === e.id}">${AI.dots}</button>
+      ${state.menu === e.id ? `<span class="admin-menu" role="menu"><button type="button" role="menuitem" data-act="open-enq" data-id="${e.id}">التفاصيل</button><a role="menuitem" href="mailto:${esc(e.email)}">مراسلة العميل</a><a role="menuitem" href="tel:${esc(e.phone)}">اتصال</a>${can('admin') ? `<button type="button" role="menuitem" class="danger" data-act="delete-enq" data-id="${e.id}">حذف الطلب</button>` : ''}</span>` : ''}</span></td></tr>`).join('')}
+  </tbody></table>
+  <div class="admin-pager"><span>${L(`عرض ${rows.length} من ${list.length} طلبات`, `Showing ${rows.length} of ${list.length} enquiries`)}</span>
+    ${pages > 1 ? `<span class="admin-pages"><button type="button" data-act="page" data-page="${state.page - 1}" ${state.page > 1 ? '' : 'disabled'} aria-label="${L('السابق', 'Previous')}">${AI.chevron}</button>
+    ${Array.from({length: pages}, (_, i) => `<button type="button" data-act="page" data-page="${i + 1}" aria-current="${state.page === i + 1}">${i + 1}</button>`).join('')}
+    <button type="button" data-act="page" data-page="${state.page + 1}" ${state.page < pages ? '' : 'disabled'} aria-label="${L('التالي', 'Next')}">${AI.chevron}</button></span>` : ''}</div></div>`
+  : `<p class="admin-hint">${all.length ? L('لا توجد طلبات تطابق البحث.', 'No enquiries match the filters.') : 'لا توجد طلبات.'}</p>`}</section>`;
+}
+// A staff member records an enquiry received by phone or in person.
+function newEnquiryForm() {
+  return `<form id="new-enquiry" class="admin-card admin-form"><div class="admin-head span2"><h3>${L('طلب جديد', 'New enquiry')}</h3><button type="button" class="admin-link-btn" data-act="new-enq-close">إلغاء</button></div>
+    <label>الاسم<input name="full_name" required minlength="2" maxlength="120"></label>
+    <label>الجوال<input name="phone" required dir="ltr" inputmode="tel" pattern="[0-9+ ]{7,20}"></label>
+    <label>البريد<input name="email" type="email" required dir="ltr" maxlength="160"></label>
+    <label>المدينة<input name="project_location" required maxlength="120"></label>
+    <label>القطاع<select name="project_type" required>${Object.entries(SECTORS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
+    <label>الميزانية<select name="budget">${Object.entries(BUDGETS).map(([k, v]) => `<option value="${k}" ${k === 'tbd' ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+    <fieldset class="span2 admin-checks"><legend>الخدمات</legend>${Object.entries(SERVICES).map(([k, v], i) => `<label class="check"><input type="checkbox" name="services" value="${k}" ${i ? '' : 'checked'}> ${v}</label>`).join('')}</fieldset>
+    <label class="span2">${L('وصف المشروع', 'Project description')}<textarea name="message" required minlength="12" maxlength="3000" rows="3"></textarea></label>
+    <label class="check span2"><input type="checkbox" name="consent" required> ${L('العميل وافق على استخدام بياناته للرد على طلبه', 'The client agreed that we use these details to respond')}</label>
+    <button class="admin-btn admin-primary span2" type="submit">${L('حفظ الطلب', 'Save enquiry')}</button></form>`;
+}
+function enquiryDetail(e) {
+  const log = state.log[e.id];
+  const notes = (log || []).filter(a => a.kind === 'note');
+  const files = e.attachments || [];
+  const tab = (k, icon, label, n) => `<button type="button" role="tab" data-act="enq-tab" data-tab-id="${k}" aria-selected="${state.enqTab === k}">${AI[icon]}<span>${label}</span>${n != null ? ` <small>(${n})</small>` : ''}</button>`;
+  const row = (k, v, attrs = '') => `<div><dt>${k}</dt><dd ${attrs}>${v || '—'}</dd></div>`;
+  const entry = a => { const [title, body] = noteText(a); return `<li class="k-${a.kind}"><span class="admin-tl-dot"></span><div><b>${a.kind === 'note' ? esc(staffName(a.actor)) : title}</b><small>${fmtDate(a.created_at)}</small>${a.kind === 'note' ? `<p class="pre">${esc(a.body)}</p>` : `<p>${esc(body)}</p>`}</div></li>`; };
+  let panel = '';
+  if (state.enqTab === 'info') panel = `<div class="admin-detail-grid">
+      <div class="admin-card"><h3>${L('معلومات العميل', 'Client details')}</h3><dl class="admin-dl">${row('الاسم', esc(e.full_name))}${row('الجوال', `<a href="tel:${esc(e.phone)}">${esc(e.phone)}</a>`, 'dir="ltr"')}${row('البريد', `<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>`, 'dir="ltr"')}${row('لغة النموذج', e.language === 'ar' ? 'العربية' : 'English')}</dl></div>
+      <div class="admin-card"><h3>${L('تفاصيل المشروع', 'Project details')}</h3><dl class="admin-dl">${row('القطاع', SECTORS[e.project_type] || esc(e.project_type))}${row('المدينة', esc(e.project_location))}${row(L('الميزانية التقديرية', 'Estimated budget'), BUDGETS[e.budget])}
+        ${row('الخدمات', (e.services || []).map(s => SERVICES[s] || esc(s)).join('، '))}${Object.values(e.answers || {}).map(a => row(esc(LANG === 'en' ? a.question_en || a.question_ar : a.question_ar), esc(a.answer))).join('')}
+        ${row(L('المصدر', 'Source'), e.source === 'staff' ? L('أضافه موظف', 'Added by staff') : L('نموذج الموقع', 'Website form'))}${row(L('تاريخ الطلب', 'Date'), fmtDate(e.created_at))}</dl></div>
+      <div class="admin-card span2"><h3>${L('وصف المشروع', 'Project description')}</h3><p class="pre">${esc(e.message)}</p></div></div>`;
+  if (state.enqTab === 'files') panel = files.length ? `<div class="admin-thumbs">${files.map(p => state.signed[p] ? `<a href="${esc(state.signed[p])}" target="_blank" rel="noopener"><img src="${esc(state.signed[p])}" alt=""></a>` : '<span class="admin-hint">جارٍ التحميل…</span>').join('')}</div>` : `<p class="admin-hint">${L('لا توجد مرفقات لهذا الطلب.', 'This enquiry has no attachments.')}</p>`;
+  if (state.enqTab === 'notes') panel = `${state.logReady === false ? `<p class="admin-msg">${L('الملاحظات تحتاج تشغيل ملف supabase/staff_v2.sql في Supabase.', 'Notes need supabase/staff_v2.sql to be run in Supabase.')}</p>` : `<form id="enq-note" class="admin-note-form"><label class="visually-hidden" for="note-body">${L('ملاحظة', 'Note')}</label><textarea id="note-body" name="body" rows="3" maxlength="2000" required placeholder="${L('اكتب ملاحظة داخلية للفريق…', 'Write an internal note for the team…')}"></textarea><button class="admin-btn admin-primary" type="submit">${AI.add}<span>${L('إضافة ملاحظة', 'Add note')}</span></button></form>`}
+    ${log ? notes.length ? `<ul class="admin-timeline">${notes.slice().reverse().map(entry).join('')}</ul>` : `<p class="admin-hint">${L('لا توجد ملاحظات بعد.', 'No notes yet.')}</p>` : '<p class="admin-hint">جارٍ التحميل…</p>'}`;
+  if (state.enqTab === 'log') panel = log ? log.length ? `<ul class="admin-timeline">${log.slice().reverse().map(entry).join('')}</ul>` : `<p class="admin-hint">${L('لا يوجد نشاط بعد.', 'No activity yet.')}</p>` : '<p class="admin-hint">جارٍ التحميل…</p>';
+  return `<section class="admin-enq-detail"><div class="admin-pagehead">
+    <div><h2>${AI.calendar}<span>${L('تفاصيل الطلب', 'Enquiry')} <span dir="ltr">${refOf(e)}</span></span></h2><small><bdi>${esc(e.full_name)}</bdi> · <bdi>${fmtDate(e.created_at)}</bdi></small></div>
+    <div class="admin-tools"><a class="admin-btn admin-ghost" href="mailto:${esc(e.email)}">${AI.mail}<span>مراسلة العميل</span></a><a class="admin-btn admin-ghost" href="tel:${esc(e.phone)}">${AI.phone}<span>اتصال</span></a>
+      ${can('admin') ? `<button type="button" class="admin-danger" data-act="delete-enq" data-id="${e.id}">حذف الطلب</button>` : ''}
+      <button type="button" class="admin-icon-btn admin-boxed" data-act="close-enq" aria-label="${L('رجوع للطلبات', 'Back to enquiries')}">${AI.close}</button></div></div>
+  <div class="admin-card admin-tabs-card"><div class="admin-tabbar" role="tablist">${tab('info', 'info', L('معلومات الطلب', 'Enquiry details'))}${tab('files', 'clip', L('المرفقات', 'Attachments'), files.length)}${tab('notes', 'note', L('الملاحظات', 'Notes'), log ? notes.length : null)}${tab('log', 'log', L('سجل النشاط', 'Activity log'))}</div>
+    <div class="admin-tabpanel" role="tabpanel">${panel}</div>
+    <div class="admin-detail-actions">
+      ${state.enqTab !== 'notes' && state.logReady !== false ? `<button type="button" class="admin-btn admin-primary" data-act="enq-tab" data-tab-id="notes" data-focus="note-body">${AI.add}<span>${L('إضافة ملاحظة', 'Add note')}</span></button>` : ''}
+      ${canEdit() ? `<label class="admin-status-label">${L('تحديث الحالة', 'Update status')} ${statusSelect(e)}</label>` : `<span>${pill(e.status)}</span>`}</div></div></section>`;
+}
+async function openEnquiry(id) {
+  state.tab = 'enquiries'; state.open = id; state.enqTab = 'info'; state.menu = null; state.bell = false;
+  await loadTab();
+  loadPhotos(enquiryOf(id));
+  loadLog(id);
+}
+async function loadLog(id) {
+  try { state.log[id] = await rest(`enquiry_activity?enquiry_id=eq.${id}&order=created_at`); state.logReady = true; }
+  catch { const e = enquiryOf(id); state.log[id] = e ? [{id: 'c', enquiry_id: id, kind: 'created', body: e.source || 'website', created_at: e.created_at}] : []; state.logReady = false; }
+  if (state.open === id) redraw();
 }
 // CSV with a UTF-8 BOM so Excel opens Arabic text correctly.
-function exportExcel() {
-  const list = filteredEnquiries();
+function exportExcel(list = filteredEnquiries()) {
   const qCols = [];
   list.forEach(e => Object.entries(e.answers || {}).forEach(([id, a]) => { if (!qCols.some(c => c[0] === id)) qCols.push([id, a.question_ar]); }));
-  const head = ['التاريخ', 'الاسم', 'الجوال', 'البريد', 'القطاع', 'الخدمات', 'المدينة', 'الميزانية', ...qCols.map(c => c[1]), 'الرسالة', 'عدد الصور', 'الحالة', 'لغة النموذج'];
-  const rows = list.map(e => [fmtDate(e.created_at), e.full_name, e.phone, e.email, SECTORS[e.project_type] || e.project_type,
+  const head = ['رقم الطلب', 'التاريخ', 'الاسم', 'الجوال', 'البريد', 'القطاع', 'الخدمات', 'المدينة', 'الميزانية', ...qCols.map(c => c[1]), 'الرسالة', 'عدد الصور', 'الحالة', 'المصدر', 'لغة النموذج'];
+  const rows = list.map(e => [refOf(e), fmtDate(e.created_at), e.full_name, e.phone, e.email, SECTORS[e.project_type] || e.project_type,
     (e.services || []).map(s => SERVICES[s] || s).join('، '), e.project_location, BUDGETS[e.budget] || '', ...qCols.map(c => ((e.answers || {})[c[0]] || {}).answer || ''),
-    e.message, (e.attachments || []).length, STATUS[e.status] || e.status, e.language === 'ar' ? 'العربية' : 'English']);
+    e.message, (e.attachments || []).length, STATUS[e.status] || e.status, e.source === 'staff' ? 'موظف' : 'الموقع', e.language === 'ar' ? 'العربية' : 'English']);
   const cell = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
   const csv = '﻿' + [head, ...rows].map(r => r.map(cell).join(',')).join('\r\n');
   const a = document.createElement('a');
@@ -488,8 +642,7 @@ function exportExcel() {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
-
-// Client photos are private: show them through short-lived signed links (admins only, enforced by storage policy).
+// Client photos are private: show them through short-lived signed links (staff only, enforced by storage policy).
 async function loadPhotos(e) {
   const paths = (e && e.attachments || []).filter(p => !state.signed[p]);
   if (!paths.length) return;
@@ -501,6 +654,7 @@ async function loadPhotos(e) {
 }
 
 /* ---------- Projects & photos ---------- */
+const PSTATUS = {active: ['نشط', 'Active'], finished: ['منتهي', 'Completed'], promo: ['بروموشن', 'Promotion']};
 // Built-in projects merged with their saved edits, followed by projects added in the panel.
 function allProjects() {
   const cms = state.data.cms || [];
@@ -511,20 +665,29 @@ function allProjects() {
 const projectLabel = (p, small = 'span') => (LANG === 'en'
   ? `<b data-raw dir="ltr">${esc(p.name)}</b>`
   : `<b data-raw>${esc(p.name_ar)}</b> <${small} data-raw dir="ltr">${esc(p.name)}</${small}>`);
+const coverOf = p => (p.builtIn ? `${PUBLIC_BASE}projects/${p.id}_1.webp` : ((state.data.photos || []).find(x => x.project_id === p.id) || {}).url || '');
 function projectsView() {
-  const d = state.data;
   const all = allProjects();
-  const sel = state.project && all.find(p => p.id === state.project);
-  const added = id => (d.photos || []).filter(x => x.project_id === id);
-  const photoCount = p => (p.builtIn ? p.images : 0) + added(p.id).length;
-  return `<section><div class="admin-head"><h2>المشاريع والصور</h2></div>
-  <div class="admin-grid2">
-  <div class="admin-card"><div class="admin-head"><h3>المشاريع (${all.length})</h3><button type="button" class="admin-btn" data-act="new-project">+ مشروع جديد</button></div>
-  <ul class="admin-list">${all.map(p => `<li class="${state.project === p.id ? 'is-sel' : ''}">
-    <button type="button" class="admin-project-pick" data-act="pick-project" data-id="${esc(p.id)}">${projectLabel(p)}</button>
-    <span class="admin-count">${photoCount(p)} صور</span>
-    <span class="admin-tag">${p.published === false ? 'مخفي' : p.builtIn ? 'أساسي' : 'مضاف'}</span></li>`).join('')}</ul></div>
-  <div class="admin-card" id="project-panel">${sel ? projectEditor(sel, added(sel.id)) : newProjectForm()}</div></div></section>`;
+  if (state.project) {
+    const sel = state.project === 'new' ? null : all.find(p => p.id === state.project);
+    return `<section><div class="admin-pagehead"><div><h2>${AI.projects}المشاريع والصور</h2></div>
+      <button type="button" class="admin-btn admin-ghost" data-act="project-back">${AI.arrow}<span>${L('كل المشاريع', 'All projects')}</span></button></div>
+      <div class="admin-card" id="project-panel">${sel ? projectEditor(sel, (state.data.photos || []).filter(x => x.project_id === sel.id)) : newProjectForm()}</div></section>`;
+  }
+  const count = k => all.filter(p => p.status === k).length;
+  const list = state.projTab === 'all' ? all : all.filter(p => p.status === state.projTab);
+  const tab = (k, label, n) => `<button type="button" role="tab" data-act="proj-tab" data-tab-id="${k}" aria-selected="${state.projTab === k}">${label} (${n})</button>`;
+  return `<section><div class="admin-pagehead">
+    <div><h2>${AI.projects}المشاريع والصور</h2><small>${L('إدارة مشاريع الشركة ومعرض الصور', 'Manage the company’s projects and photo galleries')}</small></div>
+    <button type="button" class="admin-btn admin-primary" data-act="new-project">${AI.add}<span>مشروع جديد</span></button></div>
+  <div class="admin-seg admin-seg-lg" role="tablist">${tab('all', L('الكل', 'All'), all.length)}${Object.entries(PSTATUS).map(([k, v]) => tab(k, L(...v), count(k))).join('')}</div>
+  ${list.length ? `<div class="admin-pgrid">${list.map(p => `<button type="button" class="admin-pcard" data-act="pick-project" data-id="${esc(p.id)}">
+    <span class="admin-pcard-img">${coverOf(p) ? `<img src="${esc(coverOf(p))}" alt="" loading="lazy">` : ''}
+      ${p.status ? `<span class="admin-badge b-${p.status}">${L(...PSTATUS[p.status])}</span>` : ''}${p.published === false ? `<span class="admin-badge b-hidden">مخفي</span>` : ''}</span>
+    <span class="admin-pcard-body"><span class="admin-pcard-name">${projectLabel(p, 'small')}</span>
+      <span class="admin-pcard-city">${AI.pin}${esc(LANG === 'en' ? p.city || 'Riyadh' : p.city_ar || 'الرياض')}</span>
+      ${p.progress != null ? `<span class="admin-progress"><span><i style="width:${p.progress}%"></i></span><b dir="ltr">${p.progress}%</b></span>` : `<span class="admin-progress is-empty">${L('لم تُحدد نسبة الإنجاز', 'No completion set')}</span>`}</span></button>`).join('')}</div>`
+  : `<p class="admin-hint">${L('لا توجد مشاريع بهذه الحالة. اختاري مشروعًا وحددي حالته من «تعديل».', 'No projects with this status yet. Open a project to set its status.')}</p>`}</section>`;
 }
 function projectFields(p = {}) {
   return `<label>الاسم (عربي)<input name="name_ar" required maxlength="80" value="${esc(p.name_ar)}"></label><label>الاسم (English)<input name="name" required maxlength="80" value="${esc(p.name)}"></label>
@@ -532,12 +695,15 @@ function projectFields(p = {}) {
     ${p.builtIn ? '' : `<label>المدينة (عربي)<input name="city_ar" maxlength="60" value="${esc(p.city_ar || 'الرياض')}"></label><label>المدينة (English)<input name="city" maxlength="60" value="${esc(p.city || 'Riyadh')}"></label>
     <label>النوع<select name="type">${Object.entries(SECTORS).map(([k, v]) => `<option value="${k}" ${p.type === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>`}
     <label>عدد الوحدات<input name="units" type="number" min="0" value="${esc(p.units ?? '')}"></label>
-    <label class="span2">المساحات م² (افصلي بفاصلة)<input name="sizes" placeholder="120, 145" value="${esc((p.sizes || []).join(', '))}"></label>`;
+    <label class="span2">المساحات م² (افصلي بفاصلة)<input name="sizes" placeholder="120, 145" value="${esc((p.sizes || []).join(', '))}"></label>
+    <label>${L('حالة المشروع', 'Project status')}<select name="status"><option value="">${L('بدون حالة', 'No status')}</option>${Object.entries(PSTATUS).map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${L(...v)}</option>`).join('')}</select></label>
+    <label>${L('نسبة الإنجاز %', 'Completion %')}<input name="progress" type="number" min="0" max="100" placeholder="—" value="${esc(p.progress ?? '')}"></label>
+    <p class="admin-hint span2">${L('الحالة والنسبة تظهر في صفحة المشروع على الموقع. اتركيها فاضية إذا ما عندك معلومة مؤكدة.', 'Status and completion appear on the project page on the website. Leave them empty unless confirmed.')}</p>`;
 }
 function newProjectForm() {
   return `<h3>إضافة مشروع جديد</h3><form id="new-project" class="admin-form">${projectFields()}
     <label class="span2">الصور<input name="files" type="file" accept="image/*" multiple required></label>
-    <button class="admin-btn span2" type="submit">إضافة المشروع</button>
+    <button class="admin-btn admin-primary span2" type="submit">إضافة المشروع</button>
     <p class="admin-hint span2">ارفعي صور الغرف الداخلية بجودة عالية. أول صورة تكون صورة الغلاف.</p></form>`;
 }
 function projectEditor(p, added) {
@@ -547,18 +713,19 @@ function projectEditor(p, added) {
     <button type="button" class="admin-link-btn" data-act="toggle-publish" data-id="${esc(p.id)}">${p.published === false ? 'إظهار في الموقع' : 'إخفاء من الموقع'}</button>
     ${p.builtIn ? '' : `<button type="button" class="admin-danger" data-act="delete-project" data-id="${esc(p.id)}">حذف المشروع</button>`}</div></div>
   <form id="edit-project" class="admin-form" data-id="${esc(p.id)}">${projectFields(p)}
-    <button class="admin-btn span2" type="submit">حفظ البيانات</button></form>
+    <button class="admin-btn admin-primary span2" type="submit">حفظ البيانات</button></form>
   <h3 class="admin-sub">الصور (${own.length + added.length})</h3>
   <div class="admin-thumbs">${own.map(u => `<figure><img src="${u}" alt="" loading="lazy"><span class="admin-tag">أصلية</span></figure>`).join('')}
     ${added.map(ph => `<figure><img src="${esc(ph.url)}" alt="" loading="lazy"><button type="button" class="admin-danger" data-act="delete-photo" data-id="${ph.id}">حذف</button></figure>`).join('')}</div>
   <label class="admin-upload">+ إضافة صور<input type="file" accept="image/*" multiple data-act="add-photos" data-id="${esc(p.id)}"></label>
   ${p.builtIn ? '<p class="admin-hint">الصور الأصلية من ملف الشركة ثابتة. الصور اللي تضيفينها تظهر بعدها في معرض المشروع.</p>' : ''}`;
 }
-// Fields stored in cms_projects. For built-in projects the row only overrides text, units, sizes and visibility.
+// Fields stored in cms_projects. For built-in projects the row overrides text, units, sizes, status and visibility.
 const projectRow = p => ({name: p.name, name_ar: p.name_ar, client: p.client || '', client_ar: p.client_ar || '', units: p.units ?? null, sizes: p.sizes || [],
-  published: p.published !== false, ...(p.builtIn ? {} : {city: p.city, city_ar: p.city_ar, type: p.type})});
+  published: p.published !== false, status: p.status || null, progress: p.progress ?? null, ...(p.builtIn ? {} : {city: p.city, city_ar: p.city_ar, type: p.type})});
 const formProject = (v, builtIn) => ({name: v('name'), name_ar: v('name_ar'), client: v('client'), client_ar: v('client_ar'),
   units: v('units') === '' ? null : Number(v('units')), sizes: v('sizes').split(/[,،]/).map(s => s.trim()).filter(Boolean),
+  status: v('status') || null, progress: v('progress') === '' ? null : Math.max(0, Math.min(100, Math.round(Number(v('progress'))))),
   ...(builtIn ? {} : {city: v('city') || 'Riyadh', city_ar: v('city_ar') || 'الرياض', type: v('type')})});
 async function saveProject(id, row) {
   const [saved] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates,return=representation'}, body: {id, ...row}});
@@ -570,49 +737,67 @@ const slugify = s => s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-
 /* ---------- Section images ---------- */
 function imagesView() {
   const over = Object.fromEntries((state.data.images || []).map(i => [i.slot, i.url]));
-  return `<section><div class="admin-head"><h2>صور الأقسام</h2></div>
-  <p class="admin-hint">استبدلي أي صورة في الموقع. «استرجاع» يرجّع الصورة الأصلية.</p>
-  ${SLOTS.map(([group, items]) => `<div class="admin-card"><h3>${group}</h3><div class="admin-slots">${items.map(([slot, label, def]) => `<figure class="${over[slot] ? 'is-custom' : ''}">
+  const head = `<div class="admin-pagehead"><div><h2>${AI.images}صور الأقسام</h2><small>${L('إدارة الصور حسب الأقسام', 'Manage photos by section')}</small></div>
+    ${state.imgGroup != null ? `<button type="button" class="admin-btn admin-ghost" data-act="img-back">${AI.arrow}<span>${L('كل الأقسام', 'All sections')}</span></button>` : ''}</div>`;
+  if (state.imgGroup == null) return `<section>${head}<div class="admin-cgrid">${SLOTS.map(([group, items], i) => {
+    const changed = items.filter(([slot]) => over[slot]).length;
+    return `<button type="button" class="admin-ccard" data-act="img-group" data-id="${i}"><span class="admin-ccard-img"><img src="${esc(over[items[0][0]] || items[0][2])}" alt="" loading="lazy"></span>
+      <span class="admin-ccard-body"><b>${group}</b><small>(${items.length})${changed ? ` · ${L(`${changed} مُستبدلة`, `${changed} replaced`)}` : ''}</small>${AI.chevron}</span></button>`; }).join('')}</div></section>`;
+  const [group, items] = SLOTS[state.imgGroup];
+  return `<section>${head}<div class="admin-card"><h3>${group}</h3><p class="admin-hint">استبدلي أي صورة في الموقع. «استرجاع» يرجّع الصورة الأصلية.</p>
+  <div class="admin-slots">${items.map(([slot, label, def]) => `<figure class="${over[slot] ? 'is-custom' : ''}">
     <img src="${esc(over[slot] || def)}" alt="" loading="lazy"><figcaption>${label}${over[slot] ? ' <span class="admin-tag">مُستبدلة</span>' : ''}</figcaption>
     <label class="admin-upload small">استبدال<input type="file" accept="image/*" data-act="slot-upload" data-slot="${slot}"></label>
-    ${over[slot] ? `<button type="button" class="admin-link-btn" data-act="slot-reset" data-slot="${slot}">استرجاع</button>` : ''}</figure>`).join('')}</div></div>`).join('')}</section>`;
+    ${over[slot] ? `<button type="button" class="admin-link-btn" data-act="slot-reset" data-slot="${slot}">استرجاع</button>` : ''}</figure>`).join('')}</div></div></section>`;
 }
 
 /* ---------- Form questions ---------- */
-// The form's own fields, in page order. `flex`: can be made optional or hidden (the others are always required).
-// Photos are optional by default; the other flexible fields are required by default.
+// The form's own fields, in page order: [key, Arabic, English, answer type, flexible]. Flexible fields can be made
+// optional or hidden (the others are always required). Photos are optional by default.
 const CORE_FIELDS = [
-  ['full-name', 'الاسم الكامل', 'Full name'], ['email', 'البريد الإلكتروني', 'Email address'], ['phone', 'رقم الجوال', 'Phone number'],
-  ['project-type', 'قطاع المشروع', 'Project sector'], ['services', 'الخدمات المطلوبة', 'Services required'],
-  ['project-location', 'موقع المشروع (المدينة)', 'Project location (city)', true], ['budget', 'الميزانية التقديرية', 'Estimated budget', true],
-  ['message', 'وصف المشروع', 'Project description'], ['attachments', 'صور المشروع', 'Project photos', true]
+  ['full-name', 'الاسم الكامل', 'Full name', 'text'], ['email', 'البريد الإلكتروني', 'Email address', 'email'], ['phone', 'رقم الجوال', 'Phone number', 'number'],
+  ['project-type', 'قطاع المشروع', 'Project sector', 'select'], ['services', 'الخدمات المطلوبة', 'Services required', 'multi'],
+  ['project-location', 'موقع المشروع (المدينة)', 'Project location (city)', 'text', true], ['budget', 'الميزانية التقديرية', 'Estimated budget', 'select', true],
+  ['message', 'وصف المشروع', 'Project description', 'textarea'], ['attachments', 'صور المشروع', 'Project photos', 'photos', true]
 ];
+const TYPE_LABEL = {text: ['نص', 'Text'], textarea: ['نص طويل', 'Long text'], number: ['رقم', 'Number'], email: ['بريد إلكتروني', 'Email'], select: ['اختيار من قائمة', 'Choice list'], multi: ['اختيار متعدد', 'Multiple choice'], photos: ['صور', 'Photos']};
 const coreRequired = (key, c) => (key === 'attachments' ? c.required === true : c.required !== false);
-// One list: the form's own questions (editable labels) followed by the questions added here. A single form saves the labels.
+const formCfg = () => ((state.data.settings || []).find(s => s.key === 'form_fields') || {}).value || {};
+async function saveFormFields(value) {
+  await rest('site_settings', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates'}, body: {key: 'form_fields', value, updated_at: new Date().toISOString()}});
+  state.data.settings = (state.data.settings || []).filter(s => s.key !== 'form_fields').concat({key: 'form_fields', value});
+}
+const toggle = (on, act, id, label, disabled = false) => `<button type="button" class="admin-switch" role="switch" aria-checked="${on}" aria-label="${label}" data-act="${act}" data-id="${id}" ${disabled ? 'disabled' : ''}><i></i></button>`;
 function questionsView() {
   const qs = state.data.questions || [];
-  const cfg = ((state.data.settings || []).find(s => s.key === 'form_fields') || {}).value || {};
-  return `<section><div class="admin-head"><h2>أسئلة نموذج التواصل</h2><button type="button" class="admin-btn" data-act="q-add-open">+ إضافة سؤال</button></div>
-  <p class="admin-hint">كل أسئلة نموذج «ابدأ مشروعك» هنا. غيّري النص ثم اضغطي «حفظ». الأسئلة المضافة تظهر في النموذج بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.</p>
+  const cfg = formCfg();
+  const rows = [
+    ...CORE_FIELDS.map(([key, ar, en, type, flex]) => { const c = cfg[key] || {}; return {id: 'core:' + key, key, label: LANG === 'en' ? c.label_en || en : c.label_ar || ar, ar: c.label_ar || ar, en: c.label_en || en, type: L(...TYPE_LABEL[type]), required: coreRequired(key, c), active: !c.hidden, flex, core: true}; }),
+    ...qs.map((q, i) => ({id: 'q:' + q.id, q, i, label: LANG === 'en' ? q.label_en : q.label_ar, ar: q.label_ar, en: q.label_en, type: L(...TYPE_LABEL[q.kind] || [KINDS[q.kind], q.kind]), required: q.required, active: q.active, flex: true}))
+  ];
+  return `<section><div class="admin-pagehead"><div><h2>${AI.questions}أسئلة النموذج</h2><small>${L('إدارة أسئلة نموذج «ابدأ مشروعك»', 'Manage the “Start a Project” form questions')}</small></div>
+    <button type="button" class="admin-btn admin-primary" data-act="q-add-open">${AI.add}<span>إضافة سؤال</span></button></div>
   ${state.addQ ? `<div class="admin-card" id="add-question"><div class="admin-head"><h3>سؤال جديد</h3><button type="button" class="admin-link-btn" data-act="q-add-close">إلغاء</button></div><form id="new-question" class="admin-form">
     <label>السؤال (عربي)<input name="label_ar" required maxlength="200"></label><label>السؤال (English)<input name="label_en" required maxlength="200"></label>
     <label>نوع الإجابة<select name="kind">${Object.entries(KINDS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
     <label class="check"><input type="checkbox" name="required"> إجباري</label>
     <label class="span2">الاختيارات (لنوع «قائمة اختيارات»): كل اختيار في سطر بالشكل <code>English | عربي</code><textarea name="options" rows="4" placeholder="Within 3 months | خلال 3 أشهر"></textarea></label>
-    <button class="admin-btn span2" type="submit">إضافة السؤال</button></form></div>` : ''}
-  <form id="core-fields" class="admin-card"><ol class="admin-qs">
-  ${CORE_FIELDS.map(([key, ar, en, flex]) => { const c = cfg[key] || {}; return `<li><div class="admin-core">
-    <label>العربي<input name="${key}-ar" maxlength="120" value="${esc(c.label_ar || ar)}"></label>
-    <label>English<input name="${key}-en" dir="ltr" maxlength="120" value="${esc(c.label_en || en)}"></label></div>
-    <div class="admin-tools">${flex ? `<label class="check"><input type="checkbox" name="${key}-req" ${coreRequired(key, c) ? 'checked' : ''}> إجباري</label>
-      <label class="check"><input type="checkbox" name="${key}-hide" ${c.hidden ? 'checked' : ''}> مخفي</label>` : '<span class="admin-tag">إجباري دائمًا</span>'}</div></li>`; }).join('')}
-  ${qs.map((q, i) => `<li class="${q.active ? '' : 'is-off'}">
-    <div class="admin-core-extra"><span class="admin-tag">مضاف</span> <b>${esc(q.label_ar)}</b> <span dir="ltr">${esc(q.label_en)}</span><br><small>${KINDS[q.kind]}${q.kind === 'select' ? ' · ' + (q.options || []).map(o => esc(o.ar)).join(' / ') : ''}</small></div>
-    <div class="admin-tools"><button type="button" data-act="q-move" data-id="${q.id}" data-dir="-1" ${i ? '' : 'disabled'} aria-label="لأعلى">↑</button><button type="button" data-act="q-move" data-id="${q.id}" data-dir="1" ${i < qs.length - 1 ? '' : 'disabled'} aria-label="لأسفل">↓</button>
-    <button type="button" class="admin-link-btn" data-act="q-required" data-id="${q.id}">${q.required ? 'إجباري ✓' : 'اختياري'}</button>
-    <button type="button" class="admin-link-btn" data-act="q-toggle" data-id="${q.id}">${q.active ? 'إخفاء' : 'إظهار'}</button>
-    <button type="button" class="admin-danger" data-act="q-delete" data-id="${q.id}">حذف</button></div></li>`).join('')}
-  </ol><button class="admin-btn" type="submit">حفظ</button></form></section>`;
+    <button class="admin-btn admin-primary span2" type="submit">إضافة السؤال</button></form></div>` : ''}
+  <div class="admin-table-wrap"><table class="admin-table admin-qtable"><thead><tr><th>#</th><th>${L('السؤال', 'Question')}</th><th>نوع الإجابة</th><th>${L('إلزامي', 'Required')}</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody>
+  ${rows.map((r, n) => `<tr class="${r.active ? '' : 'is-off'}"><td>${n + 1}</td>
+    <td><b ${r.core ? '' : 'data-raw'}>${esc(r.label)}</b>${r.required ? ' <span class="admin-req">*</span>' : ''}${r.core ? '' : ` <span class="admin-tag">${L('مضاف', 'Added')}</span>`}</td><td>${r.type}</td>
+    <td>${toggle(r.required, r.core ? 'core-required' : 'q-required', r.core ? r.key : r.q.id, L('إلزامي', 'Required'), r.core && !r.flex)}</td>
+    <td><span class="dash-pill ${r.active ? 's-contacted' : 's-closed'}">${r.active ? L('نشط', 'Active') : 'مخفي'}</span></td>
+    <td class="admin-actions"><button type="button" class="admin-icon-btn" data-act="q-edit" data-id="${r.id}" aria-label="${L('تعديل', 'Edit')}" title="${L('تعديل', 'Edit')}">${AI.edit}</button>
+      ${r.flex ? `<span class="admin-menu-wrap"><button type="button" class="admin-icon-btn" data-act="menu" data-id="${r.id}" aria-label="المزيد" aria-expanded="${state.menu === r.id}">${AI.dots}</button>
+      ${state.menu === r.id ? `<span class="admin-menu" role="menu"><button type="button" role="menuitem" data-act="${r.core ? 'core-hide' : 'q-toggle'}" data-id="${r.core ? r.key : r.q.id}">${r.active ? 'إخفاء' : 'إظهار'}</button>
+        ${r.core ? '' : `<button type="button" role="menuitem" data-act="q-move" data-id="${r.q.id}" data-dir="-1" ${r.i ? '' : 'disabled'}>لأعلى</button><button type="button" role="menuitem" data-act="q-move" data-id="${r.q.id}" data-dir="1" ${r.i < qs.length - 1 ? '' : 'disabled'}>لأسفل</button><button type="button" role="menuitem" class="danger" data-act="q-delete" data-id="${r.q.id}">حذف</button>`}</span>` : ''}</span>` : ''}</td></tr>
+  ${state.editRow === r.id ? `<tr class="admin-detail"><td colspan="6"><form id="q-edit-form" class="admin-form" data-id="${r.id}">
+    <label>السؤال (عربي)<input name="label_ar" required maxlength="200" value="${esc(r.ar)}"></label><label>السؤال (English)<input name="label_en" dir="ltr" required maxlength="200" value="${esc(r.en)}"></label>
+    ${!r.core && r.q.kind === 'select' ? `<label class="span2">الاختيارات (لنوع «قائمة اختيارات»): كل اختيار في سطر بالشكل <code>English | عربي</code><textarea name="options" rows="4">${esc((r.q.options || []).map(o => `${o.en} | ${o.ar}`).join('\n'))}</textarea></label>` : ''}
+    <div class="span2 admin-tools"><button class="admin-btn admin-primary" type="submit">حفظ</button><button type="button" class="admin-link-btn" data-act="q-edit" data-id="${r.id}">إلغاء</button></div></form></td></tr>` : ''}`).join('')}
+  </tbody></table></div>
+  <p class="admin-hint">${L('الأسئلة المضافة تظهر في النموذج بعد الميزانية، وإجاباتها تصل في الإيميل وفي جدول الطلبات.', 'Added questions appear in the form after the budget; answers arrive by email and in the enquiries table.')}</p></section>`;
 }
 
 /* ---------- Settings ---------- */
@@ -620,40 +805,78 @@ function settingsView() {
   const get = k => ((state.data.settings || []).find(s => s.key === k) || {}).value;
   const stats = get('stats') || [{n: 125, suffix: '+'}, {n: 3, suffix: ''}, {n: 4, suffix: ''}, {n: 7, suffix: ''}];
   const c = get('contact') || {};
-  return `<section><div class="admin-head"><h2>الأرقام والإعدادات</h2></div>
-  <form id="settings" class="admin-card admin-form"><h3 class="span2">أرقام «أثرنا»</h3>
+  const tab = (k, icon, label) => `<button type="button" role="tab" data-act="set-tab" data-tab-id="${k}" aria-selected="${state.setTab === k}">${AI[icon]}<span>${label}</span></button>`;
+  const state1 = on => `<span class="admin-state ${on ? 'is-on' : ''}">${on ? `${AI.check}${L('مفعل', 'Active')}` : L('غير مضاف', 'Not added')}</span>`;
+  const card = (icon, tone, title, value, on, ltr = true) => `<div class="admin-ccontact"><span class="admin-ccontact-icon ${tone}">${AI[icon]}</span><div><small>${title}</small><b ${ltr ? 'dir="ltr"' : ''}>${esc(value || '—')}</b>${state1(on)}</div></div>`;
+  let panel = '';
+  if (state.setTab === 'contact') panel = `<div class="admin-contact-grid">
+      ${card('phone', 'sage', L('رقم SLAB الرئيسي', 'SLAB main number'), c.phone_display || c.phone || '9200 66197', true)}
+      ${card('whatsapp', 'warm', L('رقم واتساب', 'WhatsApp number'), c.whatsapp, !!c.whatsapp)}
+      ${card('mail', 'sage', 'البريد الإلكتروني', c.email || 'info@slab.sa', true)}
+      ${card('open', 'warm', 'Instagram / LinkedIn', [c.instagram && 'Instagram', c.linkedin && 'LinkedIn'].filter(Boolean).join(' · '), !!(c.instagram || c.linkedin))}</div>
+    ${state.editContact ? `<form id="contact-form" class="admin-card admin-form"><h3 class="span2">بيانات التواصل</h3>
+      <label>رقم الهاتف (للاتصال)<input name="phone" dir="ltr" required value="${esc(c.phone || '920066197')}"></label>
+      <label>رقم الهاتف (كما يظهر)<input name="phone_display" dir="ltr" value="${esc(c.phone_display || '9200 66197')}"></label>
+      <label>${L('رقم واتساب (اختياري)', 'WhatsApp number (optional)')}<input name="whatsapp" dir="ltr" inputmode="tel" placeholder="05xxxxxxxx" pattern="[0-9+ ]{9,16}" value="${esc(c.whatsapp || '')}"></label>
+      <label>البريد الإلكتروني<input name="email" type="email" dir="ltr" required value="${esc(c.email || 'info@slab.sa')}"></label>
+      <label>Instagram<input name="instagram" type="url" dir="ltr" value="${esc(c.instagram || '')}"></label>
+      <label>LinkedIn<input name="linkedin" type="url" dir="ltr" value="${esc(c.linkedin || '')}"></label>
+      <p class="admin-hint span2">${L('رقم واتساب يظهر كأيقونة في أسفل الموقع بعد حفظه.', 'Once saved, the WhatsApp number appears as an icon in the website footer.')}</p>
+      <div class="span2 admin-tools"><button class="admin-btn admin-primary" type="submit">حفظ</button><button type="button" class="admin-link-btn" data-act="contact-edit">إلغاء</button></div></form>`
+    : `<button type="button" class="admin-btn admin-ghost" data-act="contact-edit">${AI.edit}<span>${L('تعديل بيانات التواصل', 'Edit contact details')}</span></button>`}`;
+  if (state.setTab === 'system') panel = `<form id="stats-form" class="admin-card admin-form"><h3 class="span2">أرقام «أثرنا»</h3>
     ${stats.map((s, i) => `<label>${STAT_LABELS[i]}<span class="admin-row"><input name="n${i}" type="number" min="0" required value="${esc(s.n)}"><input name="s${i}" maxlength="3" value="${esc(s.suffix)}" aria-label="لاحقة (مثل +)" placeholder="+"></span></label>`).join('')}
-    <h3 class="span2">بيانات التواصل</h3>
-    <label>رقم الهاتف (للاتصال)<input name="phone" dir="ltr" required value="${esc(c.phone || '920066197')}"></label>
-    <label>رقم الهاتف (كما يظهر)<input name="phone_display" dir="ltr" value="${esc(c.phone_display || '9200 66197')}"></label>
-    <label>البريد الإلكتروني<input name="email" type="email" dir="ltr" required value="${esc(c.email || 'info@slab.sa')}"></label>
-    <label>Instagram<input name="instagram" type="url" dir="ltr" value="${esc(c.instagram || '')}"></label>
-    <label>LinkedIn<input name="linkedin" type="url" dir="ltr" value="${esc(c.linkedin || '')}"></label>
-    <button class="admin-btn span2" type="submit">حفظ</button>
-    <p class="admin-hint span2">بريد استلام الطلبات من النموذج يبقى info@slab.sa (إعداد على السيرفر).</p></form></section>`;
+    <p class="admin-hint span2">${L('«125+» تعني وحدات مسلّمة أو قيد التنفيذ، وليست عدد مشاريع مكتملة.', '“125+” means units delivered or in progress, not completed projects.')}</p>
+    <button class="admin-btn admin-primary span2" type="submit">حفظ</button></form>`;
+  if (state.setTab === 'notify') { const p = prefs(); panel = `<div class="admin-card"><h3>${L('إشعارات الجرس', 'Bell notifications')}</h3>
+    <p class="admin-hint">${L('اختاري الإشعارات اللي تظهر لك في الجرس (على هذا الجهاز).', 'Choose which notifications appear in your bell (on this device).')}</p>
+    <ul class="admin-prefs">${[['created', L('طلب جديد', 'New enquiry')], ['status', L('تحديث حالة طلب', 'Enquiry status updated')], ['note', L('ملاحظة جديدة', 'New note')]].map(([k, label]) => `<li><span>${label}</span>${toggle(p[k], 'pref', k, label)}</li>`).join('')}</ul></div>
+    <div class="admin-card"><h3>${L('إيميلات الطلبات', 'Enquiry emails')}</h3><p class="admin-hint">بريد استلام الطلبات من النموذج يبقى info@slab.sa (إعداد على السيرفر).</p></div>`; }
+  return `<section><div class="admin-pagehead"><div><h2>${AI.settings}الأرقام والإعدادات</h2><small>${L('إدارة أرقام التواصل والإعدادات العامة', 'Contact numbers and general settings')}</small></div></div>
+  <div class="admin-seg admin-seg-lg" role="tablist">${tab('contact', 'phone', L('أرقام التواصل', 'Contact numbers'))}${tab('system', 'gear', L('إعدادات النظام', 'System settings'))}${tab('notify', 'bell', L('التنبيهات والإشعارات', 'Alerts & notifications'))}</div>
+  ${panel}</section>`;
 }
 
 /* ---------- Users ---------- */
 function usersView() {
-  return `<section><div class="admin-head"><h2>المستخدمين</h2></div>
-  <p class="admin-hint">كل بريد هنا يقدر يدخل صفحة الموظفين برمز يصله على الإيميل.</p>
-  <div class="admin-card"><ul class="admin-list">${(state.data.users || []).map(u => `<li><span dir="ltr">${esc(u.email)}</span>
-    <span class="admin-count">${u.added_by && u.added_by !== 'setup' ? 'أضافه ' + esc(u.added_by) : ''}</span>
-    ${u.email === session.email ? '<span class="admin-tag">أنتِ</span>' : `<button type="button" class="admin-danger" data-act="user-delete" data-email="${esc(u.email)}">إزالة</button>`}</li>`).join('')}</ul></div>
-  <form id="new-user" class="admin-card admin-form"><h3 class="span2">إضافة مستخدم</h3>
-    <label class="span2">البريد الإلكتروني<input name="email" type="email" dir="ltr" required></label>
-    <button class="admin-btn span2" type="submit">إضافة</button></form></section>`;
+  const users = state.data.users || [];
+  const roleSelect = (cur, disabled) => `<select name="role" ${disabled ? 'disabled' : ''}>${Object.entries(ROLES).map(([k, v]) => `<option value="${k}" ${cur === k ? 'selected' : ''}>${L(...v)}</option>`).join('')}</select>`;
+  return `<section><div class="admin-pagehead"><div><h2>${AI.users}المستخدمين</h2><small>${L('إدارة حسابات المستخدمين وصلاحيات الوصول', 'Manage staff accounts and access')}</small></div>
+    <button type="button" class="admin-btn admin-primary" data-act="user-add">${AI.add}<span>إضافة مستخدم</span></button></div>
+  ${state.addUser ? `<form id="new-user" class="admin-card admin-form"><div class="admin-head span2"><h3>إضافة مستخدم</h3><button type="button" class="admin-link-btn" data-act="user-add">إلغاء</button></div>
+    <label>الاسم<input name="name" required maxlength="80"></label>
+    <label>البريد الإلكتروني<input name="email" type="email" dir="ltr" required></label>
+    <label>${L('الدور', 'Role')}${roleSelect('projects')}</label>
+    <p class="admin-hint span2">كل بريد هنا يقدر يدخل صفحة الموظفين برمز يصله على الإيميل.</p>
+    <button class="admin-btn admin-primary span2" type="submit">إضافة</button></form>` : ''}
+  <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>${L('الدور', 'Role')}</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody>
+  ${users.map((u, i) => { const self = u.email === session.email, active = u.active !== false, key = 'u:' + u.email; return `<tr class="${active ? '' : 'is-off'}"><td>${i + 1}</td>
+    <td><span data-raw>${esc(u.name || '—')}</span>${self ? ` <span class="admin-tag">أنتِ</span>` : ''}</td><td dir="ltr">${esc(u.email)}</td><td>${L(...ROLES[u.role || 'admin'])}</td>
+    <td><span class="dash-pill ${active ? 's-contacted' : 's-closed'}">${active ? L('نشط', 'Active') : L('موقوف', 'Suspended')}</span></td>
+    <td class="admin-actions"><button type="button" class="admin-icon-btn" data-act="user-edit" data-id="${esc(u.email)}" aria-label="${L('تعديل', 'Edit')}" title="${L('تعديل', 'Edit')}">${AI.edit}</button>
+      ${self ? '' : `<span class="admin-menu-wrap"><button type="button" class="admin-icon-btn" data-act="menu" data-id="${esc(key)}" aria-label="المزيد" aria-expanded="${state.menu === key}">${AI.dots}</button>
+      ${state.menu === key ? `<span class="admin-menu" role="menu"><button type="button" role="menuitem" data-act="user-active" data-id="${esc(u.email)}">${active ? L('إيقاف الحساب', 'Suspend') : L('تفعيل الحساب', 'Activate')}</button><button type="button" role="menuitem" class="danger" data-act="user-delete" data-email="${esc(u.email)}">إزالة</button></span>` : ''}</span>`}</td></tr>
+    ${state.editRow === key ? `<tr class="admin-detail"><td colspan="6"><form id="user-edit-form" class="admin-form" data-id="${esc(u.email)}">
+      <label>الاسم<input name="name" maxlength="80" value="${esc(u.name || '')}"></label><label>${L('الدور', 'Role')}${roleSelect(u.role || 'admin', self)}</label>
+      ${self ? `<p class="admin-hint span2">${L('ما تقدرين تغيرين دورك بنفسك.', 'You cannot change your own role.')}</p>` : ''}
+      <div class="span2 admin-tools"><button class="admin-btn admin-primary" type="submit">حفظ</button><button type="button" class="admin-link-btn" data-act="user-edit" data-id="${esc(u.email)}">إلغاء</button></div></form></td></tr>` : ''}`; }).join('')}
+  </tbody></table></div>
+  <div class="admin-card admin-roles"><h3>${L('الصلاحيات', 'Access by role')}</h3><ul>
+    <li><b>${L(...ROLES.admin)}</b><span>${L('كل الصفحات، ومنها المستخدمين والأسئلة والإعدادات.', 'Every page, including users, questions and settings.')}</span></li>
+    <li><b>${L(...ROLES.projects)}</b><span>${L('الطلبات (عرض، تعديل الحالة، إضافة، ملاحظات)، المشاريع، وصور الأقسام.', 'Enquiries (view, status, add, notes), projects and section photos.')}</span></li>
+    <li><b>${L(...ROLES.finance)}</b><span>${L('عرض الطلبات وتصدير Excel وإضافة ملاحظات فقط.', 'View enquiries, export to Excel and add notes only.')}</span></li></ul></div></section>`;
 }
 
 const VIEWS = {home: homeView, enquiries: enquiriesView, projects: projectsView, images: imagesView, questions: questionsView, settings: settingsView, users: usersView};
-const redraw = () => { const m = document.getElementById('admin-main'); if (m) m.innerHTML = VIEWS[state.tab](); };
+const redraw = () => { const m = document.getElementById('admin-main'); if (m) m.innerHTML = VIEWS[state.tab](); renderBell(); };
 
 /* ---------- Events ---------- */
 $root.addEventListener('click', e => {
   const t = e.target.closest('[data-tab],[data-act]');
   if (state.menu && !(e.target.closest && e.target.closest('.admin-menu-wrap'))) { state.menu = null; redraw(); }
-  if (!t || t.tagName === 'SELECT' || t.type === 'file') return;
-  if (t.dataset.tab) { state.tab = t.dataset.tab; state.open = null; loadTab(); return; }
+  if (state.bell && !(e.target.closest && e.target.closest('.admin-bell-wrap'))) { state.bell = false; renderBell(); }
+  if (!t || t.tagName === 'SELECT' || t.tagName === 'INPUT' || t.type === 'file') return;
+  if (t.dataset.tab) { state.tab = t.dataset.tab; state.open = null; state.project = null; state.imgGroup = null; state.editRow = null; state.newEnq = false; loadTab(); return; }
   const id = t.dataset.id;
   const d = state.data;
   switch (t.dataset.act) {
@@ -664,8 +887,11 @@ $root.addEventListener('click', e => {
       applyLang();
       if (session && session.refresh_token) renderApp(); else renderLogin();
       break;
-    case 'bell': state.tab = 'enquiries'; state.filter.status = 'new'; state.open = null; loadTab(); break;
-    case 'enq-menu': state.menu = state.menu === id ? null : id; redraw(); break;
+    case 'bell': state.bell = !state.bell; state.bellAll = false; renderBell(); break;
+    case 'bell-tab': state.bellTab = t.dataset.tabId; renderBell(); break;
+    case 'bell-all': state.bellAll = true; renderBell(); break;
+    case 'bell-read': try { localStorage.setItem(seenKey(), new Date().toISOString()); } catch {} renderBell(); break;
+    case 'menu': state.menu = state.menu === id ? null : id; redraw(); break;
     case 'login-restart': renderLogin('email'); break;
     case 'login-have-code': {
       // A code already arrived: go to the code step without requesting (and invalidating) a new one.
@@ -673,20 +899,42 @@ $root.addEventListener('click', e => {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) { document.getElementById('login-msg').textContent = 'اكتبي بريدك أول.'; break; }
       renderLogin('code', mail); break;
     }
-    case 'export': exportExcel(); break;
-    case 'open-enq': state.tab = 'enquiries'; state.filter = {q: '', status: ''}; state.open = id; loadTab().then(() => loadPhotos(d.enquiries.find(x => x.id === id))); break;
-    case 'toggle-enq': state.open = state.open === id ? null : id; redraw(); if (state.open) loadPhotos(d.enquiries.find(x => x.id === id)); break;
+    case 'export': exportExcel(state.tab === 'enquiries' ? filteredEnquiries() : d.enquiries || []); break;
+    case 'export-sel': exportExcel((d.enquiries || []).filter(x => state.sel.includes(x.id))); break;
+    case 'sel-clear': state.sel = []; redraw(); break;
+    case 'filter-reset': state.filter = {q: '', status: '', sector: ''}; state.page = 1; redraw(); break;
+    case 'page': state.page = Number(t.dataset.page); redraw(); break;
+    case 'new-enq': state.tab = 'enquiries'; state.open = null; state.newEnq = true; loadTab().then(() => { const f = document.getElementById('new-enquiry'); if (f) f.querySelector('input').focus(); }); break;
+    case 'new-enq-close': state.newEnq = false; redraw(); break;
+    case 'open-enq': openEnquiry(id); break;
+    case 'close-enq': state.open = null; redraw(); break;
+    case 'enq-tab':
+      state.enqTab = t.dataset.tabId; redraw();
+      if (t.dataset.focus) { const f = document.getElementById(t.dataset.focus); if (f) f.focus(); }
+      break;
     case 'q-add-open': case 'q-add-close':
       state.addQ = t.dataset.act === 'q-add-open'; redraw();
       if (state.addQ) document.getElementById('add-question').querySelector('input').focus();
       break;
+    case 'q-edit': state.editRow = state.editRow === id ? null : id; state.menu = null; redraw(); break;
+    case 'bulk-delete':
+      if (ask(L(`حذف ${state.sel.length} طلبات نهائيًا؟`, `Delete ${state.sel.length} enquiries permanently?`))) run(async () => {
+        const gone = d.enquiries.filter(x => state.sel.includes(x.id));
+        await rest(`project_enquiries?id=in.(${gone.map(x => x.id).join(',')})`, {method: 'DELETE'});
+        const files = gone.flatMap(x => x.attachments || []);
+        if (files.length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: files}}).catch(() => {});
+        d.enquiries = d.enquiries.filter(x => !state.sel.includes(x.id)); state.sel = []; redraw();
+      }, 'تم حذف الطلب');
+      break;
     case 'delete-enq':
-      if (ask('حذف هذا الطلب نهائيًا؟')) run(async () => { const gone = d.enquiries.find(x => x.id === id); await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); if ((gone.attachments || []).length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: gone.attachments}}).catch(() => {}); d.enquiries = d.enquiries.filter(x => x.id !== id); redraw(); }, 'تم حذف الطلب');
+      if (ask('حذف هذا الطلب نهائيًا؟')) run(async () => { const gone = d.enquiries.find(x => x.id === id); await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); if ((gone.attachments || []).length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: gone.attachments}}).catch(() => {}); d.enquiries = d.enquiries.filter(x => x.id !== id); state.open = null; redraw(); }, 'تم حذف الطلب');
       break;
+    case 'proj-tab': state.projTab = t.dataset.tabId; redraw(); break;
     case 'pick-project': case 'new-project':
-      state.project = t.dataset.act === 'pick-project' ? id : null; redraw();
-      document.getElementById('project-panel').scrollIntoView({behavior: 'smooth', block: 'start'});
+      state.project = t.dataset.act === 'pick-project' ? id : 'new'; redraw();
+      document.getElementById('admin-main').scrollIntoView({behavior: 'smooth', block: 'start'});
       break;
+    case 'project-back': state.project = null; redraw(); break;
     case 'toggle-publish': run(async () => {
       const p = allProjects().find(x => x.id === id);
       await saveProject(id, {...projectRow(p), published: p.published === false});
@@ -703,31 +951,71 @@ $root.addEventListener('click', e => {
     case 'delete-photo':
       if (ask('حذف الصورة؟')) run(async () => { const ph = d.photos.find(x => String(x.id) === id); await rest(`project_photos?id=eq.${id}`, {method: 'DELETE'}); await removeUpload(ph.url); d.photos = d.photos.filter(x => x !== ph); redraw(); }, 'تم حذف الصورة');
       break;
+    case 'img-group': state.imgGroup = Number(id); redraw(); break;
+    case 'img-back': state.imgGroup = null; redraw(); break;
     case 'slot-reset': run(async () => { const old = d.images.find(x => x.slot === t.dataset.slot); await rest(`image_overrides?slot=eq.${t.dataset.slot}`, {method: 'DELETE'}); if (old) await removeUpload(old.url); d.images = d.images.filter(x => x !== old); redraw(); }, 'تم استرجاع الصورة الأصلية'); break;
+    case 'core-required': case 'core-hide': run(async () => {
+      const cfg = formCfg(), c = {...(cfg[id] || {})};
+      if (t.dataset.act === 'core-hide') c.hidden = !c.hidden; else c.required = !coreRequired(id, c);
+      await saveFormFields({...cfg, [id]: c}); state.menu = null; redraw();
+    }, 'تم الحفظ'); break;
     case 'q-toggle': case 'q-required': run(async () => {
       const q = d.questions.find(x => String(x.id) === id); const field = t.dataset.act === 'q-toggle' ? 'active' : 'required';
-      await rest(`form_questions?id=eq.${id}`, {method: 'PATCH', body: {[field]: !q[field]}}); q[field] = !q[field]; redraw();
+      await rest(`form_questions?id=eq.${id}`, {method: 'PATCH', body: {[field]: !q[field]}}); q[field] = !q[field]; state.menu = null; redraw();
     }, 'تم الحفظ'); break;
     case 'q-move': run(async () => {
       const qs = d.questions; const i = qs.findIndex(x => String(x.id) === id); const j = i + Number(t.dataset.dir);
       [qs[i], qs[j]] = [qs[j], qs[i]];
       await Promise.all(qs.map((q, k) => (q.position === k ? null : rest(`form_questions?id=eq.${q.id}`, {method: 'PATCH', body: {position: k}}).then(() => { q.position = k; }))));
-      redraw();
+      state.menu = null; redraw();
     }); break;
-    case 'q-delete': if (ask('حذف السؤال؟ الإجابات السابقة تبقى محفوظة في الطلبات.')) run(async () => { await rest(`form_questions?id=eq.${id}`, {method: 'DELETE'}); d.questions = d.questions.filter(x => String(x.id) !== id); redraw(); }, 'تم حذف السؤال'); break;
-    case 'user-delete': if (ask(`إزالة ${t.dataset.email} من صفحة الموظفين؟`)) run(async () => { await rest(`site_admins?email=eq.${encodeURIComponent(t.dataset.email)}`, {method: 'DELETE'}); d.users = d.users.filter(u => u.email !== t.dataset.email); redraw(); }, 'تمت الإزالة'); break;
+    case 'q-delete': if (ask('حذف السؤال؟ الإجابات السابقة تبقى محفوظة في الطلبات.')) run(async () => { await rest(`form_questions?id=eq.${id}`, {method: 'DELETE'}); d.questions = d.questions.filter(x => String(x.id) !== id); state.menu = null; redraw(); }, 'تم حذف السؤال'); break;
+    case 'set-tab': state.setTab = t.dataset.tabId; state.editContact = false; redraw(); break;
+    case 'contact-edit': state.editContact = !state.editContact; redraw(); break;
+    case 'pref': {
+      const p = prefs(); p[id] = !p[id];
+      try { localStorage.setItem(NOTIFY_KEY, JSON.stringify(p)); } catch {}
+      redraw(); break;
+    }
+    case 'user-add': state.addUser = !state.addUser; redraw(); if (state.addUser) document.getElementById('new-user').querySelector('input').focus(); break;
+    case 'user-edit': state.editRow = state.editRow === 'u:' + id ? null : 'u:' + id; state.menu = null; redraw(); break;
+    case 'user-active': run(async () => {
+      const u = d.users.find(x => x.email === id);
+      await rest(`site_admins?email=eq.${encodeURIComponent(id)}`, {method: 'PATCH', body: {active: u.active === false}});
+      u.active = u.active === false; state.menu = null; redraw();
+    }, 'تم الحفظ'); break;
+    case 'user-delete': if (ask(`إزالة ${t.dataset.email} من صفحة الموظفين؟`)) run(async () => { await rest(`site_admins?email=eq.${encodeURIComponent(t.dataset.email)}`, {method: 'DELETE'}); d.users = d.users.filter(u => u.email !== t.dataset.email); state.menu = null; redraw(); }, 'تمت الإزالة'); break;
   }
 });
 
 $root.addEventListener('input', e => {
-  if (e.target.id === 'enq-search') { state.filter.q = e.target.value; const pos = e.target.selectionStart; redraw(); const s = document.getElementById('enq-search'); s.focus(); s.setSelectionRange(pos, pos); }
+  if (e.target.id === 'enq-search') { state.filter.q = e.target.value; state.page = 1; const pos = e.target.selectionStart; redraw(); const s = document.getElementById('enq-search'); s.focus(); s.setSelectionRange(pos, pos); }
+});
+$root.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (state.bell) { state.bell = false; renderBell(); document.querySelector('.admin-bell').focus(); }
+  else if (state.menu) { state.menu = null; redraw(); }
 });
 
+async function setStatus(ids, value) {
+  const d = state.data;
+  await rest(`project_enquiries?id=in.(${ids.join(',')})`, {method: 'PATCH', body: {status: value}});
+  ids.forEach(id => { const x = d.enquiries.find(y => y.id === id); if (x) x.status = value; delete state.log[id]; });
+  if (state.open && ids.includes(state.open)) loadLog(state.open);
+  redraw(); loadActivity();
+}
 $root.addEventListener('change', e => {
   const t = e.target;
   const d = state.data;
-  if (t.id === 'enq-status') { state.filter.status = t.value; redraw(); return; }
-  if (t.dataset.act === 'status') run(async () => { await rest(`project_enquiries?id=eq.${t.dataset.id}`, {method: 'PATCH', body: {status: t.value}}); d.enquiries.find(x => x.id === t.dataset.id).status = t.value; t.className = `admin-status s-${t.value}`; updateBell(); }, 'تم تحديث الحالة');
+  if (t.id === 'enq-status') { state.filter.status = t.value; state.page = 1; redraw(); return; }
+  if (t.id === 'enq-sector') { state.filter.sector = t.value; state.page = 1; redraw(); return; }
+  if (t.id === 'bulk-status' && t.value) { run(() => setStatus(state.sel, t.value), 'تم تحديث الحالة'); return; }
+  if (t.dataset.act === 'sel') { state.sel = t.checked ? [...state.sel, t.dataset.id] : state.sel.filter(x => x !== t.dataset.id); redraw(); return; }
+  if (t.dataset.act === 'sel-page') {
+    const ids = filteredEnquiries().slice((state.page - 1) * PAGE, state.page * PAGE).map(x => x.id);
+    state.sel = t.checked ? [...new Set([...state.sel, ...ids])] : state.sel.filter(x => !ids.includes(x)); redraw(); return;
+  }
+  if (t.dataset.act === 'status') run(() => setStatus([t.dataset.id], t.value), 'تم تحديث الحالة');
   if (t.dataset.act === 'add-photos' && t.files.length) run(async () => {
     t.disabled = true; toast('جارٍ رفع الصور…');
     const start = d.photos.filter(x => x.project_id === t.dataset.id).length;
@@ -750,22 +1038,26 @@ $root.addEventListener('change', e => {
   }, 'تم استبدال الصورة');
 });
 
+const FORMS = ['new-project', 'edit-project', 'new-question', 'q-edit-form', 'contact-form', 'stats-form', 'new-user', 'user-edit-form', 'new-enquiry', 'enq-note'];
 $root.addEventListener('submit', e => {
   const f = e.target;
-  if (!['new-project', 'edit-project', 'core-fields', 'new-question', 'settings', 'new-user'].includes(f.id)) return;
+  if (!FORMS.includes(f.id)) return;
   e.preventDefault();
   if (!f.reportValidity()) return;
-  const v = name => (f.elements[name] ? f.elements[name].value.trim() : '');
+  const v = name => (f.elements[name] && f.elements[name].value !== undefined ? f.elements[name].value.trim() : '');
   const d = state.data;
   const btn = f.querySelector('button[type=submit]');
   btn.disabled = true;
   const done = () => { btn.disabled = false; };
+  const getSetting = k => ((d.settings || []).find(s => s.key === k) || {}).value;
+  const saveSetting = async (key, value) => {
+    await rest('site_settings', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates'}, body: {key, value, updated_at: new Date().toISOString()}});
+    d.settings = (d.settings || []).filter(s => s.key !== key).concat({key, value});
+  };
   if (f.id === 'new-project') run(async () => {
     let id = slugify(v('name'));
     while ([...BUILT_IN_IDS, ...d.cms.map(p => p.id)].includes(id)) id = id.slice(0, 36) + '-' + Math.floor(Math.random() * 90 + 10);
-    const sizes = v('sizes').split(/[,،]/).map(s => s.trim()).filter(Boolean);
-    const [p] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {id, name: v('name'), name_ar: v('name_ar'), client: v('client'), client_ar: v('client_ar'),
-      city: v('city') || 'Riyadh', city_ar: v('city_ar') || 'الرياض', type: v('type'), units: v('units') === '' ? null : Number(v('units')), sizes, position: d.cms.length}});
+    const [p] = await rest('cms_projects', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {id, ...formProject(v, false), position: d.cms.length}});
     d.cms.push(p);
     toast('جارٍ رفع الصور…');
     const files = Array.from(f.elements.files.files);
@@ -776,12 +1068,6 @@ $root.addEventListener('submit', e => {
     }
     state.project = id; redraw();
   }, 'تمت إضافة المشروع').finally(done);
-  if (f.id === 'core-fields') run(async () => {
-    const value = Object.fromEntries(CORE_FIELDS.map(([key, , , flex]) => [key, {label_ar: v(key + '-ar'), label_en: v(key + '-en'),
-      ...(flex ? {required: f.elements[key + '-req'].checked, hidden: f.elements[key + '-hide'].checked} : {})}]));
-    await rest('site_settings', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates'}, body: {key: 'form_fields', value, updated_at: new Date().toISOString()}});
-    d.settings = (d.settings || []).filter(s => s.key !== 'form_fields').concat({key: 'form_fields', value});
-  }, 'تم حفظ الأسئلة الأساسية').finally(done);
   if (f.id === 'edit-project') run(async () => {
     const p = allProjects().find(x => x.id === f.dataset.id);
     await saveProject(p.id, {...projectRow(p), ...formProject(v, p.builtIn)});
@@ -793,19 +1079,61 @@ $root.addEventListener('submit', e => {
     const [q] = await rest('form_questions', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {label_ar: v('label_ar'), label_en: v('label_en'), kind, options, required: f.elements.required.checked, position: d.questions.length}});
     d.questions.push(q); state.addQ = false; redraw();
   }, 'تمت إضافة السؤال').finally(done);
-  if (f.id === 'settings') run(async () => {
-    const stats = [0, 1, 2, 3].map(i => ({n: Number(v('n' + i)), suffix: v('s' + i)}));
-    const contact = {phone: v('phone'), phone_display: v('phone_display') || v('phone'), email: v('email'), instagram: v('instagram'), linkedin: v('linkedin')};
-    const now = new Date().toISOString();
-    await rest('site_settings', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates'}, body: [{key: 'stats', value: stats, updated_at: now}, {key: 'contact', value: contact, updated_at: now}]});
-    d.settings = [{key: 'stats', value: stats}, {key: 'contact', value: contact}];
+  if (f.id === 'q-edit-form') run(async () => {
+    const [type, key] = f.dataset.id.split(/:(.*)/);
+    if (type === 'core') {
+      const cfg = formCfg();
+      await saveFormFields({...cfg, [key]: {...(cfg[key] || {}), label_ar: v('label_ar'), label_en: v('label_en')}});
+    } else {
+      const q = d.questions.find(x => String(x.id) === key);
+      const body = {label_ar: v('label_ar'), label_en: v('label_en')};
+      if (q.kind === 'select') {
+        body.options = v('options').split('\n').map(l => l.split('|').map(s => s.trim())).filter(([en]) => en).map(([en, ar]) => ({en, ar: ar || en}));
+        if (body.options.length < 2) throw new Error('أضيفي اختيارين على الأقل للقائمة.');
+      }
+      await rest(`form_questions?id=eq.${key}`, {method: 'PATCH', body});
+      Object.assign(q, body);
+    }
+    state.editRow = null; redraw();
+  }, 'تم الحفظ').finally(done);
+  if (f.id === 'contact-form') run(async () => {
+    const whatsapp = v('whatsapp').replace(/[^\d+]/g, '');
+    await saveSetting('contact', {...(getSetting('contact') || {}), phone: v('phone'), phone_display: v('phone_display') || v('phone'), whatsapp, email: v('email'), instagram: v('instagram'), linkedin: v('linkedin')});
+    state.editContact = false; redraw();
+  }, 'تم حفظ الإعدادات').finally(done);
+  if (f.id === 'stats-form') run(async () => {
+    await saveSetting('stats', [0, 1, 2, 3].map(i => ({n: Number(v('n' + i)), suffix: v('s' + i)})));
   }, 'تم حفظ الإعدادات').finally(done);
   if (f.id === 'new-user') run(async () => {
-    const email = v('email').toLowerCase();
-    const [u] = await rest('site_admins', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {email, added_by: session.email}});
-    d.users.push(u); redraw();
+    const [u] = await rest('site_admins', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {email: v('email').toLowerCase(), name: v('name'), role: v('role'), added_by: session.email}});
+    d.users.push(u); state.addUser = false; redraw();
   }, 'تمت إضافة المستخدم').finally(done);
+  if (f.id === 'user-edit-form') run(async () => {
+    const email = f.dataset.id, self = email === session.email;
+    const body = {name: v('name'), ...(self ? {} : {role: v('role')})};
+    await rest(`site_admins?email=eq.${encodeURIComponent(email)}`, {method: 'PATCH', body});
+    Object.assign(d.users.find(u => u.email === email), body);
+    if (self) state.me.name = body.name;
+    state.editRow = null; redraw();
+  }, 'تم الحفظ').finally(done);
+  if (f.id === 'new-enquiry') run(async () => {
+    const services = Array.from(f.querySelectorAll('input[name=services]:checked')).map(x => x.value);
+    if (!services.length) throw new Error(L('اختاري خدمة واحدة على الأقل.', 'Choose at least one service.'));
+    const [row] = await rest('project_enquiries', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {
+      full_name: v('full_name'), phone: v('phone'), email: v('email').toLowerCase(), project_type: v('project_type'), project_location: v('project_location'),
+      budget: v('budget'), services, message: v('message'), consent: true, language: LANG, source: 'staff', status: 'new'}});
+    d.enquiries.unshift(row); state.newEnq = false;
+    openEnquiry(row.id); loadActivity();
+  }, L('تم حفظ الطلب', 'Enquiry saved')).finally(done);
+  if (f.id === 'enq-note') run(async () => {
+    const id = state.open;
+    const [note] = await rest('enquiry_activity', {method: 'POST', headers: {Prefer: 'return=representation'}, body: {enquiry_id: id, kind: 'note', body: v('body'), actor: session.email}});
+    (state.log[id] = state.log[id] || []).push(note); redraw();
+  }, L('تمت إضافة الملاحظة', 'Note added')).finally(done);
 });
+
+// New activity from the rest of the team every minute while the page is open.
+setInterval(() => { if (session && document.visibilityState === 'visible' && document.getElementById('admin-bell-wrap')) loadActivity(); }, 60000);
 
 // Returning from the sign-in link in the email: Supabase puts the session in the URL fragment.
 async function start() {

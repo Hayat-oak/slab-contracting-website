@@ -985,3 +985,5 @@ html[dir="rtl"] .card-tag { letter-spacing: 0; font-size: 14px; }
 .file-btn:hover { background: var(--ink); color: #fff; }
 .file-pick input[type=file]:focus-visible + .file-btn { outline: 2px solid var(--accent); outline-offset: 3px; }
 .file-names { color: var(--muted); font-size: 15px; }
+.project-meta .meta-progress { display: block; height: 4px; margin-top: 10px; background: var(--sand); }
+.project-meta .meta-progress i { display: block; height: 100%; background: var(--sage-deep); }
