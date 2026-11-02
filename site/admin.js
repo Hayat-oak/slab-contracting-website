@@ -335,6 +335,8 @@ const AI = Object.fromEntries(Object.entries({
   refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 6l2.6 1.5M17.2 16.5l2.6 1.5M4.2 18l2.6-1.5M17.2 7.5 19.8 6M2.5 12h3M18.5 12h3"/>',
+  instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/>',
+  linkedin: '<path fill="currentColor" stroke="none" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.1c0-1.22-.02-2.78-1.7-2.78-1.7 0-1.96 1.33-1.96 2.7V21h-4z"/>',
   whatsapp: '<path d="M4 20l1.3-4A8.5 8.5 0 1 1 8 18.8z"/><path d="M9 8.5c0 3.3 3 6.5 6.5 6.5l1-1.7-2-1-1 1c-1-.4-2.3-1.7-2.7-2.7l1-1-1-2z"/>',
   clip: '<path d="M8 12.5 14.5 6a3 3 0 0 1 4.2 4.2l-8 8A4.6 4.6 0 0 1 4 11.7L11 4.7"/>',
   log: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
@@ -810,6 +812,8 @@ function settingsView() {
   const stats = get('stats') || [{n: 125, suffix: '+'}, {n: 3, suffix: ''}, {n: 4, suffix: ''}, {n: 7, suffix: ''}];
   const c = get('contact') || {};
   const tab = (k, icon, label) => `<button type="button" role="tab" data-act="set-tab" data-tab-id="${k}" aria-selected="${state.setTab === k}">${AI[icon]}<span>${label}</span></button>`;
+  // Account name from a profile link, e.g. instagram.com/slab.saudi/ → @slab.saudi
+  const handle = (url, at = '') => { const m = String(url || '').match(/\/(?:company\/|in\/)?([^/?#]+)\/?(?:[?#].*)?$/); return m ? at + m[1] : ''; };
   const state1 = on => `<span class="admin-state ${on ? 'is-on' : ''}">${on ? `${AI.check}${L('مفعل', 'Active')}` : L('غير مضاف', 'Not added')}</span>`;
   const card = (icon, tone, title, value, on, ltr = true) => `<div class="admin-ccontact"><span class="admin-ccontact-icon ${tone}">${AI[icon]}</span><div><small>${title}</small><b ${ltr ? 'dir="ltr"' : ''}>${esc(value || '—')}</b>${state1(on)}</div></div>`;
   let panel = '';
@@ -817,7 +821,8 @@ function settingsView() {
       ${card('phone', 'sage', L('رقم SLAB الرئيسي', 'SLAB main number'), c.phone_display || c.phone || '9200 66197', true)}
       ${card('whatsapp', 'warm', L('رقم واتساب', 'WhatsApp number'), c.whatsapp, !!c.whatsapp)}
       ${card('mail', 'sage', 'البريد الإلكتروني', c.email || 'info@slab.sa', true)}
-      ${card('open', 'warm', 'Instagram / LinkedIn', [c.instagram && 'Instagram', c.linkedin && 'LinkedIn'].filter(Boolean).join(' · '), !!(c.instagram || c.linkedin))}</div>
+      ${card('instagram', 'warm', 'Instagram', handle(c.instagram, '@'), !!c.instagram)}
+      ${card('linkedin', 'sage', 'LinkedIn', handle(c.linkedin), !!c.linkedin)}</div>
     ${state.editContact ? `<form id="contact-form" class="admin-card admin-form"><h3 class="span2">بيانات التواصل</h3>
       <label>رقم الهاتف (للاتصال)<input name="phone" dir="ltr" required value="${esc(c.phone || '920066197')}"></label>
       <label>رقم الهاتف (كما يظهر)<input name="phone_display" dir="ltr" value="${esc(c.phone_display || '9200 66197')}"></label>
