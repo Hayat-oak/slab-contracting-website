@@ -405,6 +405,16 @@ async function loadTab() {
 const NOTIFY_KEY = 'slab-admin-notify', seenKey = () => 'slab-admin-seen:' + session.email;
 const prefs = () => { try { return {created: true, status: true, note: true, ...JSON.parse(localStorage.getItem(NOTIFY_KEY) || '{}')}; } catch { return {created: true, status: true, note: true}; } };
 const lastSeen = () => { try { return localStorage.getItem(seenKey()) || ''; } catch { return ''; } };
+// Opening an enquiry marks its notifications up to that moment as read; later activity on it shows as unread again.
+const readKey = () => 'slab-admin-read:' + session.email;
+const readAt = () => { try { return JSON.parse(localStorage.getItem(readKey()) || '{}'); } catch { return {}; } };
+const isUnread = a => a.created_at > lastSeen() && a.created_at > (readAt()[a.enquiry_id] || '');
+function markRead(enquiryId) {
+  const map = readAt();
+  map[enquiryId] = new Date().toISOString();
+  const recent = Object.entries(map).sort((x, y) => y[1].localeCompare(x[1])).slice(0, 300);
+  try { localStorage.setItem(readKey(), JSON.stringify(Object.fromEntries(recent))); } catch {}
+}
 async function loadActivity() {
   try { state.activity = await rest('enquiry_activity?select=*&order=created_at.desc&limit=60'); state.logReady = true; }
   catch { // Before supabase/staff_v2.sql runs: new enquiries only.
@@ -442,14 +452,14 @@ function noteText(a) {
 function renderBell() {
   const wrap = document.getElementById('admin-bell-wrap');
   if (!wrap) return;
-  const all = notifications(), seen = lastSeen();
-  const unread = all.filter(a => a.created_at > seen);
+  const all = notifications();
+  const unread = all.filter(isUnread);
   const list = (state.bellTab === 'unread' ? unread : all).slice(0, state.bellAll ? 60 : 5);
   wrap.innerHTML = `<button type="button" class="admin-bell" data-act="bell" aria-expanded="${state.bell}" aria-label="${L('الإشعارات', 'Notifications')}${unread.length ? ` (${unread.length})` : ''}">${AI.bell}${unread.length ? `<i>${unread.length > 9 ? '9+' : unread.length}</i>` : ''}</button>
   ${state.bell ? `<div class="admin-notify" role="dialog" aria-label="${L('الإشعارات', 'Notifications')}">
     <h3>${L('الإشعارات', 'Notifications')}</h3>
     <div class="admin-seg" role="tablist"><button type="button" role="tab" data-act="bell-tab" data-tab-id="all" aria-selected="${state.bellTab === 'all'}">${L('الكل', 'All')} (${all.length})</button><button type="button" role="tab" data-act="bell-tab" data-tab-id="unread" aria-selected="${state.bellTab === 'unread'}">${L('غير مقروءة', 'Unread')} (${unread.length})</button></div>
-    <ul>${list.map(a => { const [title, body, icon] = noteText(a); return `<li class="${a.created_at > seen ? 'is-unread' : ''}"><button type="button" data-act="open-enq" data-id="${a.enquiry_id}"><span class="admin-notify-icon">${AI[icon]}</span><span><b>${title}</b><span>${esc(body)}</span><small>${ago(a.created_at)}</small></span></button></li>`; }).join('') || `<li class="admin-hint">${L('لا توجد إشعارات.', 'No notifications.')}</li>`}</ul>
+    <ul>${list.map(a => { const [title, body, icon] = noteText(a); return `<li class="${isUnread(a) ? 'is-unread' : ''}"><button type="button" data-act="open-enq" data-id="${a.enquiry_id}"><span class="admin-notify-icon">${AI[icon]}</span><span><b>${title}</b><span>${esc(body)}</span><small>${ago(a.created_at)}</small></span></button></li>`; }).join('') || `<li class="admin-hint">${L('لا توجد إشعارات.', 'No notifications.')}</li>`}</ul>
     <div class="admin-notify-foot">${unread.length ? `<button type="button" data-act="bell-read">${L('تحديد الكل كمقروء', 'Mark all as read')}</button>` : '<span></span>'}
       ${!state.bellAll && (state.bellTab === 'unread' ? unread : all).length > 5 ? `<button type="button" data-act="bell-all">${L('عرض جميع الإشعارات', 'View all notifications')} ${AI.arrow}</button>` : ''}</div></div>` : ''}`;
 }
@@ -617,6 +627,7 @@ function enquiryDetail(e) {
 }
 async function openEnquiry(id) {
   state.tab = 'enquiries'; state.open = id; state.enqTab = 'info'; state.menu = null; state.bell = false;
+  markRead(id);
   await loadTab();
   loadPhotos(enquiryOf(id));
   loadLog(id);
@@ -906,7 +917,7 @@ $root.addEventListener('click', e => {
     case 'bell': state.bell = !state.bell; state.bellAll = false; renderBell(); break;
     case 'bell-tab': state.bellTab = t.dataset.tabId; renderBell(); break;
     case 'bell-all': state.bellAll = true; renderBell(); break;
-    case 'bell-read': try { localStorage.setItem(seenKey(), new Date().toISOString()); } catch {} renderBell(); break;
+    case 'bell-read': try { localStorage.setItem(seenKey(), new Date().toISOString()); localStorage.removeItem(readKey()); } catch {} renderBell(); break;
     case 'menu': state.menu = state.menu === id ? null : id; redraw(); break;
     case 'login-restart': renderLogin('email'); break;
     case 'login-have-code': {
