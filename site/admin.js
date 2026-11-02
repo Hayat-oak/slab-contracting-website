@@ -509,7 +509,7 @@ function homeView() {
   return `<section class="dash">
   <div class="dash-hero"><div><h2>${AI.home}<span>${L('مرحبًا،', 'Welcome,')} <span data-raw>${esc(first)}</span></span></h2><p>${L('نظرة عامة على أداء المشاريع والطلبات', 'An overview of projects and enquiries')}</p></div></div>
   <div class="dash-stats">
-    ${stat('layers', 'dark', 'إجمالي الطلبات', all.length, HILLS)}${stat('plus', 'warm', 'طلبات جديدة', status('new'), HILLS)}
+    ${stat('layers', 'warm', 'إجمالي الطلبات', all.length, HILLS)}${stat('plus', 'warm', 'طلبات جديدة', status('new'), HILLS)}
     ${stat('phone', 'sage', 'تم التواصل', status('contacted'), HILLS)}${stat('pin', 'sage', 'المدن النشطة', cities.filter(c => c[0] !== 'غير محدد').length, SKYLINE)}</div>
   <div class="dash-row">
     <div class="dash-card"><h3>${AI.pie}توزيع القطاعات</h3>${donut}</div>
