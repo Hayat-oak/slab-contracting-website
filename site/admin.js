@@ -354,7 +354,7 @@ const can = (...roles) => roles.includes(role());
 const canEdit = () => can('admin', 'projects');
 const allowed = tab => ACCESS[role()].includes(tab);
 const PAGE = 10;
-Object.assign(state, {filter: {q: '', status: '', sector: ''}, page: 1, sel: [], enqTab: 'info', projTab: 'all', imgGroup: null, setTab: 'contact', editRow: null, menu: null, bell: false, bellTab: 'all', bellAll: false, activity: [], log: {}, newEnq: false, addUser: false, editContact: false});
+Object.assign(state, {filter: {q: '', status: '', sector: ''}, page: 1, enqTab: 'info', projTab: 'all', imgGroup: null, setTab: 'contact', editRow: null, menu: null, bell: false, bellTab: 'all', bellAll: false, activity: [], log: {}, newEnq: false, addUser: false, editContact: false});
 
 async function renderApp() {
   try { state.data.users = await rest('site_admins?select=*&order=created_at'); } catch { state.data.users = []; }
@@ -541,8 +541,6 @@ function enquiriesView() {
   const pages = Math.max(1, Math.ceil(list.length / PAGE));
   state.page = Math.min(state.page, pages);
   const rows = list.slice((state.page - 1) * PAGE, state.page * PAGE);
-  state.sel = state.sel.filter(id => all.some(x => x.id === id));
-  const allOnPage = rows.length && rows.every(r => state.sel.includes(r.id));
   const th = (icon, label) => `<th><span>${icon ? AI[icon] : ''}${label}</span></th>`;
   return `<section><div class="admin-pagehead">
     <div><h2>${AI.enquiries}الطلبات</h2><small>${L('إدارة ومتابعة جميع الطلبات', 'Manage and follow up every enquiry')}</small></div>
@@ -555,16 +553,9 @@ function enquiriesView() {
     <button type="button" class="admin-icon-btn admin-boxed" data-act="filter-reset" title="${L('مسح الفلاتر', 'Clear filters')}" aria-label="${L('مسح الفلاتر', 'Clear filters')}">${AI.filter}</button>
     <button type="button" class="admin-btn admin-ghost" data-act="export">${AI.download}<span>تصدير Excel</span></button>
   </div>
-  ${state.sel.length ? `<div class="admin-bulk"><b>${L(`${state.sel.length} محدد`, `${state.sel.length} selected`)}</b>
-    ${canEdit() ? `<select id="bulk-status" aria-label="${L('تغيير الحالة', 'Change status')}"><option value="">${L('تغيير الحالة…', 'Change status…')}</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>` : ''}
-    <button type="button" class="admin-link-btn" data-act="export-sel">${L('تصدير المحدد', 'Export selected')}</button>
-    ${can('admin') ? `<button type="button" class="admin-danger" data-act="bulk-delete">${L('حذف المحدد', 'Delete selected')}</button>` : ''}
-    <button type="button" class="admin-link-btn" data-act="sel-clear">${L('إلغاء التحديد', 'Clear selection')}</button></div>` : ''}
   ${list.length ? `<div class="admin-table-wrap"><table class="admin-table admin-enq"><thead><tr>
-    <th class="admin-check"><input type="checkbox" data-act="sel-page" ${allOnPage ? 'checked' : ''} aria-label="${L('تحديد الصفحة', 'Select page')}"></th>
     ${th('', '#')}${th('user', 'الاسم')}${th('phone', 'الجوال')}${th('layers', 'القطاع')}${th('pin', 'المدينة')}${th('status', 'الحالة')}${th('calendar', L('تاريخ الطلب', 'Date'))}<th><span class="visually-hidden">الإجراءات</span></th></tr></thead><tbody>
   ${rows.map(e => `<tr>
-    <td class="admin-check"><input type="checkbox" data-act="sel" data-id="${e.id}" ${state.sel.includes(e.id) ? 'checked' : ''} aria-label="${esc(e.full_name)}"></td>
     <td class="admin-ref" dir="ltr">${refOf(e).slice(1)}</td>
     <td><button type="button" class="dash-open" data-act="open-enq" data-id="${e.id}">${esc(e.full_name)}</button></td>
     <td dir="ltr"><a href="tel:${esc(e.phone)}">${esc(e.phone)}</a></td><td>${SECTORS[e.project_type] || esc(e.project_type)}</td><td>${esc(e.project_location)}</td>
@@ -909,8 +900,6 @@ $root.addEventListener('click', e => {
       renderLogin('code', mail); break;
     }
     case 'export': exportExcel(state.tab === 'enquiries' ? filteredEnquiries() : d.enquiries || []); break;
-    case 'export-sel': exportExcel((d.enquiries || []).filter(x => state.sel.includes(x.id))); break;
-    case 'sel-clear': state.sel = []; redraw(); break;
     case 'filter-reset': state.filter = {q: '', status: '', sector: ''}; state.page = 1; redraw(); break;
     case 'page': state.page = Number(t.dataset.page); redraw(); break;
     case 'new-enq': state.tab = 'enquiries'; state.open = null; state.newEnq = true; loadTab().then(() => { const f = document.getElementById('new-enquiry'); if (f) f.querySelector('input').focus(); }); break;
@@ -926,15 +915,6 @@ $root.addEventListener('click', e => {
       if (state.addQ) document.getElementById('add-question').querySelector('input').focus();
       break;
     case 'q-edit': state.editRow = state.editRow === id ? null : id; state.menu = null; redraw(); break;
-    case 'bulk-delete':
-      if (ask(L(`حذف ${state.sel.length} طلبات نهائيًا؟`, `Delete ${state.sel.length} enquiries permanently?`))) run(async () => {
-        const gone = d.enquiries.filter(x => state.sel.includes(x.id));
-        await rest(`project_enquiries?id=in.(${gone.map(x => x.id).join(',')})`, {method: 'DELETE'});
-        const files = gone.flatMap(x => x.attachments || []);
-        if (files.length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: files}}).catch(() => {});
-        d.enquiries = d.enquiries.filter(x => !state.sel.includes(x.id)); state.sel = []; redraw();
-      }, 'تم حذف الطلب');
-      break;
     case 'delete-enq':
       if (ask('حذف هذا الطلب نهائيًا؟')) run(async () => { const gone = d.enquiries.find(x => x.id === id); await rest(`project_enquiries?id=eq.${id}`, {method: 'DELETE'}); if ((gone.attachments || []).length) await api('/storage/v1/object/enquiry-files', {method: 'DELETE', body: {prefixes: gone.attachments}}).catch(() => {}); d.enquiries = d.enquiries.filter(x => x.id !== id); state.open = null; redraw(); }, 'تم حذف الطلب');
       break;
@@ -1021,12 +1001,6 @@ $root.addEventListener('change', e => {
   const d = state.data;
   if (t.id === 'enq-status') { state.filter.status = t.value; state.page = 1; redraw(); return; }
   if (t.id === 'enq-sector') { state.filter.sector = t.value; state.page = 1; redraw(); return; }
-  if (t.id === 'bulk-status' && t.value) { run(() => setStatus(state.sel, t.value), 'تم تحديث الحالة'); return; }
-  if (t.dataset.act === 'sel') { state.sel = t.checked ? [...state.sel, t.dataset.id] : state.sel.filter(x => x !== t.dataset.id); redraw(); return; }
-  if (t.dataset.act === 'sel-page') {
-    const ids = filteredEnquiries().slice((state.page - 1) * PAGE, state.page * PAGE).map(x => x.id);
-    state.sel = t.checked ? [...new Set([...state.sel, ...ids])] : state.sel.filter(x => !ids.includes(x)); redraw(); return;
-  }
   if (t.dataset.act === 'status') run(() => setStatus([t.dataset.id], t.value), 'تم تحديث الحالة');
   if (t.dataset.act === 'add-photos' && t.files.length) run(async () => {
     t.disabled = true; toast('جارٍ رفع الصور…');
