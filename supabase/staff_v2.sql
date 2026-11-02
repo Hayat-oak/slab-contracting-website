@@ -10,6 +10,7 @@
 
 -- 1) Staff: name, role, active ------------------------------------------------
 alter table public.site_admins add column if not exists name text not null default '' check (char_length(name) <= 80);
+alter table public.site_admins add column if not exists name_ar text not null default '' check (char_length(name_ar) <= 80);
 alter table public.site_admins add column if not exists role text not null default 'admin' check (role in ('admin', 'projects', 'finance'));
 alter table public.site_admins add column if not exists active boolean not null default true;
 

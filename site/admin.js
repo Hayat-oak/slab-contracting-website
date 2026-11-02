@@ -361,7 +361,7 @@ async function renderApp() {
   const mine = state.data.users.find(u => u.email === session.email);
   state.me = {email: session.email, name: '', ...mine, role: (mine && mine.role) || 'admin'};
   if (!allowed(state.tab)) state.tab = 'home';
-  const who = state.me.name || session.email;
+  const who = personName(state.me);
   $root.innerHTML = `<div class="admin-layout">
   <aside class="admin-side">
     <a class="admin-logo" href="./">${LOGO_MARK}<span><b>SLAB</b><small>صفحة الموظفين</small></span></a>
@@ -370,7 +370,7 @@ async function renderApp() {
   <div class="admin-body-col">
     <header class="admin-topbar">
       <div class="admin-bell-wrap" id="admin-bell-wrap"></div>
-      <span class="admin-who">${AI.user}<span ${state.me.name ? 'data-raw' : 'dir="ltr"'}>${esc(who)}</span></span>
+      <span class="admin-who">${AI.user}<span ${who === session.email ? 'dir="ltr"' : 'data-raw'}>${esc(who)}</span></span>
       ${langButton()}
       <button type="button" class="admin-logout" data-act="logout">${AI.logout}<span>تسجيل الخروج</span></button>
     </header>
@@ -413,7 +413,9 @@ async function loadActivity() {
   renderBell();
 }
 const notifications = () => { const p = prefs(); return state.activity.filter(a => a.actor !== session.email && p[a.kind]); };
-const staffName = email => { const u = (state.data.users || []).find(x => x.email === email); return (u && u.name) || email || L('الموقع', 'Website'); };
+// A staff member's name in the panel's language (Arabic or English name), falling back to the other one, then the email.
+const personName = u => (u && (LANG === 'en' ? u.name || u.name_ar : u.name_ar || u.name)) || (u && u.email) || '';
+const staffName = email => personName((state.data.users || []).find(x => x.email === email)) || email || L('الموقع', 'Website');
 const enquiryOf = id => (state.data.enquiries || []).find(e => e.id === id);
 const refOf = e => refNo(e);
 function refNo(e) {
@@ -500,7 +502,7 @@ function homeView() {
   const donut = all.length ? `<div class="dash-donut-wrap"><ul class="dash-legend">${slices.map(([k, v]) => `<li><i style="background:${SECTOR_COLORS[k]}"></i><span>${SECTORS[k] || 'أخرى'}</span><b dir="ltr">${Math.round(v / all.length * 100)}% (${v})</b></li>`).join('')}</ul>
     <svg class="dash-donut" viewBox="0 0 200 200" role="img" aria-label="توزيع القطاعات">${arcs}<circle class="dash-hole" cx="100" cy="100" r="46"/><text class="dash-total" x="100" y="96">${all.length}</text><text class="dash-total-label" x="100" y="120">طلبات</text></svg></div>` : empty;
 
-  const first = (state.me.name || session.email.split('@')[0]).split(/\s+/)[0];
+  const first = (personName(state.me) === session.email ? session.email.split('@')[0] : personName(state.me)).split(/\s+/)[0];
   const quick = [
     canEdit() && `<button type="button" data-act="new-enq">${AI.plus}<span>${L('إضافة طلب', 'Add enquiry')}</span></button>`,
     `<button type="button" data-act="export">${AI.download}<span>تصدير Excel</span></button>`,
@@ -853,20 +855,22 @@ function usersView() {
   return `<section><div class="admin-pagehead"><div><h2>${AI.users}المستخدمين</h2><small>${L('إدارة حسابات المستخدمين وصلاحيات الوصول', 'Manage staff accounts and access')}</small></div>
     <button type="button" class="admin-btn admin-primary" data-act="user-add">${AI.add}<span>إضافة مستخدم</span></button></div>
   ${state.addUser ? `<form id="new-user" class="admin-card admin-form"><div class="admin-head span2"><h3>إضافة مستخدم</h3><button type="button" class="admin-link-btn" data-act="user-add">إلغاء</button></div>
-    <label>الاسم<input name="name" required maxlength="80"></label>
+    <label>${L('الاسم (عربي)', 'Name (Arabic)')}<input name="name_ar" required maxlength="80"></label>
+    <label>${L('الاسم (English)', 'Name (English)')}<input name="name" dir="ltr" required maxlength="80"></label>
     <label>البريد الإلكتروني<input name="email" type="email" dir="ltr" required></label>
     <label>${L('الدور', 'Role')}${roleSelect('projects')}</label>
     <p class="admin-hint span2">كل بريد هنا يقدر يدخل صفحة الموظفين برمز يصله على الإيميل.</p>
     <button class="admin-btn admin-primary span2" type="submit">إضافة</button></form>` : ''}
   <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>الاسم</th><th>البريد الإلكتروني</th><th>${L('الدور', 'Role')}</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody>
   ${users.map((u, i) => { const self = u.email === session.email, active = u.active !== false, key = 'u:' + u.email; return `<tr class="${active ? '' : 'is-off'}"><td>${i + 1}</td>
-    <td><span data-raw>${esc(u.name || '—')}</span>${self ? ` <span class="admin-tag">أنتِ</span>` : ''}</td><td dir="ltr">${esc(u.email)}</td><td>${L(...ROLES[u.role || 'admin'])}</td>
+    <td><span data-raw>${esc(personName(u) === u.email ? '—' : personName(u))}</span>${self ? ` <span class="admin-tag">أنتِ</span>` : ''}</td><td dir="ltr">${esc(u.email)}</td><td>${L(...ROLES[u.role || 'admin'])}</td>
     <td><span class="dash-pill ${active ? 's-contacted' : 's-closed'}">${active ? L('نشط', 'Active') : L('موقوف', 'Suspended')}</span></td>
     <td class="admin-actions"><button type="button" class="admin-icon-btn" data-act="user-edit" data-id="${esc(u.email)}" aria-label="${L('تعديل', 'Edit')}" title="${L('تعديل', 'Edit')}">${AI.edit}</button>
       ${self ? '' : `<span class="admin-menu-wrap"><button type="button" class="admin-icon-btn" data-act="menu" data-id="${esc(key)}" aria-label="المزيد" aria-expanded="${state.menu === key}">${AI.dots}</button>
       ${state.menu === key ? `<span class="admin-menu" role="menu"><button type="button" role="menuitem" data-act="user-active" data-id="${esc(u.email)}">${active ? L('إيقاف الحساب', 'Suspend') : L('تفعيل الحساب', 'Activate')}</button><button type="button" role="menuitem" class="danger" data-act="user-delete" data-email="${esc(u.email)}">إزالة</button></span>` : ''}</span>`}</td></tr>
     ${state.editRow === key ? `<tr class="admin-detail"><td colspan="6"><form id="user-edit-form" class="admin-form" data-id="${esc(u.email)}">
-      <label>الاسم<input name="name" maxlength="80" value="${esc(u.name || '')}"></label><label>${L('الدور', 'Role')}${roleSelect(u.role || 'admin', self)}</label>
+      <label>${L('الاسم (عربي)', 'Name (Arabic)')}<input name="name_ar" maxlength="80" value="${esc(u.name_ar || '')}"></label><label>${L('الاسم (English)', 'Name (English)')}<input name="name" dir="ltr" maxlength="80" value="${esc(u.name || '')}"></label>
+      <label>${L('الدور', 'Role')}${roleSelect(u.role || 'admin', self)}</label>
       ${self ? `<p class="admin-hint span2">${L('ما تقدرين تغيرين دورك بنفسك.', 'You cannot change your own role.')}</p>` : ''}
       <div class="span2 admin-tools"><button class="admin-btn admin-primary" type="submit">حفظ</button><button type="button" class="admin-link-btn" data-act="user-edit" data-id="${esc(u.email)}">إلغاء</button></div></form></td></tr>` : ''}`; }).join('')}
   </tbody></table></div>
@@ -1103,16 +1107,17 @@ $root.addEventListener('submit', e => {
     await saveSetting('stats', [0, 1, 2, 3].map(i => ({n: Number(v('n' + i)), suffix: v('s' + i)})));
   }, 'تم حفظ الإعدادات').finally(done);
   if (f.id === 'new-user') run(async () => {
-    const [u] = await postCompat('site_admins', {email: v('email').toLowerCase(), name: v('name'), role: v('role'), added_by: session.email}, ['name', 'role']);
+    const [u] = await postCompat('site_admins', {email: v('email').toLowerCase(), name: v('name'), name_ar: v('name_ar'), role: v('role'), added_by: session.email}, ['name', 'name_ar', 'role']);
     d.users.push(u); state.addUser = false; redraw();
   }, 'تمت إضافة المستخدم').finally(done);
   if (f.id === 'user-edit-form') run(async () => {
     const email = f.dataset.id, self = email === session.email;
-    const body = {name: v('name'), ...(self ? {} : {role: v('role')})};
+    const body = {name: v('name'), name_ar: v('name_ar'), ...(self ? {} : {role: v('role')})};
     await rest(`site_admins?email=eq.${encodeURIComponent(email)}`, {method: 'PATCH', body});
     Object.assign(d.users.find(u => u.email === email), body);
-    if (self) state.me.name = body.name;
-    state.editRow = null; redraw();
+    state.editRow = null;
+    // Own name changed: redraw the whole panel so the top bar and the welcome banner use it.
+    if (self) { Object.assign(state.me, body); renderApp(); } else redraw();
   }, 'تم الحفظ').finally(done);
   if (f.id === 'new-enquiry') run(async () => {
     const services = Array.from(f.querySelectorAll('input[name=services]:checked')).map(x => x.value);
