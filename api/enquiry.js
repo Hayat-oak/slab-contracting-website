@@ -11,7 +11,7 @@
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://oydrudnqcazzytauodup.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_KEY || 'sb_publishable_4Ep7dLPR3odGYd_uf3GDtw_0U4ieWvw';
 const TO = process.env.ENQUIRY_TO || 'info@slab.sa';
-const SITE = 'https://slab-contracting-website.vercel.app';
+const SITE = process.env.SITE_URL || 'https://www.slab.sa';
 const FROM = process.env.ENQUIRY_FROM || 'SLAB Website <website@slab.sa>';
 
 const SECTORS = {residential: ['Residential', 'سكني'], hospitality: ['Hospitality', 'ضيافة'], commercial: ['Commercial', 'تجاري'], institutional: ['Government & Institutional', 'حكومي ومؤسسي']};
