@@ -1004,14 +1004,14 @@ html[dir="rtl"] .card-tag { letter-spacing: 0; font-size: 14px; }
 .partners-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 36px); max-width: 1200px; }
 .partner-card { display: flex; align-items: center; justify-content: center; height: clamp(190px, 17vw, 280px); padding: clamp(24px, 3.4vw, 52px); background: rgba(255, 255, 255, .55); border: 1px solid #ddd6cc; border-radius: 16px; box-shadow: 0 1px 2px rgba(40, 52, 59, .04);
   transition: transform .35s var(--ease-out), box-shadow .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease); }
-/* Entrance (once, when the section scrolls into view): the heading fades in, then each card rises and fades in, 700ms,
-   ALIYAH first and SOUL 200ms later. The row is revealed as one so the stagger also holds on mobile. Without
+/* Entrance (once, when the section scrolls into view): the heading fades in, then each card rises 35px and fades in over 1,400ms,
+   ALIYAH first and SOUL 500ms later. The row is revealed as one so the stagger also holds on mobile. Without
    IntersectionObserver or with reduced motion everything is shown at once (see reveal in app.js). */
 .partners-head[data-reveal] { transform: none; transition: opacity .7s var(--ease-out); }
 .partners-grid[data-reveal] { transform: none; transition: none; opacity: 1; }
-.partners-grid[data-reveal]:not(.visible) .partner-card { opacity: 0; transform: translateY(36px); }
-.partners-grid.visible .partner-card { animation: partner-in .7s cubic-bezier(.16, 1, .3, 1) var(--d, 0ms) backwards; }
-@keyframes partner-in { from { opacity: 0; transform: translateY(36px); } }
+.partners-grid[data-reveal]:not(.visible) .partner-card { opacity: 0; transform: translateY(35px); }
+.partners-grid.visible .partner-card { animation: partner-in 1.4s cubic-bezier(.22, 1, .36, 1) var(--d, 0ms) backwards; }
+@keyframes partner-in { from { opacity: 0; transform: translateY(35px); } }
 .partner-card img { width: auto; height: auto; max-width: 100%; max-height: 100%; min-height: 0; object-fit: contain; }
 .partner-card .partner-aliyah { width: 62%; }
 .partner-card .partner-soul { width: 78%; }

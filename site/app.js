@@ -549,7 +549,7 @@ function partners() {
   </svg>
   <div class="container partners-inner">
     <div class="partners-head" data-reveal><h2 class="section-title" id="partners-title">${t('partnersTitle')}</h2><span class="partners-rule" aria-hidden="true"></span><p class="copy">${t('partnersDesc')}</p></div>
-    <ul class="partners-grid" role="list" data-reveal>${logos.map(([id, alt, w, h], i) => `<li class="partner-card" style="--d:${250 + i * 200}ms"><img src="assets/partners/${id}.webp" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async" class="partner-${id}"></li>`).join('')}</ul>
+    <ul class="partners-grid" role="list" data-reveal>${logos.map(([id, alt, w, h], i) => `<li class="partner-card" style="--d:${250 + i * 500}ms"><img src="assets/partners/${id}.webp" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async" class="partner-${id}"></li>`).join('')}</ul>
   </div></section>`;
 }
 
