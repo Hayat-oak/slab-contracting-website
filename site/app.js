@@ -121,7 +121,7 @@ const phrases = {
  serviceLong2:'Coordinate design development, technical requirements, stakeholder review, and approvals before execution.',
  serviceLong3:'Deliver functional, refined interior environments aligned with the operational and design requirements of each asset.',
  serviceLong4:'Coordinate scope, contractors, schedules, procurement, resources, reporting, and contractual requirements.',
- sectors:'Sectors We Serve', sectorsSub:'Solutions shaped for a range of environments and operational needs.', hospitality:'Hospitality', hospitalityDesc:'Hotels, serviced residences and guest-facing spaces.', residentialDesc:'Apartments, villas, compounds and renovation programs.', commercial:'Commercial', commercialDesc:'Offices, towers, mixed-use environments and commercial fit-out.', institutional:'Government & Institutional', institutionalDesc:'Projects requiring governance, accountability and documented controls.',
+ sectors:'Sectors We Serve', sectorsSub:'Solutions shaped for a range of environments and operational needs.', hospitality:'Hospitality', hospitalityDesc:'Hotels & guest spaces', residentialDesc:'Apartments & villas', commercial:'Commercial', commercialDesc:'Offices & mixed-use', institutional:'Government & Institutional', institutionalDesc:'Governed, accountable projects',
  aboutHero:'About SLAB', aboutHeroSub:'SAUDI PROJECT MANAGEMENT · INTEGRATED DELIVERY', ourStory:'Our Story', storyCopy:'SLAB Project Management is a Saudi company specialising in small-project management, design, fit-out and execution, part of Oaktree Group. We work with residential, hospitality, commercial and institutional clients through design support, procurement, construction and interior fit-out.',
  storyCopy2:'Our role spans early project definition, technical coordination, execution, quality control and handover — with a structured focus on scope, cost, schedule and quality.',
  storyTitle:'Design & Build and Fit-Out Expertise', aboutNav:'On this page',
@@ -184,7 +184,7 @@ view:'عرض',openPhoto:'عرض الصورة بملء الشاشة',prevPhoto:'�
  servicesHero:'خدماتنا',servicesHeroSub:'حلول متكاملة للإنشاءات والتشطيبات',servicesIntro:'إطار عمل منسق من تعريف المشروع حتى التسليم.',
  serviceLong1:'تنفيذ متكامل للمشاريع بدعم من التخطيط وإدارة الموقع وضبط الجودة والتنسيق مع الأطراف المعنية.',serviceLong2:'تنسيق تطوير التصاميم والمتطلبات الفنية ومراجعة الجهات المعنية والموافقات قبل التنفيذ.',
  serviceLong3:'تنفيذ بيئات داخلية عملية ومدروسة تتماشى مع المتطلبات التشغيلية والتصميمية لكل مشروع.',serviceLong4:'تنسيق النطاق والمقاولين والجداول والمشتريات والموارد والتقارير ومتطلبات العقود.',
- sectors:'القطاعات التي نخدمها',sectorsSub:'حلول تلائم أنواعًا مختلفة من المشاريع والمتطلبات التشغيلية.',hospitality:'الضيافة',hospitalityDesc:'الفنادق والشقق المخدومة والمساحات المخصصة للضيوف.',residentialDesc:'الشقق والفلل والمجمعات السكنية وبرامج التجديد.',commercial:'التجاري',commercialDesc:'المكاتب والأبراج والمشاريع متعددة الاستخدام والتشطيبات التجارية.',institutional:'الحكومي والمؤسسي',institutionalDesc:'مشاريع تتطلب الحوكمة والمساءلة والالتزام والتوثيق.',
+ sectors:'القطاعات التي نخدمها',sectorsSub:'حلول تلائم أنواعًا مختلفة من المشاريع والمتطلبات التشغيلية.',hospitality:'الضيافة',hospitalityDesc:'الفنادق ومساحات الضيافة',residentialDesc:'الشقق والفلل',commercial:'التجاري',commercialDesc:'المكاتب والمشاريع متعددة الاستخدام',institutional:'الحكومي والمؤسسي',institutionalDesc:'مشاريع خاضعة للحوكمة والمساءلة',
  aboutHero:'من نحن',aboutHeroSub:'إدارة مشاريع سعودية · تنفيذ متكامل',ourStory:'قصتنا',storyCopy:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة والتصميم والتشطيبات والتنفيذ، وهي جزء من مجموعة أوكتري. نخدم المشاريع السكنية والضيافة والتجارية والمؤسسية عبر دعم التصميم والمشتريات والإنشاءات والتشطيبات الداخلية.',storyCopy2:'يشمل دورنا تعريف المشروع وتنسيق الجوانب الفنية والتنفيذ وضبط الجودة والتسليم، مع تركيز منظم على النطاق والتكلفة والجدول والجودة.',
  storyTitle:'خبرة في التصميم والبناء والتشطيبات',aboutNav:'في هذه الصفحة',
  delivery:'تنفيذ متكامل',deliveryDesc:'تنسيق التصميم والإنشاءات والتشطيبات والتسليم ضمن إطار واحد.',control:'رقابة منظمة',controlDesc:'متابعة نطاق الأعمال والجدول والمشتريات والتكلفة والجودة والموقع.',ksa:'انتشار داخل المملكة',ksaDesc:'خبرة في مشاريع بالرياض والمدينة المنورة وجدة.',
@@ -396,10 +396,10 @@ function serviceCards() {
 // Sectors and seven-stage strip (client design). Photos are SLAB's own; the profile has no dedicated
 // commercial/government photography, so those two use SLAB team / planning images.
 const SECTOR_VISUALS = {
-  hospitality: {src: HD('soulhittin', 2), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-9M21 19v-5a3 3 0 0 0-3-3H10v6M3 17h18M6.5 13.5a1.5 1.5 0 1 0 0-.01"/></svg>'},
-  residential: {src: HD('almajidiya111', 2), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>'},
-  commercial: {src: 'assets/about/sector-commercial.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3h12v18M4 21h16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M11 21v-3h2v3"/></svg>'},
-  institutional: {src: 'assets/about/sector-institutional.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 4l9 5M4 9h16M6 9v8M10 9v8M14 9v8M18 9v8M3 20h18M4 17h16"/></svg>'}
+  hospitality: {src: HD('soulhittin', 3), pos: '44% 50%', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19v-9M21 19v-5a3 3 0 0 0-3-3H10v6M3 17h18M6.5 13.5a1.5 1.5 0 1 0 0-.01"/></svg>'},
+  residential: {src: HD('ajlan11', 2), icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></svg>'},
+  commercial: {src: 'assets/about/sector-commercial-2.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3h12v18M4 21h16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M11 21v-3h2v3"/></svg>'},
+  institutional: {src: 'assets/about/sector-institutional-2.webp', icon: '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9 12 4l9 5M4 9h16M6 9v8M10 9v8M14 9v8M18 9v8M3 20h18M4 17h16"/></svg>'}
 };
 const SECTOR_ALT = {hospitality: HD('soulhittin', 3), residential: HD('ajlan11', 2), commercial: 'assets/about/sector-commercial-2.webp', institutional: 'assets/about/sector-institutional-2.webp'};
 function sectorsSection(link) {

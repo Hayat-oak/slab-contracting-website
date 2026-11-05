@@ -1131,3 +1131,19 @@ html[dir="rtl"] .contact-layout .dark-button:hover .icon { transform: scaleX(-1)
   .contact-layout .dark-button:hover .icon { transform: none; }
   html[dir="rtl"] .contact-layout .dark-button:hover .icon { transform: scaleX(-1); }
 }
+
+/* ---------- Sectors We Serve (client reference, Nov 2026): tall photo cards in natural colour, light gradient only
+   behind the text at the bottom, thin light gaps; text block anchored to the bottom of each card ---------- */
+.sector-cards { gap: 6px; }
+.sector-card { display: flex; flex-direction: column; justify-content: flex-end; grid-row: auto; aspect-ratio: 4 / 4.9; background: #d9d4cb; }
+.sector-card::before { content: none; }
+.sector-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20, 20, 19, 0) 52%, rgba(20, 20, 19, .28) 70%, rgba(20, 20, 19, .62) 100%); pointer-events: none; }
+.sector-card > img { filter: none; }
+.sector-band { z-index: 1; align-items: stretch; background: none; backdrop-filter: none; padding: 0 clamp(20px, 2.2vw, 36px) clamp(26px, 2.6vw, 40px); text-shadow: 0 1px 12px rgba(0, 0, 0, .25); }
+.sector-icon { font-size: clamp(34px, 2.6vw, 44px); border-inline-end-color: rgba(255, 255, 255, .7); }
+.sector-band > div { align-self: auto; }
+.sector-num { font-size: 16px; opacity: 1; }
+.sector-band h3 { font-size: clamp(24px, 2vw, 32px); font-weight: 400; line-height: 1.15; margin: 6px 0 8px; }
+.sector-band p { font-size: clamp(15px, 1.1vw, 17px); color: #fff; }
+@media (max-width: 1180px) { .sector-card { aspect-ratio: 4 / 4.2; } }
+@media (max-width: 640px) { .sector-card { aspect-ratio: 4 / 3.6; } }
