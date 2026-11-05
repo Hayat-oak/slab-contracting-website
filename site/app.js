@@ -105,6 +105,7 @@ const phrases = {
  creating:'Crafting Meaningful Spaces', aboutHome:'SLAB Project Management is a Saudi company specialising in small-project management, design, fit-out and execution, part of Oaktree Group. We bring design coordination, procurement, site execution, quality control and handover together in one integrated delivery process.',
  aboutSlab:'About SLAB', featured:'Featured Projects', featuredSub:'Real spaces. Delivered with purpose and precision.',
  bannerTitle:'Let’s Build\nYour Next Project', bannerDesc:'Tell us about your next project, and let’s begin the conversation.',
+ partnersTitle:'Success Partners', partnersDesc:'We value our partnerships in delivering projects defined by quality and lasting value.',
  projectHero:'Projects', projectsTagline:'A COLLECTION OF RESIDENTIAL DESIGN, FURNITURE & FIT-OUT WORK.', all:'All', aliyah:'Aliyah Homes', soul:'SOUL', other:'Other Projects', adminLogin:'Staff login', showing:'projects shown', filterLabel:'Filter projects by client',
  projectTitle:'Residential Fit-Out', type:'Type', budget:'Estimated budget', budgetChoose:'Select a range', budget_lt500k:'Under SAR 500,000', budget_500k1m:'SAR 500,000 – 1 million', budget_1m3m:'SAR 1 – 3 million', budget_gt3m:'Over SAR 3 million', budget_tbd:'Not decided yet', errBudget:'Please select an estimated budget.', projectTypeTag:'Residential',
  projStatus:'Project status', pst_active:'In progress', pst_finished:'Completed', pst_promo:'Promotion',
@@ -169,6 +170,7 @@ const phrases = {
  service3:'التشطيبات الداخلية',service3desc:'مساحات داخلية عملية تراعي التصميم ومتطلبات الاستخدام.',service4:'إدارة المشاريع والعقود',service4desc:'إدارة نطاق الأعمال والموارد والتكاليف والجداول.',
  creating:'نصنع مساحات ذات معنى',aboutHome:'سلاب لإدارة المشاريع شركة سعودية متخصصة في إدارة المشاريع الصغيرة والتصميم والتشطيبات والتنفيذ، وهي جزء من مجموعة أوكتري. تجمع بين تنسيق التصميم والمشتريات والتنفيذ وضبط الجودة والتسليم في إطار عمل متكامل.',aboutSlab:'تعرف على سلاب',featured:'مشاريع مختارة',featuredSub:'مساحات حقيقية نُفذت بعناية ودقة.',
  bannerTitle:'لنبدأ\nمشروعك القادم',bannerDesc:'حدثنا عن مشروعك القادم لنبدأ رحلة العمل معًا.',
+ partnersTitle:'شركاء النجاح', partnersDesc:'نعتز بالتعاون مع شركائنا في تقديم مشاريع ذات جودة وقيمة مستدامة.',
  projectHero:'مشاريعنا',projectsTagline:'مجموعة من أعمال التصميم والأثاث والتشطيبات السكنية',all:'الكل',aliyah:'عالية هوم',soul:'سول',other:'مشاريع أخرى',adminLogin:'دخول الموظفين',showing:'مشروع معروض',filterLabel:'تصفية المشاريع حسب العميل',
  projectTitle:'تشطيبات سكنية',type:'النوع',budget:'الميزانية التقديرية',budgetChoose:'اختر الفئة',budget_lt500k:'أقل من 500 ألف ريال',budget_500k1m:'من 500 ألف إلى مليون ريال',budget_1m3m:'من 1 إلى 3 ملايين ريال',budget_gt3m:'أكثر من 3 ملايين ريال',budget_tbd:'غير محددة بعد',errBudget:'يرجى اختيار الميزانية التقديرية.',projectTypeTag:'سكني',
  projStatus:'حالة المشروع', pst_active:'قيد التنفيذ', pst_finished:'منتهي', pst_promo:'عرض ترويجي',
@@ -525,7 +527,30 @@ function projectList() {
     `<button type="button" class="filter ${state.filter === f ? 'active' : ''}" data-action="filter" data-filter="${f}" aria-pressed="${state.filter === f}">${t(f)} <sup>${count(f)}</sup></button>`).join('')}
     <span class="results-count" id="results-count" aria-live="polite">${list.length} ${t('showing')}</span></div>
   <div class="project-grid listing" id="project-results">${projectResults(list)}</div>
-</div></section></main>`;
+</div></section>
+${partners()}</main>`;
+}
+
+// Success partners: the two clients' original logos (site/assets/partners, background removed only). Not links:
+// no official partner URLs have been approved.
+function partners() {
+  const logos = [['aliyah', 'عالية هوم — ALIYAH Homes', 1000, 718], ['soul', 'SOUL — The Rhythm of Living', 1200, 424]];
+  return `<section class="partners" aria-labelledby="partners-title">
+  <svg class="partners-art" viewBox="0 0 300 560" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <rect x="34" y="70" width="190" height="490" fill="#ebe3d8"/><rect x="224" y="70" width="58" height="490" fill="#ddd2c4"/>
+    <rect x="34" y="52" width="252" height="18" fill="#e2d8cb"/><rect x="34" y="70" width="248" height="6" fill="#cfc3b4" opacity=".6"/>
+    <rect x="96" y="250" width="104" height="214" fill="#d6cbbd"/><rect x="104" y="258" width="88" height="206" fill="#4b5052"/>
+    <path d="M104 258h88v206H104z" fill="url(#partners-glass)"/><path d="M148 258v206" stroke="#3a3e40" stroke-width="3"/>
+    <polygon points="0,410 300,560 0,560" fill="var(--sage)" opacity=".75"/>
+    <g class="partners-olive"><path d="M300 92C238 104 186 142 150 196M262 102c-8 22-6 40 4 56M214 128c-12 18-14 36-6 52M176 162c-16 10-24 26-22 44" fill="none" stroke="#7d7a52" stroke-width="2.2" stroke-linecap="round"/>
+      ${[[276, 96, -20], [252, 88, 30], [240, 116, -50], [228, 106, 20], [204, 122, -30], [196, 146, 40], [184, 140, -60], [170, 166, 10], [160, 186, -40], [152, 204, 60], [264, 130, 70], [266, 150, -10], [206, 156, 80], [208, 176, -20], [158, 222, 20], [290, 100, 10]]
+        .map(([x, y, r], i) => `<ellipse cx="${x}" cy="${y}" rx="13" ry="4.2" transform="rotate(${r} ${x} ${y})" fill="${i % 3 ? '#8f8d5c' : '#a6a273'}"/>`).join('')}</g>
+    <defs><linearGradient id="partners-glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#c9a77f" stop-opacity=".25"/></linearGradient></defs>
+  </svg>
+  <div class="container partners-inner">
+    <div class="partners-head" data-reveal><h2 class="section-title" id="partners-title">${t('partnersTitle')}</h2><span class="partners-rule" aria-hidden="true"></span><p class="copy">${t('partnersDesc')}</p></div>
+    <ul class="partners-grid" role="list">${logos.map(([id, alt, w, h], i) => `<li class="partner-card" data-reveal style="--d:${120 + i * 120}ms"><img src="assets/partners/${id}.webp" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async" class="partner-${id}"></li>`).join('')}</ul>
+  </div></section>`;
 }
 
 function projectResults(list) {
