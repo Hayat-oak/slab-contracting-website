@@ -523,9 +523,10 @@ function projectList() {
   const count = f => projects.filter(p => f === 'all' || p.category === f).length;
   return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('projectHero'), t('projectsTagline'), 'masharef', 3)}
 <section class="section-sm"><div class="container">
-  <div class="filters" role="group" aria-label="${t('filterLabel')}">${['all', 'aliyah', 'soul', 'other'].filter(f => count(f)).map(f =>
-    `<button type="button" class="filter ${state.filter === f ? 'active' : ''}" data-action="filter" data-filter="${f}" aria-pressed="${state.filter === f}">${t(f)} <sup>${count(f)}</sup></button>`).join('')}
-    <span class="results-count" id="results-count" aria-live="polite">${list.length} ${t('showing')}</span></div>
+  <div class="filters" role="group" aria-label="${t('filterLabel')}"><div class="filter-tabs">${['all', 'aliyah', 'soul', 'other'].filter(f => count(f)).map(f =>
+    `<button type="button" class="filter ${state.filter === f ? 'active' : ''}" data-action="filter" data-filter="${f}" aria-pressed="${state.filter === f}">${filterLabel(f)}<span class="filter-badge">${count(f)}</span></button>`).join('')}
+    <span class="filter-ink" aria-hidden="true"></span></div>
+    <span class="visually-hidden" id="results-count" aria-live="polite">${list.length} ${t('showing')}</span></div>
   <div class="project-grid listing" id="project-results">${projectResults(list)}</div>
 </div></section>
 ${partners()}</main>`;
@@ -551,6 +552,24 @@ function partners() {
     <div class="partners-head" data-reveal><h2 class="section-title" id="partners-title">${t('partnersTitle')}</h2><span class="partners-rule" aria-hidden="true"></span><p class="copy">${t('partnersDesc')}</p></div>
     <ul class="partners-grid" role="list" data-reveal>${logos.map(([id, alt, w, h], i) => `<li class="partner-card" style="--d:${250 + i * 500}ms"><img src="assets/partners/${id}.webp" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async" class="partner-${id}"></li>`).join('')}</ul>
   </div></section>`;
+}
+
+// Client filters show the client's original logo (site/assets/partners); "All" and "Other" are text.
+const FILTER_LOGOS = {aliyah: ['aliyah', 1000, 718], soul: ['soul', 1200, 424]};
+function filterLabel(f) {
+  const logo = FILTER_LOGOS[f];
+  return logo ? `<img class="filter-logo filter-logo-${f}" src="assets/partners/${logo[0]}.webp" alt="${t(f)}" width="${logo[1]}" height="${logo[2]}" decoding="async">` : `<span class="filter-text">${t(f)}</span>`;
+}
+// Slides the underline under the active filter (and keeps it in view when the row scrolls sideways on phones).
+function placeFilterInk() {
+  const row = document.querySelector('.filter-tabs');
+  const on = row && row.querySelector('.filter.active');
+  if (!on) return;
+  const ink = row.querySelector('.filter-ink');
+  ink.style.left = on.offsetLeft + 'px';
+  ink.style.width = on.offsetWidth + 'px';
+  const box = row.getBoundingClientRect();
+  if (row.scrollWidth > row.clientWidth && box.top >= 0 && box.bottom <= innerHeight) on.scrollIntoView({block: 'nearest', inline: 'center', behavior: reducedMotion() ? 'auto' : 'smooth'});
 }
 
 function projectResults(list) {
@@ -820,6 +839,10 @@ function afterRender(r) {
   }
   if (r.page === 'home') clearInterval(heroTimer);
   if (r.page === 'about') requestFrame(updateSubnav);
+  if (r.page === 'projects' && !r.id) {
+    requestFrame(placeFilterInk);
+    document.querySelectorAll('.filter-logo').forEach(i => { if (!i.complete) i.addEventListener('load', placeFilterInk, {once: true}); });
+  }
   if (r.page === 'projects' && r.id) { const p = currentProject(); if (p) upgradeGallery(p, state.gallery + 1); }
 }
 
@@ -1150,6 +1173,7 @@ function setFilter(f) {
   const grid = document.getElementById('project-results');
   grid.innerHTML = projectResults(list);
   document.getElementById('results-count').textContent = `${list.length} ${t('showing')}`;
+  placeFilterInk();
   setReveal();
 }
 
@@ -1398,7 +1422,7 @@ window.addEventListener('scroll', () => {
   scrollQueued = true;
   requestFrame(() => { scrollQueued = false; updateHeader(); runParallax(); updateSubnav(); });
 }, {passive: true});
-window.addEventListener('resize', () => requestFrame(runParallax), {passive: true});
+window.addEventListener('resize', () => requestFrame(() => { runParallax(); placeFilterInk(); }), {passive: true});
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && state.mobile) { setMenu(false); return; }

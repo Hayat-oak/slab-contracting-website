@@ -1030,3 +1030,32 @@ html[dir="rtl"] .card-tag { letter-spacing: 0; font-size: 14px; }
   .partners-grid.visible .partner-card:hover { transform: none; }
   .partners-grid.visible .partner-card { animation: none; }
 }
+
+/* ---------- Projects: client filters (All · ALIYAH Homes · SOUL) ----------
+   Equal columns with thin dividers over a light baseline; clients appear as their original logos; each option has
+   a count badge; one sage underline slides to the active option (placeFilterInk in app.js). Phones scroll sideways. */
+.filters { border-bottom: 0; gap: 0; }
+.filter-tabs { position: relative; flex: 1; min-width: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border-bottom: 1px solid var(--border); }
+.filter-tabs .filter { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 96px; padding: 14px clamp(14px, 2vw, 28px); color: var(--muted); font-size: clamp(18px, 1.5vw, 22px); transition: color .3s var(--ease); }
+.filter-tabs .filter::after { content: none; }
+.filter-tabs .filter + .filter::before { content: ''; position: absolute; inset-inline-start: 0; top: 50%; height: 30px; margin-top: -15px; width: 1px; background: var(--border); }
+.filter-tabs .filter:hover, .filter-tabs .filter.active { color: var(--ink); }
+.filter-text { line-height: 1; }
+.filter-logo { width: auto; flex: none; transition: opacity .3s var(--ease); }
+.filter-logo-aliyah { height: clamp(50px, 4.4vw, 64px); }
+.filter-logo-soul { height: clamp(34px, 3vw, 44px); }
+.filter-badge { flex: none; min-width: 40px; padding: 5px 12px; border-radius: 999px; background: #ece7df; color: var(--muted); font-size: 14px; line-height: 1.3; text-align: center; font-variant-numeric: tabular-nums; transition: background .3s var(--ease), color .3s var(--ease); }
+.filter-tabs .filter:hover .filter-badge { background: #e4ded4; }
+.filter-tabs .filter.active .filter-badge { background: #dfe7df; color: var(--ink); }
+.filter-ink { position: absolute; bottom: -2px; left: 0; width: 0; height: 3px; border-radius: 3px; background: var(--sage-deep); pointer-events: none; transition: left .35s ease-in-out, width .35s ease-in-out; }
+.filter-tabs .filter:focus-visible { outline-offset: -6px; }
+@media (max-width: 740px) {
+  .filter-tabs { display: flex; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tabs .filter { flex: 1 0 auto; min-height: 72px; gap: 8px; padding: 12px 12px; font-size: 16px; }
+  .filter-logo-aliyah { height: 40px; }
+  .filter-logo-soul { height: 24px; }
+  .filter-badge { min-width: 28px; padding: 3px 8px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .filter-ink, .filter-logo, .filter-badge { transition: none; } }
+@media (max-width: 740px) { .filter-ink { bottom: 0; } }
