@@ -627,7 +627,7 @@ ${sectorsSection(false)}${processStrip()}
 function about() {
   const sub = [['story', t('ourStory')], ['principles', t('principles')], ['why', t('why')]];
   return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('aboutHero'), t('aboutHeroSub'), 'jawhara8', 4)}
-<nav class="subnav" aria-label="${t('aboutNav')}"><div class="container">${sub.map(([id, label]) => `<a href="#about-${id}" data-action="scroll-to" data-target="about-${id}" class="${id === 'story' ? 'active' : ''}">${label}</a>`).join('')}</div></nav>
+<nav class="subnav" aria-label="${t('aboutNav')}"><div class="container">${sub.map(([id, label]) => `<a href="#about-${id}" data-action="scroll-to" data-target="about-${id}" class="${id === 'story' ? 'active' : ''}">${label}</a>`).join('')}</div><i class="subnav-progress" aria-hidden="true"></i></nav>
 <section class="section" id="about-story"><div class="container about-feature">
   <div data-reveal><span class="eyebrow">${t('ourStory')}</span><h2 class="section-title">${t('storyTitle')}</h2><p class="copy">${t('storyCopy')}</p><p class="copy">${t('storyCopy2')}</p></div>
   <div class="photo reveal-img" data-reveal><div class="parallax-inner" data-parallax>${img('almughrizat', 3, '')}</div></div>
@@ -793,7 +793,7 @@ function render({scrollTop = false, focusMain = false} = {}) {
 }
 
 
-// About sub-navigation: highlight the section in view.
+// About sub-navigation: highlight the section in view and show reading progress through the page.
 function updateSubnav() {
   const nav = document.querySelector('.subnav');
   if (!nav) return;
@@ -802,8 +802,11 @@ function updateSubnav() {
   let current = links[0];
   links.forEach(a => { const s = document.getElementById(a.dataset.target); if (s && s.getBoundingClientRect().top <= offset) current = a; });
   links.forEach(a => { const on = a === current; a.classList.toggle('active', on); if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
-  // Keep the active tab in view when the row scrolls sideways (phones).
-  if (current && nav.dataset.active !== current.dataset.target) { nav.dataset.active = current.dataset.target; const row = nav.querySelector('.container'), box = nav.getBoundingClientRect(); if (row.scrollWidth > row.clientWidth && box.top >= 0 && box.bottom <= innerHeight) current.scrollIntoView({block: 'nearest', inline: 'center', behavior: reducedMotion() ? 'auto' : 'smooth'}); }
+  const first = document.getElementById(links[0].dataset.target), last = document.getElementById(links[links.length - 1].dataset.target);
+  if (first && last) {
+    const start = first.getBoundingClientRect().top + scrollY - offset, end = last.getBoundingClientRect().bottom + scrollY - innerHeight;
+    nav.style.setProperty('--p', Math.min(1, Math.max(0, (scrollY - start) / Math.max(1, end - start))).toFixed(3));
+  }
 }
 function afterRender(r) {
   state.formStarted = 0;
