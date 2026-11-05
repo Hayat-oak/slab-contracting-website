@@ -914,8 +914,6 @@ html[dir="rtl"] .subnav a::after { transform-origin: right; }
 .subnav a.active { color: var(--ink); }
 .subnav a.active span { color: var(--accent); }
 .subnav a.active::after { transform: scaleX(1); }
-.subnav-progress { position: absolute; inset-inline: 0; bottom: -1px; height: 1px; background: var(--ink); opacity: .25; transform: scaleX(var(--p, 0)); transform-origin: left; transition: transform .15s linear; }
-html[dir="rtl"] .subnav-progress { transform-origin: right; }
 
 /* ---------- Icon system (client design): toned circle + partial arc accent ---------- */
 .icon-ring { position: relative; background: var(--tone, #ece4dc); color: var(--tone-ink, #4a4038); border: 0; }
@@ -1029,4 +1027,23 @@ html[dir="rtl"] .card-tag { letter-spacing: 0; font-size: 14px; }
   .partner-card { transition: none; }
   .partners-grid.visible .partner-card:hover { transform: none; }
   .partners-grid.visible .partner-card { animation: none; }
+}
+
+/* ---------- About: section tabs (Our Story · Our Delivery Principles · Why Clients Choose SLAB) ----------
+   Text-only tabs in equal columns with thin dividers, a light baseline, and a slim sage underline under the
+   section in view. On narrow screens the row scrolls sideways instead of wrapping. */
+.subnav { background: rgba(246, 245, 242, .96); border-bottom: 0; }
+.subnav .container { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; position: relative; }
+.subnav .container::after { content: ''; position: absolute; inset-inline: var(--gutter); bottom: 0; height: 1px; background: var(--border); pointer-events: none; }
+.subnav a { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: clamp(20px, 2.2vw, 28px) 16px; font-size: clamp(16px, 1.25vw, 19px); letter-spacing: .01em; color: var(--muted); text-align: center; transition: color .3s var(--ease); }
+.subnav a + a::before { content: ''; position: absolute; inset-inline-start: 0; top: 50%; height: 26px; margin-top: -13px; width: 1px; background: var(--border); }
+.subnav a::after { inset-inline: 0; bottom: 0; height: 3px; border-radius: 3px; background: var(--sage-deep); }
+.subnav a:hover { color: var(--ink); }
+.subnav a:hover::after { transform: scaleX(0); }
+.subnav a.active { color: var(--ink); }
+.subnav a:focus-visible { outline-offset: -4px; }
+@media (max-width: 740px) {
+  .subnav .container { display: flex; gap: 0; overflow-x: auto; scroll-snap-type: x proximity; }
+  .subnav a { flex: none; padding: 18px 22px; font-size: 15px; scroll-snap-align: start; }
+  .subnav .container::after { inset-inline: 0; }
 }
