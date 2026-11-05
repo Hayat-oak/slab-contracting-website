@@ -15,7 +15,7 @@ const SITE = process.env.SITE_URL || 'https://www.slab.sa';
 const FROM = process.env.ENQUIRY_FROM || 'SLAB Website <website@slab.sa>';
 
 const SECTORS = {residential: ['Residential', 'سكني'], hospitality: ['Hospitality', 'ضيافة'], commercial: ['Commercial', 'تجاري'], institutional: ['Government & Institutional', 'حكومي ومؤسسي']};
-const SERVICES = {'fit-out-execution': ['Fit-Out & Execution', 'التشطيبات والتنفيذ'], design: ['Design', 'التصميم'], 'interior-fit-out': ['Interior Fit-Out', 'التشطيبات الداخلية'], 'project-contract-management': ['Project & Contract Management', 'إدارة المشاريع والعقود']};
+const SERVICES = {'fit-out-execution': ['Fit-Out & Execution', 'التشطيبات والتنفيذ'], design: ['Design', 'التصميم'], 'interior-fit-out': ['Interior Fit-Out', 'التشطيبات الداخلية'], 'project-contract-management': ['Project & Contract Management', 'إدارة المشاريع والعقود'], other: ['Other', 'أخرى']};
 const BUDGETS = {lt500k: ['Under SAR 500,000', 'أقل من 500 ألف ريال'], '500k1m': ['SAR 500,000 – 1 million', 'من 500 ألف إلى مليون ريال'], '1m3m': ['SAR 1 – 3 million', 'من 1 إلى 3 ملايين ريال'], gt3m: ['Over SAR 3 million', 'أكثر من 3 ملايين ريال'], tbd: ['Not decided yet', 'غير محددة بعد']};
 
 const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
@@ -145,9 +145,16 @@ module.exports = async (req, res) => {
   // Unanswered optional questions are stored as empty (null), not as blank text.
   const stored = {...row, full_name: row.full_name || null, email: row.email || null, phone: row.phone || null, project_type: row.project_type || null};
   let db = await insert({...stored, budget: budgetKey, answers, attachments});
+  // Until supabase/services_other.sql has run, the services check only allows the four main services: keep those
+  // and record "Other" as a note in the message.
+  if (db && db.status === 400 && row.services.includes('other') && row.services.length > 1) {
+    stored.services = row.services.filter(s => s !== 'other');
+    stored.message = `${row.message || ''}\n\n[Services: Other / الخدمات: أخرى]`.trim();
+    db = await insert({...stored, budget: budgetKey, answers, attachments});
+  }
   if (db && db.status === 400) {
     const extra = Object.values(answers).map(a => `${a.question_en}: ${a.answer}`).join('\n');
-    db = await insert({...stored, message: `${row.message}\n\n[Estimated budget: ${budgetEn}]${extra ? '\n' + extra : ''}`});
+    db = await insert({...stored, message: `${stored.message || ''}\n\n[Estimated budget: ${budgetEn}]${extra ? '\n' + extra : ''}`.trim()});
   }
   if (!db || !db.ok) return res.status(502).json({ok: false, error: 'store_failed'});
 

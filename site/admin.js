@@ -41,7 +41,7 @@ const SLOTS = [
 ];
 
 const SECTORS = {residential: 'سكني', hospitality: 'ضيافة', commercial: 'تجاري', institutional: 'حكومي ومؤسسي'};
-const SERVICES = {'fit-out-execution': 'التشطيبات والتنفيذ', design: 'التصميم', 'interior-fit-out': 'التشطيبات الداخلية', 'project-contract-management': 'إدارة المشاريع والعقود'};
+const SERVICES = {'fit-out-execution': 'التشطيبات والتنفيذ', design: 'التصميم', 'interior-fit-out': 'التشطيبات الداخلية', 'project-contract-management': 'إدارة المشاريع والعقود', other: 'أخرى'};
 const BUDGETS = {lt500k: 'أقل من 500 ألف', '500k1m': '500 ألف – مليون', '1m3m': '1 – 3 مليون', gt3m: 'أكثر من 3 مليون', tbd: 'غير محددة'};
 const STATUS = {new: 'جديد', contacted: 'تم التواصل', closed: 'مغلق'};
 const KINDS = {text: 'نص قصير', textarea: 'نص طويل', number: 'رقم', select: 'قائمة اختيارات'};
