@@ -432,8 +432,8 @@ function cta() {
   <a class="outline-cta light" href="#/contact">${t('start')} ${ICON.arrow}</a></div></section>`;
 }
 
-function interiorHero(title, sub, photo = 'soulhittin', index = 1) {
-  return `<section class="interior-hero"><div class="bg" data-parallax style="background-image:url('${HD(photo, index)}')"></div>
+function interiorHero(title, sub, photo = 'soulhittin', index = 1, extra = '') {
+  return `<section class="interior-hero${extra ? ' ' + extra : ''}"><div class="bg" data-parallax style="background-image:url('${HD(photo, index)}')"></div>
   <div class="content"><h1 class="hero-title-anim">${title}</h1><p>${sub}</p></div></section>`;
 }
 
@@ -696,7 +696,7 @@ const fshown = key => !fieldCfg(key).hidden;
 const freq = key => (key === 'attachments' ? fieldCfg(key).required === true : fieldCfg(key).required !== false);
 const MAX_PHOTOS = 6;
 function field(id, label, input, hint = '', req = true) {
-  return `<div class="field ${['project-location', 'message', 'attachments'].includes(id) ? 'full' : ''}"><label for="${id}">${label}${req ? ' <span aria-hidden="true">*</span>' : ''}</label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
+  return `<div class="field ${['message', 'attachments'].includes(id) ? 'full' : ''}"><label for="${id}">${label}${req ? ' <span aria-hidden="true">*</span>' : ''}</label>${input}${hint ? `<small class="hint" id="${id}-hint">${hint}</small>` : ''}<small class="error" id="${id}-error" hidden></small></div>`;
 }
 
 // Extra question added in the admin panel (form_questions). Select answers are sent as the option index.
@@ -712,10 +712,12 @@ function questionField(q) {
   return `<div class="field ${q.kind === 'textarea' ? 'full' : ''}"><label for="${id}">${label}</label>${input}<small class="error" id="${id}-error" hidden></small></div>`;
 }
 
+const ICON_UPLOAD = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 14v5h14v-5"/></svg>';
 function contact() {
   const sectors = ['residential', 'hospitality', 'commercial', 'institutional'];
-  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('contactHero'), t('contactHeroSub'), 'almajidiya70', 2)}
+  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('contactHero'), t('contactHeroSub'), 'almajidiya70', 2, 'contact-hero')}
 <section class="container contact-layout">
+<svg class="contact-lines" viewBox="0 0 520 260" aria-hidden="true" focusable="false">${Array.from({length: 14}, (_, i) => `<path d="M-10 ${70 + i * 13} C 90 ${40 + i * 13}, 170 ${110 + i * 11}, 270 ${120 + i * 10} S 430 ${210 + i * 6}, 540 ${260 + i * 3}"/>`).join('')}</svg>
 <div class="contact-details" data-reveal><h2>${t('getInTouch')}</h2><p class="copy">${t('contactCopy')}</p>
   <ul class="contact-points">
     <li><a class="contact-point" href="tel:${PHONE}">${ICON.phone}<div><small>${t('phone')}</small><strong dir="ltr">${PHONE_DISPLAY}</strong></div></a></li>
@@ -742,7 +744,7 @@ function contact() {
   ${fshown('budget') ? field('budget', flabel('budget', 'budget'), `<select id="budget" name="budget"${freq('budget') ? ' required' : ''} aria-describedby="budget-error"><option value="">${t('budgetChoose')}</option>${BUDGET_KEYS.map(k => `<option value="${k}">${t('budget_' + k)}</option>`).join('')}</select>`, '', freq('budget')) : ''}
   ${CMS.questions.map(questionField).join('')}
   ${fshown('message') ? field('message', flabel('message', 'message'), `<textarea id="message" name="message"${freq('message') ? ' required minlength="12"' : ''} maxlength="3000" aria-describedby="message-hint message-error"></textarea>`, t('messageHint'), freq('message')) : ''}
-  ${fshown('attachments') ? field('attachments', flabel('attachments', 'attachmentsLabel'), `<div class="file-pick"><input id="attachments" name="attachments" type="file" accept="image/*" multiple${freq('attachments') ? ' required' : ''} aria-describedby="attachments-hint attachments-error"><label for="attachments" class="file-btn" aria-hidden="true">${ICON.expand}${t('choosePhotos')}</label><span class="file-names" id="attachments-names">${t('noPhotos')}</span></div>`, t('attachmentsHint'), freq('attachments')) : ''}
+  ${fshown('attachments') ? field('attachments', flabel('attachments', 'attachmentsLabel'), `<div class="file-pick"><input id="attachments" name="attachments" type="file" accept="image/*" multiple${freq('attachments') ? ' required' : ''} aria-describedby="attachments-hint attachments-error"><label for="attachments" class="file-btn" aria-hidden="true">${ICON_UPLOAD}${t('choosePhotos')}</label><span class="file-names" id="attachments-names">${t('noPhotos')}</span></div>`, t('attachmentsHint'), freq('attachments')) : ''}
   <div class="field full consent-field"><label class="check"><input type="checkbox" id="consent" name="consent" value="yes" required aria-describedby="consent-error"><span>${t('consent')} <a href="#/privacy">${t('consentLink')}</a>. <span aria-hidden="true">*</span></span></label><small class="error" id="consent-error" hidden></small></div>
   <div class="submit-row"><p class="form-note">${t('formNote')}</p><button class="dark-button" type="submit"><span class="btn-label">${t('send')}</span> ${ICON.arrow}</button></div>
   <div id="form-feedback" class="form-message" role="status" aria-live="polite" hidden></div>
