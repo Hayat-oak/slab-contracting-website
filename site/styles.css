@@ -329,7 +329,7 @@ html[dir="rtl"] .interior-hero::after { background: linear-gradient(-90deg, rgba
 .why-list p { font-size: 16px; color: var(--muted); line-height: 1.75; margin: 0; }
 
 /* process */
-.process-top { padding-top: clamp(60px, 7vw, 100px); }
+.process-top { padding-top: clamp(44px, 4.5vw, 64px); }
 .process-top .copy { max-width: 640px; font-size: clamp(19px, 1.4vw, 21px); }
 .process-track { position: relative; margin-top: 64px; }
 .process-track::before, .process-progress { content: ''; position: absolute; height: 1px; inset-inline: 26px; top: 26px; background: var(--border); }

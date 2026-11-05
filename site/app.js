@@ -671,8 +671,8 @@ function processPanel() {
 }
 
 function process() {
-  return `<main class="page" id="main-content" tabindex="-1"><section class="section-sm process-top"><div class="container">
-<span class="eyebrow">${t('processHeroSub')}</span><h1 class="page-title hero-title-anim">${t('processTitle')}</h1><p class="copy">${t('processIntro')}</p>
+  return `<main class="page" id="main-content" tabindex="-1">${interiorHero(t('processHero'), t('processHeroSub'), 'almajidiya130', 1)}<section class="section-sm process-top"><div class="container">
+<p class="copy process-intro">${t('processIntro')}</p>
 <div class="process-track"><div class="process-progress" id="process-progress" style="--p:${state.step / 6}"></div>
 <div class="process-steps" role="tablist" aria-label="${t('processStages')}">${Array.from({length: 7}, (_, i) =>
   `<button type="button" role="tab" class="process-step ${state.step === i ? 'active' : ''} ${i < state.step ? 'done' : ''}" id="step-${i}" aria-controls="process-panel" aria-selected="${state.step === i}" tabindex="${state.step === i ? 0 : -1}" data-action="step" data-index="${i}"><span class="step-num">${pad(i + 1)}</span><span class="step-circle icon-ring" style="--tone:${STAGE_TONES[i]};--tone-ink:${toneInk(STAGE_TONES[i])}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${STAGE_ICONS[i]}</svg></span><strong>${t('p' + (i + 1))}</strong><small>${t('p' + (i + 1) + 'd')}</small></button>`).join('')}</div></div>
