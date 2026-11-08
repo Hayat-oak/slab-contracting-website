@@ -465,8 +465,8 @@ function impact() {
     <div class="impact-stats">${items.map(([icon, n, suffix, key]) => `<div class="impact-stat" data-reveal>
       <span class="impact-icon icon-ring">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
       <span class="impact-label">${t(key)}</span></div>`).join('')}</div>
-    <div class="impact-cities">${cities.map(([img, name, desc]) => `<a class="city-card" href="#/projects" data-reveal data-cursor="diag">
-      <img class="city-photo" src="${slotSrc('city-' + img, `assets/about/city-${img}-v2.webp`)}" alt="" loading="lazy" decoding="async">
+    <div class="impact-cities">${cities.map(([img, name, desc], i) => `<a class="city-card" href="#/projects" data-reveal data-cursor="diag" style="--d:${i * 350}ms">
+      <img class="city-photo" data-parallax src="${slotSrc('city-' + img, `assets/about/city-${img}-v2.webp`)}" alt="" loading="lazy" decoding="async">
       <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div>
       <span class="city-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div>
   </div>

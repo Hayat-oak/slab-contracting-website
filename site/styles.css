@@ -1167,3 +1167,21 @@ html[dir="rtl"] .contact-layout .dark-button:hover .icon { transform: scaleX(-1)
 @media (prefers-reduced-motion: reduce) {
   .service-row .photo.reveal-img, .service-row .photo img, .service-row > :not(.photo) { clip-path: none; transform: none; opacity: 1; transition: none; }
 }
+
+/* Our Impact city cards (client request, Nov 2026): the three cities appear one after another as the band scrolls in
+   (photo out of a soft blur, then name, line and text rise, arrow last); photos drift gently while scrolling (parallax). */
+.city-card[data-reveal] { opacity: 1; transform: none; }
+.city-card[data-reveal] .city-photo { opacity: 0; filter: blur(8px) saturate(.85); transition: opacity 1.4s cubic-bezier(.22, 1, .36, 1) var(--d, 0ms), filter 1.6s cubic-bezier(.22, 1, .36, 1) var(--d, 0ms); }
+.city-card[data-reveal] .city-copy h3, .city-card[data-reveal] .city-copy p { opacity: 0; transform: translateY(22px); transition: opacity .9s ease, transform 1s cubic-bezier(.22, 1, .36, 1); }
+.city-card[data-reveal] .city-copy h3 { transition-delay: calc(var(--d, 0ms) + .45s); }
+.city-card[data-reveal] .city-copy p { transition-delay: calc(var(--d, 0ms) + .7s); }
+.city-card[data-reveal] .city-copy > i { width: 0; transition: width .8s cubic-bezier(.22, 1, .36, 1) calc(var(--d, 0ms) + .6s); }
+.city-card[data-reveal] .city-arrow { opacity: 0; scale: .7; transition: opacity .6s ease calc(var(--d, 0ms) + .9s), scale .7s cubic-bezier(.22, 1, .36, 1) calc(var(--d, 0ms) + .9s), background .3s, color .3s, transform .3s; }
+.city-card.visible .city-photo { opacity: 1; filter: none; }
+.city-card.visible .city-copy h3, .city-card.visible .city-copy p { opacity: 1; transform: none; }
+.city-card.visible .city-copy > i { width: 32px; }
+.city-card.visible .city-arrow { opacity: 1; scale: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .city-card[data-reveal] .city-photo, .city-card[data-reveal] .city-copy h3, .city-card[data-reveal] .city-copy p, .city-card[data-reveal] .city-arrow { opacity: 1; filter: none; transform: none; scale: 1; transition: none; }
+  .city-card[data-reveal] .city-copy > i { width: 32px; transition: none; }
+}
