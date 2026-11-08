@@ -6,6 +6,12 @@
   "framework": null,
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "slab-contracting-website.vercel.app" }],
+      "destination": "https://www.slab.sa/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "slab-contracting-website.vercel.app" }],
       "destination": "https://www.slab.sa/:path*",
