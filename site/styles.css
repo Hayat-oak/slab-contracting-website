@@ -1153,3 +1153,17 @@ html[dir="rtl"] .contact-layout .dark-button:hover .icon { transform: scaleX(-1)
   border: 1px solid rgba(255, 255, 255, .9); box-shadow: 0 0 0 1px rgba(20, 20, 19, .06), 0 6px 20px rgba(20, 20, 19, .12);
   backdrop-filter: none; -webkit-backdrop-filter: none; }
 .cursor-label .icon { width: 24px; height: 24px; stroke-width: 1.3; filter: drop-shadow(0 1px 2px rgba(20, 20, 19, .35)); }
+
+/* Services page (client request, Nov 2026): each photo lowers into view slowly, one row at a time, text follows. */
+.service-row[data-reveal] { transform: none; transition: opacity .4s ease; }
+.service-row .photo.reveal-img { clip-path: inset(0 0 100% 0); transition: clip-path 1.8s cubic-bezier(.22, 1, .36, 1) .1s; }
+.service-row.visible .photo.reveal-img { clip-path: inset(0 0 0 0); }
+.service-row .photo img { transform: translateY(-5%) scale(1.06); transition: transform 2.2s cubic-bezier(.22, 1, .36, 1) .1s; }
+.service-row.visible .photo img { transform: none; }
+.service-row > :not(.photo) { opacity: 0; transform: translateY(18px); transition: opacity 1s ease .7s, transform 1s cubic-bezier(.22, 1, .36, 1) .7s; }
+.service-row.visible > :not(.photo) { opacity: 1; transform: none; }
+.service-row:nth-child(2) .photo.reveal-img, .service-row:nth-child(2) .photo img { transition-delay: .6s; }
+.service-row:nth-child(2) > :not(.photo) { transition-delay: 1.2s; }
+@media (prefers-reduced-motion: reduce) {
+  .service-row .photo.reveal-img, .service-row .photo img, .service-row > :not(.photo) { clip-path: none; transform: none; opacity: 1; transition: none; }
+}
