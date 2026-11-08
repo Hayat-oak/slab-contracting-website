@@ -377,8 +377,8 @@ function footer() {
 
 function projectCard(p, extra = '') {
   return `<article class="project-card ${extra}" data-reveal>
-  <a href="${href('projects/' + p.id)}" data-cursor="diag">
-    <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${ptype(p)}`)}<span class="card-tag">${ptype(p)}${p.status ? ` · ${t('pst_' + p.status)}` : ''}</span></div>
+  <a href="${href('projects/' + p.id)}">
+    <div class="photo reveal-img" data-cursor="diag">${img(p.id, 1, `${pname(p)} — ${ptype(p)}`)}<span class="card-tag">${ptype(p)}${p.status ? ` · ${t('pst_' + p.status)}` : ''}</span></div>
     <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${[pcity(p), pclient(p), p.units ? units(p) : ''].filter(Boolean).join(' · ')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
   </a></article>`;
 }
@@ -386,8 +386,8 @@ function projectCard(p, extra = '') {
 function serviceCards() {
   return `<div class="service-grid">${[1, 2, 3, 4].map(i => {
 
-    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="diag">
-      <div class="photo reveal-img">${serviceImg(i)}</div>
+    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms">
+      <div class="photo reveal-img" data-cursor="diag">${serviceImg(i)}</div>
       <div class="card-end"><div><span class="card-num">${pad(i)}</span><h3>${t('service' + i)}</h3><p class="micro">${t('service' + i + 'desc')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
     </a>`;
   }).join('')}</div>`;
@@ -465,7 +465,7 @@ function impact() {
     <div class="impact-stats">${items.map(([icon, n, suffix, key]) => `<div class="impact-stat" data-reveal>
       <span class="impact-icon icon-ring">${IMPACT_ICON[icon]}</span><b><span data-count="${n}">${n}</span>${suffix}</b><i aria-hidden="true"></i>
       <span class="impact-label">${t(key)}</span></div>`).join('')}</div>
-    <div class="impact-cities">${cities.map(([img, name, desc]) => `<a class="city-card" href="#/projects" data-reveal>
+    <div class="impact-cities">${cities.map(([img, name, desc]) => `<a class="city-card" href="#/projects" data-reveal data-cursor="diag">
       <img class="city-photo" src="${slotSrc('city-' + img, `assets/about/city-${img}-v2.webp`)}" alt="" loading="lazy" decoding="async">
       <div class="city-copy"><h3>${t(name)}</h3><i aria-hidden="true"></i><p>${t(desc)}</p></div>
       <span class="city-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div>
@@ -654,7 +654,7 @@ function about() {
 </div>
 <div class="container"><div class="pillars">${[['delivery', 'deliveryDesc'], ['control', 'controlDesc'], ['ksa', 'ksaDesc']].map(([k, d], i) => `<article data-reveal style="--d:${i * 80}ms"><span class="eyebrow">${pad(i + 1)}</span><div class="pillar-photo reveal-img"><img src="assets/about/pillar-${k}.webp" alt="" loading="lazy" decoding="async"></div><h3>${t(k)}</h3><p>${t(d)}</p></article>`).join('')}</div></div></section>
 <section class="section principles-section" id="about-principles"><div class="principles-wall" aria-hidden="true"></div><div class="container"><div class="principles-head" data-reveal><span class="eyebrow eyebrow-trail">${t('ourApproach')}</span><h2 class="section-title">${t('principles')}</h2><p class="copy">${t('principlesLead')}</p></div>
-<div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<a class="principle" href="#/process" data-reveal style="--d:${i * 90}ms"><span class="principle-num"><span class="eyebrow">${pad(i + 1)}</span><i aria-hidden="true"></i></span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img"><img src="${slotSrc('principle-' + (key === 'controlPrinciple' ? 'control' : key), `assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp`)}" alt="" loading="lazy" decoding="async"></div><span class="principle-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div></div></section>
+<div class="principles">${['precision', 'controlPrinciple', 'value'].map((key, i) => `<a class="principle" href="#/process" data-reveal style="--d:${i * 90}ms"><span class="principle-num"><span class="eyebrow">${pad(i + 1)}</span><i aria-hidden="true"></i></span><h3>${t(key)}</h3><p>${t(key + 'Desc')}</p><div class="principle-photo reveal-img" data-cursor="diag"><img src="${slotSrc('principle-' + (key === 'controlPrinciple' ? 'control' : key), `assets/about/principle-${key === 'controlPrinciple' ? 'control' : key}.webp`)}" alt="" loading="lazy" decoding="async"></div><span class="principle-arrow" aria-hidden="true">${ICON.arrow}</span></a>`).join('')}</div></div></section>
 
 <section class="section-sm tinted" id="about-why"><div class="container why-layout">
   <div class="why-intro" data-reveal><span class="why-rule" aria-hidden="true"></span><h2 class="section-title">${t('why')}</h2><p class="copy">${t('whyDesc')}</p><div class="feature-image reveal-img"><img src="assets/about/why-main.webp" alt="" loading="lazy" decoding="async"></div></div>
