@@ -1148,7 +1148,8 @@ html[dir="rtl"] .contact-layout .dark-button:hover .icon { transform: scaleX(-1)
 @media (max-width: 1180px) { .sector-card { aspect-ratio: 4 / 4.2; } }
 @media (max-width: 640px) { .sector-card { aspect-ratio: 4 / 3.6; } }
 
-/* Hover cursor (client request, Nov 2026): light frosted circle in the site's cream with a slim ink icon. */
-.cursor-label { width: 68px; height: 68px; margin: -34px 0 0 -34px; background: rgba(246, 245, 242, .86); color: var(--ink);
-  border: 1px solid rgba(37, 39, 40, .1); box-shadow: 0 8px 24px rgba(20, 20, 19, .14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-.cursor-label .icon { width: 24px; height: 24px; stroke-width: 1.3; }
+/* Hover cursor (client choice, Nov 2026): thin white ring, see-through, with a slim slanted arrow (expand icon on the gallery). */
+.cursor-label { width: 76px; height: 76px; margin: -38px 0 0 -38px; background: rgba(255, 255, 255, .08); color: #fff;
+  border: 1px solid rgba(255, 255, 255, .9); box-shadow: 0 0 0 1px rgba(20, 20, 19, .06), 0 6px 20px rgba(20, 20, 19, .12);
+  backdrop-filter: none; -webkit-backdrop-filter: none; }
+.cursor-label .icon { width: 24px; height: 24px; stroke-width: 1.3; filter: drop-shadow(0 1px 2px rgba(20, 20, 19, .35)); }

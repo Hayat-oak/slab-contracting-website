@@ -377,7 +377,7 @@ function footer() {
 
 function projectCard(p, extra = '') {
   return `<article class="project-card ${extra}" data-reveal>
-  <a href="${href('projects/' + p.id)}" data-cursor="arrow">
+  <a href="${href('projects/' + p.id)}" data-cursor="diag">
     <div class="photo reveal-img">${img(p.id, 1, `${pname(p)} — ${ptype(p)}`)}<span class="card-tag">${ptype(p)}${p.status ? ` · ${t('pst_' + p.status)}` : ''}</span></div>
     <div class="card-end"><div><h3>${pname(p)}</h3><p class="micro">${[pcity(p), pclient(p), p.units ? units(p) : ''].filter(Boolean).join(' · ')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
   </a></article>`;
@@ -386,7 +386,7 @@ function projectCard(p, extra = '') {
 function serviceCards() {
   return `<div class="service-grid">${[1, 2, 3, 4].map(i => {
 
-    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="arrow">
+    return `<a class="service-card" href="#/services/${i}" data-reveal style="--d:${(i - 1) * 80}ms" data-cursor="diag">
       <div class="photo reveal-img">${serviceImg(i)}</div>
       <div class="card-end"><div><span class="card-num">${pad(i)}</span><h3>${t('service' + i)}</h3><p class="micro">${t('service' + i + 'desc')}</p></div><span class="arrow-mini">${ICON.diag}</span></div>
     </a>`;
